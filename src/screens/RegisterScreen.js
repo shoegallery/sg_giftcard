@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
@@ -8,10 +13,11 @@ import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
-import { emailValidator } from "../helpers/emailValidator";
+import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
 import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
@@ -23,7 +29,7 @@ export default function RegisterScreen({ navigation }) {
   });
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
-    const emailError = emailValidator(email.value);
+    const emailError = phoneValidator(email.value);
     const passwordError = passwordValidator(password.value);
     if (emailError || passwordError || nameError) {
       setName({ ...name, error: nameError });
@@ -39,71 +45,86 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <Background>
-      <ScrollView>
-        <BackButton goBack={navigation.goBack} />
-        <Logo />
-        <Header>Бүртгэл үүсгэх</Header>
+      <BackButton goBack={navigation.goBack} />
 
-        <TextInput
-          label="Нэр"
-          returnKeyType="next"
-          value={name.value}
-          onChangeText={(text) => setName({ value: text, error: "" })}
-          error={!!name.error}
-          errorText={name.error}
-        />
-        <TextInput
-          label="Утасны дугаар"
-          returnKeyType="next"
-          value={email.value}
-          onChangeText={(text) => setEmail({ value: text, error: "" })}
-          error={!!email.error}
-          errorText={email.error}
-          autoCapitalize="none"
-          autoCompleteType="email"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-        />
-        <TextInput
-          label="Нууц үг"
-          returnKeyType="done"
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: "" })}
-          error={!!password.error}
-          errorText={password.error}
-          secureTextEntry
-        />
-        <TextInput
-          label="Нууц үгээ давтана уу."
-          returnKeyType="done"
-          value={password.value}
-          onChangeText={(text) =>
-            setPasswordConfirm({ value: text, error: "" })
-          }
-          error={!!password.error}
-          errorText={password.error}
-          secureTextEntry
-        />
-        <Button
-          mode="contained"
-          onPress={onSignUpPressed}
-          style={{ marginTop: 24 }}
+      <Logo />
+      <Header>Бүртгэл үүсгэх</Header>
+      <SafeAreaView style={{ width: "100%", height: "70%" }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+          enabled={false}
         >
-          Sign Up
-        </Button>
+          <ScrollView style={{ width: "100%", height: "100%" }}>
+            <TextInput
+              label="Нэр"
+              returnKeyType="next"
+              value={name.value}
+              onChangeText={(text) => setName({ value: text, error: "" })}
+              error={!!name.error}
+              errorText={name.error}
+            />
 
-        <View style={styles.row}>
-          <Text>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
-            <Text style={styles.link}>Login</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <TextInput
+              label="Утасны дугаар"
+              returnKeyType="next"
+              value={email.value}
+              onChangeText={(text) => setEmail({ value: text, error: "" })}
+              error={!!email.error}
+              errorText={email.error}
+              textContentType="telephoneNumber"
+              keyboardType="number-pad"
+            />
+
+            <TextInput
+              label="Нууц үг"
+              returnKeyType="next"
+              value={password.value}
+              onChangeText={(text) => setPassword({ value: text, error: "" })}
+              error={!!password.error}
+              errorText={password.error}
+              textContentType="password"
+              secureTextEntry
+            />
+
+            <TextInput
+              label="Нууц үгээ давтана уу."
+              returnKeyType="done"
+              value={passwordConfirm.value}
+              onChangeText={(text) =>
+                setPasswordConfirm({ value: text, error: "" })
+              }
+              error={!!password.error}
+              errorText={password.error}
+              textContentType="newPassword"
+              secureTextEntry
+            />
+
+            <Button
+              mode="contained"
+              onPress={onSignUpPressed}
+              style={{ marginTop: 24 }}
+            >
+              Sign Up
+            </Button>
+
+            <View style={styles.row}>
+              <Text>Already have an account? </Text>
+              <TouchableOpacity
+                onPress={() => navigation.replace("LoginScreen")}
+              >
+                <Text style={styles.link}>Login</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </Background>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { paddingTop: 0 },
   row: {
     flexDirection: "row",
     marginTop: 3,
