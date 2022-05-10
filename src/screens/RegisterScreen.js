@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
@@ -21,7 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
-  const [email, setEmail] = useState({ value: "", error: "" });
+  const [phone, setPhone] = useState({ value: null, error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [passwordConfirm, setPasswordConfirm] = useState({
     value: "",
@@ -29,12 +31,14 @@ export default function RegisterScreen({ navigation }) {
   });
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
-    const emailError = phoneValidator(email.value);
+    const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
-    if (emailError || passwordError || nameError) {
+    const passwordConfirmError = passwordValidator(passwordConfirm.value);
+    if (phoneError || passwordError || nameError || passwordConfirmError) {
       setName({ ...name, error: nameError });
-      setEmail({ ...email, error: emailError });
+      setPhone({ ...phone, error: phoneError });
       setPassword({ ...password, error: passwordError });
+      setPasswordConfirm({ ...passwordConfirm, error: passwordError });
       return;
     }
     navigation.reset({
@@ -42,11 +46,11 @@ export default function RegisterScreen({ navigation }) {
       routes: [{ name: "Dashboard" }],
     });
   };
+  console.log(phone);
 
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-
       <Logo />
       <Header>Бүртгэл үүсгэх</Header>
       <SafeAreaView style={{ width: "100%", height: "70%" }}>
@@ -56,50 +60,62 @@ export default function RegisterScreen({ navigation }) {
           enabled={false}
         >
           <ScrollView style={{ width: "100%", height: "100%" }}>
-            <TextInput
-              label="Нэр"
-              returnKeyType="next"
-              value={name.value}
-              onChangeText={(text) => setName({ value: text, error: "" })}
-              error={!!name.error}
-              errorText={name.error}
-            />
-
-            <TextInput
-              label="Утасны дугаар"
-              returnKeyType="next"
-              value={email.value}
-              onChangeText={(text) => setEmail({ value: text, error: "" })}
-              error={!!email.error}
-              errorText={email.error}
-              textContentType="telephoneNumber"
-              keyboardType="number-pad"
-            />
-
-            <TextInput
-              label="Нууц үг"
-              returnKeyType="next"
-              value={password.value}
-              onChangeText={(text) => setPassword({ value: text, error: "" })}
-              error={!!password.error}
-              errorText={password.error}
-              textContentType="password"
-              secureTextEntry
-            />
-
-            <TextInput
-              label="Нууц үгээ давтана уу."
-              returnKeyType="done"
-              value={passwordConfirm.value}
-              onChangeText={(text) =>
-                setPasswordConfirm({ value: text, error: "" })
-              }
-              error={!!password.error}
-              errorText={password.error}
-              textContentType="newPassword"
-              secureTextEntry
-            />
-
+            <TouchableOpacity>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Нэр"
+                  returnKeyType="next"
+                  value={name.value}
+                  onChangeText={(text) => setName({ value: text, error: "" })}
+                  error={!!name.error}
+                  errorText={name.error}
+                />
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Утасны дугаар"
+                  returnKeyType="next"
+                  value={phone.value}
+                  onChangeText={(number) =>
+                    setPhone({ value: number, error: "" })
+                  }
+                  error={!!phone.error}
+                  errorText={phone.error}
+                  textContentType="telephoneNumber"
+                  keyboardType="number-pad"
+                />
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Нууц үг"
+                  returnKeyType="next"
+                  value={password.value}
+                  onChangeText={(text) =>
+                    setPassword({ value: text, error: "" })
+                  }
+                  error={!!password.error}
+                  errorText={password.error}
+                  textContentType="password"
+                  secureTextEntry
+                  keyboardType="default"
+                />
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Нууц үгээ давтана уу."
+                  returnKeyType="done"
+                  value={passwordConfirm.value}
+                  onChangeText={(text) =>
+                    setPasswordConfirm({ value: text, error: "" })
+                  }
+                  error={!!password.error}
+                  errorText={password.error}
+                  textContentType="newPassword"
+                  secureTextEntry
+                  keyboardType="default"
+                />
+              </TouchableWithoutFeedback>
+            </TouchableOpacity>
             <Button
               mode="contained"
               onPress={onSignUpPressed}
