@@ -34,6 +34,7 @@ export default function RegisterScreen({ navigation }) {
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
     const passwordConfirmError = passwordValidator(passwordConfirm.value);
+
     if (phoneError || passwordError || nameError || passwordConfirmError) {
       setName({ ...name, error: nameError });
       setPhone({ ...phone, error: phoneError });
@@ -46,13 +47,11 @@ export default function RegisterScreen({ navigation }) {
       routes: [{ name: "Dashboard" }],
     });
   };
-  console.log(phone);
 
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Бүртгэл үүсгэх</Header>
+      {/* <Header>Бүртгэл үүсгэх</Header> */}
       <SafeAreaView style={{ width: "100%", height: "70%" }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -119,13 +118,13 @@ export default function RegisterScreen({ navigation }) {
             <Button
               mode="contained"
               onPress={onSignUpPressed}
-              style={{ marginTop: 24 }}
+              style={{ marginTop: 10 }}
             >
               Бүртгүүлэх
             </Button>
 
             <View style={styles.row}>
-              <Text>Та өмнө нь бүртгүүлсэн үү? </Text>
+              <Text>Та бүртгэлтэй юу? </Text>
               <TouchableOpacity
                 onPress={() => navigation.replace("LoginScreen")}
               >
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   container: { paddingTop: 0 },
   row: {
     flexDirection: "row",
-    marginTop: 3,
+    marginTop: 1,
   },
   link: {
     fontWeight: "bold",
