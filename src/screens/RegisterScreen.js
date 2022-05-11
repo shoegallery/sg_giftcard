@@ -121,15 +121,15 @@ export default function RegisterScreen({ navigation }) {
               onPress={onSignUpPressed}
               style={{ marginTop: 24 }}
             >
-              Sign Up
+              Бүртгүүлэх
             </Button>
 
             <View style={styles.row}>
-              <Text>Already have an account? </Text>
+              <Text>Та өмнө нь бүртгүүлсэн үү? </Text>
               <TouchableOpacity
                 onPress={() => navigation.replace("LoginScreen")}
               >
-                <Text style={styles.link}>Login</Text>
+                <Text style={styles.link}>Тийм</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
