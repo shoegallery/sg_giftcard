@@ -11,10 +11,17 @@ import {
   Dashboard,
   ResetPasswordScreen,
 } from "./src/screens";
+import { Text, TextInput } from "react-native";
+
 import { StateProvider } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createStackNavigator();
+
+if (Text.defaultProps == null) Text.defaultProps = {};
+Text.defaultProps.allowFontScaling = false;
+if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+TextInput.defaultProps.allowFontScaling = false;
 
 export default function App() {
   return (

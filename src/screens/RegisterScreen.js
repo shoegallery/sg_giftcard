@@ -22,7 +22,11 @@ import { passwordValidator } from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import Header from "../components/Header";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });
@@ -62,13 +66,12 @@ export default function RegisterScreen({ navigation }) {
       url: `${baseUrl}/wallets/create`,
       headers: {
         "Content-Type": "application/json",
-        Host: "https://dolphin-app-3r9tk.ondigitalocean.app",
-        "Content-Length": 500,
       },
       data: request,
     };
     axios(config)
       .then(function (response) {
+        console.log(response.data);
         if (response.data.success === true) {
           // console.log(JSON.stringify(response.data));
           navigation.reset({
@@ -83,89 +86,73 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <Background>
-      <Logo />
-      {/* <Header>Бүртгэл үүсгэх</Header> */}
-      <SafeAreaView style={{ width: "100%", height: "70%" }}>
+    <Background style={{ paddingTop: 100 }}>
+      <Header>Бүртгэл үүсгэх</Header>
+      <SafeAreaView style={{ width: wp("80%"), height: hp("60%") }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.container}
           enabled={false}
         >
-          <ScrollView style={{ width: "100%", height: "100%" }}>
-            <TouchableOpacity>
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <TextInput
-                  label="Нэр"
-                  returnKeyType="next"
-                  value={name.value}
-                  onChangeText={(text) => setName({ value: text, error: "" })}
-                  error={!!name.error}
-                  errorText={name.error}
-                />
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <TextInput
-                  label="Утасны дугаар"
-                  returnKeyType="next"
-                  value={phone.value}
-                  onChangeText={(number) =>
-                    setPhone({ value: number, error: "" })
-                  }
-                  error={!!phone.error}
-                  errorText={phone.error}
-                  textContentType="telephoneNumber"
-                  keyboardType="number-pad"
-                />
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <TextInput
-                  label="Нууц үг"
-                  returnKeyType="next"
-                  value={password.value}
-                  onChangeText={(text) =>
-                    setPassword({ value: text, error: "" })
-                  }
-                  error={!!password.error}
-                  errorText={password.error}
-                  textContentType="password"
-                  secureTextEntry
-                  keyboardType="default"
-                />
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <TextInput
-                  label="Нууц үгээ давтана уу."
-                  returnKeyType="done"
-                  value={passwordConfirm.value}
-                  onChangeText={(textConfirm) =>
-                    setPasswordConfirm({ value: textConfirm, error: "" })
-                  }
-                  error={!!passwordConfirm.error}
-                  errorText={passwordConfirm.error}
-                  textContentType="newPassword"
-                  secureTextEntry
-                  keyboardType="default"
-                />
-              </TouchableWithoutFeedback>
-            </TouchableOpacity>
-            <Button
-              mode="contained"
-              onPress={onSignUpPressed}
-              style={{ marginTop: 10 }}
-            >
-              Бүртгүүлэх
-            </Button>
+          <TouchableOpacity>
+            <TextInput
+              label="Нэр"
+              returnKeyType="next"
+              value={name.value}
+              onChangeText={(text) => setName({ value: text, error: "" })}
+              error={!!name.error}
+              errorText={name.error}
+            />
+            <TextInput
+              label="Утасны дугаар"
+              returnKeyType="next"
+              value={phone.value}
+              onChangeText={(number) => setPhone({ value: number, error: "" })}
+              error={!!phone.error}
+              errorText={phone.error}
+              textContentType="telephoneNumber"
+              keyboardType="number-pad"
+            />
+            <TextInput
+              label="Нууц үг"
+              returnKeyType="next"
+              value={password.value}
+              onChangeText={(text) => setPassword({ value: text, error: "" })}
+              error={!!password.error}
+              errorText={password.error}
+              textContentType="password"
+              secureTextEntry
+              keyboardType="default"
+            />
 
-            <View style={styles.row}>
-              <Text>Та бүртгэлтэй юу? </Text>
-              <TouchableOpacity
-                onPress={() => navigation.replace("LoginScreen")}
-              >
-                <Text style={styles.link}>Тийм</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+            <TextInput
+              label="Нууц үгээ давтана уу."
+              returnKeyType="done"
+              value={passwordConfirm.value}
+              onChangeText={(textConfirm) =>
+                setPasswordConfirm({ value: textConfirm, error: "" })
+              }
+              error={!!passwordConfirm.error}
+              errorText={passwordConfirm.error}
+              textContentType="newPassword"
+              secureTextEntry
+              keyboardType="default"
+            />
+          </TouchableOpacity>
+          <Button
+            mode="contained"
+            onPress={onSignUpPressed}
+            style={{ marginTop: 10 }}
+          >
+            Бүртгүүлэх
+          </Button>
+
+          <View style={styles.row}>
+            <Text>Та бүртгэлтэй юу? </Text>
+            <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
+              <Text style={styles.link}>Тийм</Text>
+            </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </Background>

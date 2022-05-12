@@ -23,6 +23,10 @@ import { passwordValidator } from "../helpers/passwordValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StateContext } from "../Context/StateContext";
 import { golden, platnium, rosegold, member } from "../assets/cardTypes";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: "88268360", error: "" });
@@ -80,7 +84,7 @@ export default function LoginScreen({ navigation }) {
   useEffect(() => {}, []);
   return (
     <Background>
-      <Logo style={{ width: 200, heigth: 150 }} />
+      <Logo style={{ width: wp("25%"), heigth: wp("25%") }} />
       <Header>Welcome back.</Header>
       <SafeAreaView style={{ width: "100%" }}>
         <KeyboardAvoidingView

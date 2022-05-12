@@ -5,7 +5,11 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { theme } from "../core/theme";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 export default function Background({ children }) {
   return (
     <ImageBackground
@@ -23,16 +27,16 @@ export default function Background({ children }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: "100%",
+    width: wp("100%"),
     backgroundColor: theme.colors.surface,
   },
   container: {
     flex: 1,
-    padding: 20,
-    width: "100%",
-    maxWidth: "100%",
+    paddingTop: hp("3%") + getStatusBarHeight(),
+    padding: wp("10%"),
+    width: wp("100%"),
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
 });
