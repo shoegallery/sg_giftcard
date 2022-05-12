@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import { baseUrl } from "../baseUrl";
+import axios from "axios";
+
+import React, { useState, useEffect } from "react";
 import Background from "../components/Background";
 import BackButton from "../components/BackButton";
 import Logo from "../components/Logo";
@@ -6,44 +9,80 @@ import Header from "../components/Header";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { phoneValidator } from "../helpers/phoneValidator";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ForgetPasswordScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: "", error: "" });
+  const [requestPhone, setRequestPhone] = useState({ value: null, error: "" });
 
-  const sendResetPasswordEmail = () => {
-    const emailError = phoneValidator(email.value);
-    if (emailError) {
-      setEmail({ ...email, error: emailError });
+  const sendResetPasswordMessage = () => {
+    const phoneError = phoneValidator(requestPhone.value);
+    if (phoneError) {
+      setRequestPhone({ ...requestPhone, error: phoneError });
       return;
     }
-    navigation.navigate("ResetPasswordScreen");
-  };
 
+    var requestPassword = JSON.stringify({
+      phone: parseInt(requestPhone.value),
+    });
+    var config = {
+      method: "POST",
+      url: `${baseUrl}/wallets/forgot-password`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      data: requestPassword,
+    };
+    try {
+      axios(config)
+        .then(function (responseTokenCode) {
+          // if (response.data.status === true) {
+          // console.log(JSON.stringify(response.data));
+          navigation.navigate("ResetPasswordScreen");
+
+          // }
+        })
+        .catch(function (error) {
+          console.log(error);
+          setRequestPhone({
+            ...requestPhone,
+            error: "Утасны дугаар эсвэл нууц үг буруу байна",
+          });
+        });
+    } catch (err) {
+      // Handle Error Here
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    setRequestPhone({ value: null, error: "" });
+  }, []);
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Logo />
       <Header>Нууц үгээ сэргээх</Header>
-      <TextInput
-        label="Утасны дугаар"
-        returnKeyType="done"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: "" })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-        description="Таны гар утсанд баталгаажуулах код илгээнэ."
-      />
-      <Button
-        mode="contained"
-        onPress={sendResetPasswordEmail}
-        style={{ marginTop: 16 }}
-      >
-        Send Instructions
-      </Button>
+      <SafeAreaView style={{ width: "100%" }}>
+        <TextInput
+          label="Утасны дугаар"
+          returnKeyType="next"
+          value={requestPhone.value}
+          onChangeText={(number) =>
+            setRequestPhone({ value: number, error: "" })
+          }
+          error={!!requestPhone.error}
+          errorText={requestPhone.error}
+          textContentType="telephoneNumber"
+          keyboardType="number-pad"
+          description="Таны гар утсанд баталгаажуулах код илгээнэ."
+        />
+        <Button
+          mode="contained"
+          onPress={sendResetPasswordMessage}
+          style={{ marginTop: 16 }}
+        >
+          Send Instructions
+        </Button>
+      </SafeAreaView>
     </Background>
   );
 }
