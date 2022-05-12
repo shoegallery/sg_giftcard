@@ -1,3 +1,6 @@
+import { baseUrl } from "../baseUrl";
+import axios from "axios";
+
 import React, { useState, useRef } from "react";
 import {
   View,
@@ -8,12 +11,11 @@ import {
   Keyboard,
 } from "react-native";
 import { Text } from "react-native-paper";
+
 import Background from "../components/Background";
 import Logo from "../components/Logo";
-import Header from "../components/Header";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -42,10 +44,42 @@ export default function RegisterScreen({ navigation }) {
       setPasswordConfirm({ ...passwordConfirm, error: passwordError });
       return;
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Dashboard" }],
+    if (password.value !== passwordConfirm.value) {
+      setPasswordConfirm({
+        ...passwordConfirm,
+        error: "Баталгаажуулах нууц үг ижил байх ёстой.",
+      });
+      return;
+    }
+
+    var request = JSON.stringify({
+      username: name.value,
+      phone: parseInt(phone.value),
+      password: password.value,
     });
+    var config = {
+      method: "POST",
+      url: `${baseUrl}/wallets/create`,
+      headers: {
+        "Content-Type": "application/json",
+        Host: "https://dolphin-app-3r9tk.ondigitalocean.app",
+        "Content-Length": 500,
+      },
+      data: request,
+    };
+    axios(config)
+      .then(function (response) {
+        if (response.data.success === true) {
+          // console.log(JSON.stringify(response.data));
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "LoginScreen" }],
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -104,11 +138,11 @@ export default function RegisterScreen({ navigation }) {
                   label="Нууц үгээ давтана уу."
                   returnKeyType="done"
                   value={passwordConfirm.value}
-                  onChangeText={(text) =>
-                    setPasswordConfirm({ value: text, error: "" })
+                  onChangeText={(textConfirm) =>
+                    setPasswordConfirm({ value: textConfirm, error: "" })
                   }
-                  error={!!password.error}
-                  errorText={password.error}
+                  error={!!passwordConfirm.error}
+                  errorText={passwordConfirm.error}
                   textContentType="newPassword"
                   secureTextEntry
                   keyboardType="default"

@@ -1,5 +1,5 @@
 import { baseUrl } from "../baseUrl";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -21,13 +21,16 @@ import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { StateContext } from "../Context/StateContext";
+import { golden, platnium, rosegold, member } from "../assets/cardTypes";
 
 export default function LoginScreen({ navigation }) {
-  const [phone, setPhone] = useState({ value: "86218721", error: "" });
-  const [password, setPassword] = useState({ value: "12345678", error: "" });
+  const [phone, setPhone] = useState({ value: "88268360", error: "" });
+  const [password, setPassword] = useState({ value: "88268360", error: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [request, setRequest] = useState();
+  const [userData, setUserData] = useContext(StateContext);
 
   const onLoginPressed = () => {
     const phoneError = phoneValidator(phone.value);
@@ -42,30 +45,35 @@ export default function LoginScreen({ navigation }) {
       phone: parseInt(phone.value),
       password: password.value,
     });
+
     var config = {
       method: "POST",
       url: `${baseUrl}/wallets/login`,
       headers: {
         "Content-Type": "application/json",
       },
+      maxRedirects: 0,
       data: request,
     };
+    console.log(config.url);
+    console.log(config.data);
 
     axios(config)
       .then(function (response) {
-        if (response.data.status === true) {
-          // console.log(JSON.stringify(response.data));
-
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Dashboard" }],
-          });
-        }
+        // if (response.data.status === true) {
+        // console.log(JSON.stringify(response.data));
+        setUserData(response.data);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Dashboard" }],
+        });
+        // }
       })
       .catch(function (error) {
+        console.log(error);
         setPassword({
           ...password,
-          error: "Утасны дугаараа эсвэл нууц үгээ дахин оруулна уу",
+          error: "Утасны дугаар эсвэл нууц үг буруу байна",
         });
       });
   };
@@ -107,7 +115,7 @@ export default function LoginScreen({ navigation }) {
       </SafeAreaView>
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("ResetPasswordScreen")}
+          onPress={() => navigation.navigate("ForgetPasswordScreen")}
         >
           <Text style={styles.forgot}>Нууц үгээ мартсан уу?</Text>
         </TouchableOpacity>

@@ -7,31 +7,42 @@ import {
   StartScreen,
   LoginScreen,
   RegisterScreen,
-  ResetPasswordScreen,
+  ForgetPasswordScreen,
   Dashboard,
+  ResetPasswordScreen,
 } from "./src/screens";
+import { StateProvider } from "./src/Context/StateContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <Provider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="LoginScreen"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-          <Stack.Screen name="Dashboard" component={Dashboard} />
-          <Stack.Screen
-            name="ResetPasswordScreen"
-            component={ResetPasswordScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <SafeAreaProvider>
+      <StateProvider>
+        <Provider theme={theme}>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="LoginScreen"
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="LoginScreen" component={LoginScreen} />
+              <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+              <Stack.Screen name="Dashboard" component={Dashboard} />
+              <Stack.Screen
+                name="ForgetPasswordScreen"
+                component={ForgetPasswordScreen}
+              />
+              <Stack.Screen
+                name="ResetPasswordScreen"
+                component={ResetPasswordScreen}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
+      </StateProvider>
+    </SafeAreaProvider>
   );
 }
