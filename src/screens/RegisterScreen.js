@@ -10,25 +10,24 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Text } from "react-native-paper";
-
+import Background from "../components/Background";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import Background from "../components/Background";
 import Logo from "../components/Logo";
-import Button from "../components/Button";
+
 import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
-import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });
@@ -90,7 +89,7 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <Background style={{ paddingTop: 100 }}>
+    <Background>
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
       <SafeAreaView style={{ width: wp("80%") }}>
@@ -145,8 +144,16 @@ export default function RegisterScreen({ navigation }) {
               keyboardType="default"
             />
 
-            <Button mode="contained" onPress={onSignUpPressed}>
-              Бүртгүүлэх
+            <Button
+              backgroundColor="#7986CB"
+              shadow={2}
+              size="md"
+              mode="contained"
+              onPress={onSignUpPressed}
+            >
+              <Text fontSize="xl" bold color="white">
+                Болсон
+              </Text>
             </Button>
           </View>
           <View style={styles.row}>

@@ -8,11 +8,9 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import { Text } from "react-native-paper";
-
 import Background from "../components/Background";
 import Logo from "../components/Logo";
-import Button from "../components/Button";
+
 import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -25,7 +23,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-
+import { Button, VStack, Text, NativeBaseProvider } from "native-base";
 export default function ResetPasswordScreen({ navigation }) {
   const [tokenCode, setTokenCode] = useState({ value: null, error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });
@@ -95,7 +93,6 @@ export default function ResetPasswordScreen({ navigation }) {
 
   return (
     <Background>
-      {/* <Header>Бүртгэл үүсгэх</Header> */}
       <SafeAreaView style={{ width: wp("80%"), height: hp("60%") }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -104,7 +101,7 @@ export default function ResetPasswordScreen({ navigation }) {
         >
           <TouchableOpacity>
             <TextInput
-              label="Сэргээх код"
+              label="Баталгаажуулах код"
               returnKeyType="next"
               value={tokenCode.value}
               onChangeText={(numbers) =>
@@ -151,12 +148,18 @@ export default function ResetPasswordScreen({ navigation }) {
               keyboardType="default"
             />
           </TouchableOpacity>
+
           <Button
+            style={{ marginTop: 20 }}
+            backgroundColor="#7986CB"
+            shadow={2}
+            size="md"
             mode="contained"
             onPress={onSignUpPressed}
-            style={{ marginTop: 10 }}
           >
-            Нууц үг сэргээх
+            <Text fontSize="xl" bold color="white">
+              Нууц үг сэргээх
+            </Text>
           </Button>
 
           <View style={styles.row}></View>

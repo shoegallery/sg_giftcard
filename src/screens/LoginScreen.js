@@ -4,17 +4,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
-import { Text } from "react-native-paper";
-import axios from "axios";
 
+import axios from "axios";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
-import Button from "../components/Button";
+// import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 
 import { theme } from "../core/theme";
@@ -22,15 +22,16 @@ import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StateContext } from "../Context/StateContext";
-import { golden, platnium, rosegold, member } from "../assets/cardTypes";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
+import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+
 export default function LoginScreen({ navigation }) {
-  const [phone, setPhone] = useState({ value: "", error: "" });
-  const [password, setPassword] = useState({ value: "", error: "" });
+  const [phone, setPhone] = useState({ value: "86218721", error: "" });
+  const [password, setPassword] = useState({ value: "86218721", error: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [request, setRequest] = useState();
@@ -81,66 +82,105 @@ export default function LoginScreen({ navigation }) {
       });
   };
   useEffect(() => {}, []);
+
   return (
-    <Background>
-      <Logo style={{ width: wp("25%"), heigth: wp("25%") }} />
-      <Header>Welcome back.</Header>
-      <SafeAreaView style={{ width: "100%", height: hp("50%") }}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-          enabled={false}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <TextInput
-              label="Утасны дугаар"
-              returnKeyType="next"
-              value={phone.value}
-              onChangeText={(number) => setPhone({ value: number, error: "" })}
-              error={!!phone.error}
-              errorText={phone.error}
-              textContentType="telephoneNumber"
-              keyboardType="number-pad"
-            />
-          </TouchableWithoutFeedback>
-          <TextInput
-            label="Нууц үг"
-            returnKeyType="next"
-            value={password.value}
-            onChangeText={(text) => setPassword({ value: text, error: "" })}
-            error={!!password.error}
-            errorText={password.error}
-            textContentType="password"
-            secureTextEntry
-            keyboardType="default"
-          />
-        </KeyboardAvoidingView>
-        <View style={styles.forgotPassword}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ForgetPasswordScreen")}
-          >
-            <Text style={styles.forgot}>Нууц үгээ мартсан уу?</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginVertical: 0 }}>
-          <Button mode="contained" onPress={onLoginPressed}>
-            Нэвтрэх
-          </Button>
-        </View>
-        <View style={styles.row}>
-          <Button
-            mode="outlined"
-            onPress={() => navigation.navigate("RegisterScreen")}
-          >
-            Шинээр бүртгүүлэх
-          </Button>
-        </View>
-      </SafeAreaView>
-    </Background>
+    <NativeBaseProvider>
+      <VStack w="100%" space={4} px="2" mt="4">
+        <Background>
+          <Logo style={{ width: wp("25%"), heigth: wp("25%") }} />
+          <Header>Welcome back.</Header>
+          <SafeAreaView style={{ width: "100%", height: hp("50%") }}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Утасны дугаар"
+                  returnKeyType="next"
+                  value={phone.value}
+                  onChangeText={(number) =>
+                    setPhone({ value: number, error: "" })
+                  }
+                  error={!!phone.error}
+                  errorText={phone.error}
+                  textContentType="telephoneNumber"
+                  keyboardType="number-pad"
+                />
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TextInput
+                  label="Нууц үг"
+                  returnKeyType="next"
+                  value={password.value}
+                  onChangeText={(text) =>
+                    setPassword({ value: text, error: "" })
+                  }
+                  error={!!password.error}
+                  errorText={password.error}
+                  textContentType="password"
+                  secureTextEntry
+                  keyboardType="default"
+                />
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.forgotPassword}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("ForgetPasswordScreen")}
+                  >
+                    <Text style={styles.forgot}>Нууц үгээ мартсан уу?</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+            <View style={{ marginVertical: 0 }}>
+              <Button
+                backgroundColor="#7986CB"
+                shadow={2}
+                size="md"
+                mode="contained"
+                onPress={onLoginPressed}
+              >
+                <Text fontSize="xl" bold color="white">
+                  Нэвтрэх
+                </Text>
+              </Button>
+            </View>
+
+            <Button
+              marginTop={hp("2%")}
+              bordered
+              margin="0"
+              variant="Subtle"
+              borderColor="#7986CB"
+              borderWidth="2"
+              size="md"
+              onPress={() => navigation.navigate("RegisterScreen")}
+            >
+              <Text fontSize="xl" bold color="#7986CB">
+                Шинээр бүртгүүлэх
+              </Text>
+            </Button>
+          </SafeAreaView>
+        </Background>
+      </VStack>
+    </NativeBaseProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  inner: {
+    padding: 0,
+    flex: 1,
+    justifyContent: "space-around",
+  },
   forgotPassword: {
     width: "100%",
     alignItems: "flex-end",

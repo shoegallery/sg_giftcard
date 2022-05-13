@@ -15,7 +15,7 @@ import {
 
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
-  console.log(userData);
+  console.log(userData.wallets.balance.$numberDecimal);
   console.log(userData.wallets.walletType);
   var imageSource;
 
@@ -36,6 +36,7 @@ export default function Dashboard({ navigation }) {
           <Image
             source={imageSource}
             style={{
+              marginTop: hp("5%"),
               position: "relative",
               justifyContent: "center",
               alignSelf: "center",

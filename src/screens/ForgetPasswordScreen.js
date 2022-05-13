@@ -7,13 +7,15 @@ import BackButton from "../components/BackButton";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
 import TextInput from "../components/TextInput";
-import Button from "../components/Button";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+
+import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+
 export default function ForgetPasswordScreen({ navigation }) {
   const [requestPhone, setRequestPhone] = useState({ value: null, error: "" });
 
@@ -87,12 +89,18 @@ export default function ForgetPasswordScreen({ navigation }) {
           keyboardType="number-pad"
           description="Таны гар утсанд баталгаажуулах код илгээнэ."
         />
+
         <Button
+          style={{ marginTop: 30 }}
+          backgroundColor="#7986CB"
+          shadow={2}
+          size="md"
           mode="contained"
           onPress={sendResetPasswordMessage}
-          style={{ marginTop: 30 }}
         >
-          Нууц үг сэргээх
+          <Text fontSize="xl" bold color="white">
+            Нууц үг сэргээх
+          </Text>
         </Button>
       </SafeAreaView>
     </Background>
