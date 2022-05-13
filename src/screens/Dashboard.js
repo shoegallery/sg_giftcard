@@ -5,9 +5,10 @@ import Logo from "../components/Logo";
 
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
-import Button from "../components/Button";
-import { StateContext } from "../Context/StateContext";
+import NumberFormat from "react-number-format";
 
+import { StateContext } from "../Context/StateContext";
+import { Button, VStack, Text, NativeBaseProvider } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -15,7 +16,7 @@ import {
 
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
-  console.log(userData.wallets.balance.$numberDecimal);
+  console.log(userData.wallets);
   console.log(userData.wallets.walletType);
   var imageSource;
 
@@ -32,29 +33,58 @@ export default function Dashboard({ navigation }) {
   return (
     <Background>
       <View style={{ flexDirection: "column", display: "flex" }}>
-        <View>
+        <View style={{ position: "relative" }}>
           <Image
             source={imageSource}
             style={{
-              marginTop: hp("5%"),
-              position: "relative",
-              justifyContent: "center",
+              flex: 1,
+
               alignSelf: "center",
+              position: "absolute",
+              maxHeight: hp("35%"),
               width: wp("95%"),
-              maxHeight: hp("30%"),
               resizeMode: "contain",
             }}
           ></Image>
+          <View
+            style={{
+              position: "absolute",
+              marginTop: hp("20%"),
+              marginLeft: wp("1%"),
+            }}
+          >
+            <NumberFormat
+              value={userData.wallets.balance.$numberDecimal}
+              displayType={"text"}
+              thousandSeparator={true}
+              renderText={(formattedValue) => (
+                <View>
+                  <Text color="white" fontSize="xl">
+                    Хэтэвчинд
+                  </Text>
+                  <Text bold paddingTop={0} color="white" fontSize="2xl">
+                    {formattedValue}₮
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
         </View>
-        <View style={{ flex: 3, position: "relative" }}>
+        <View style={{ height: hp("65%"), paddingTop: hp("35%") }}>
+          <Button bordered success>
+            <Text>Success</Text>
+          </Button>
           <Header style={{ position: "relative" }}>Let’s start</Header>
           <Paragraph style={{ position: "relative" }}>
             Your amazing app starts here. Open you favorite code editor and
             start editing this project.
           </Paragraph>
+
           <Button
-            style={{ position: "relative" }}
-            mode="outlined"
+            backgroundColor="#7986CB"
+            shadow={2}
+            size="md"
+            mode="contained"
             onPress={() =>
               navigation.reset({
                 index: 0,
@@ -62,7 +92,9 @@ export default function Dashboard({ navigation }) {
               })
             }
           >
-            Logout
+            <Text fontSize="xl" bold color="white">
+              Logout
+            </Text>
           </Button>
         </View>
       </View>
