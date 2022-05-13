@@ -2,7 +2,10 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { TextInput as Input } from "react-native-paper";
 import { theme } from "../core/theme";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 export default function TextInput({ errorText, description, ...props }) {
   return (
     <View style={styles.container}>
@@ -23,8 +26,9 @@ export default function TextInput({ errorText, description, ...props }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    marginVertical: 5,
+    height: hp("10%"),
+    width: wp("80%"),
+    marginVertical: hp("0.5%"),
   },
   input: {
     backgroundColor: theme.colors.surface,
@@ -32,11 +36,11 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 13,
     color: theme.colors.secondary,
-    paddingTop: 3,
+    paddingTop: hp("1%"),
   },
   error: {
     fontSize: 13,
     color: theme.colors.error,
-    paddingTop: 3,
+    paddingTop: hp("0.5%"),
   },
 });

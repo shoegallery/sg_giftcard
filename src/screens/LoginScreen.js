@@ -124,11 +124,13 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.forgot}>Нууц үгээ мартсан уу?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
-        Нэвтрэх
-      </Button>
+      <View style={{ padding: 0, margin: 0 }}>
+        <Button mode="contained" onPress={onLoginPressed}>
+          Нэвтрэх
+        </Button>
+      </View>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => navigation.replace("RegisterScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
           <Text style={styles.link}>Шинээр бүртгүүлэх</Text>
         </TouchableOpacity>
       </View>

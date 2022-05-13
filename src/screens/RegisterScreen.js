@@ -1,5 +1,6 @@
 import { baseUrl } from "../baseUrl";
 import axios from "axios";
+import BackButton from "../components/BackButton";
 
 import React, { useState, useRef } from "react";
 import {
@@ -87,6 +88,7 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <Background style={{ paddingTop: 100 }}>
+      <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
       <SafeAreaView style={{ width: wp("80%"), height: hp("60%") }}>
         <KeyboardAvoidingView
@@ -139,11 +141,7 @@ export default function RegisterScreen({ navigation }) {
               keyboardType="default"
             />
           </TouchableOpacity>
-          <Button
-            mode="contained"
-            onPress={onSignUpPressed}
-            style={{ marginTop: 10 }}
-          >
+          <Button mode="contained" onPress={onSignUpPressed}>
             Бүртгүүлэх
           </Button>
 

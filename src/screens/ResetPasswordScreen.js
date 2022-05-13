@@ -7,8 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -20,12 +18,14 @@ import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { tokenCodeValidator } from "../helpers/tokenCodeValidator";
+import { passwordConfirmValidator } from "../helpers/passwordConfirmValidator";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+
 export default function ResetPasswordScreen({ navigation }) {
   const [tokenCode, setTokenCode] = useState({ value: null, error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });
@@ -38,13 +38,15 @@ export default function ResetPasswordScreen({ navigation }) {
     const tokenCodeError = tokenCodeValidator(tokenCode.value);
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
-    const passwordConfirmError = passwordValidator(passwordConfirm.value);
+    const passwordConfirmError = passwordConfirmValidator(
+      passwordConfirm.value
+    );
 
     if (phoneError || passwordError || tokenCodeError || passwordConfirmError) {
-      setName({ ...tokenCode, error: tokenCodeError });
+      setTokenCode({ ...tokenCode, error: tokenCodeError });
       setPhone({ ...phone, error: phoneError });
       setPassword({ ...password, error: passwordError });
-      setPasswordConfirm({ ...passwordConfirm, error: passwordError });
+      setPasswordConfirm({ ...passwordConfirm, error: passwordConfirmError });
       return;
     }
     if (password.value !== passwordConfirm.value) {
@@ -55,11 +57,13 @@ export default function ResetPasswordScreen({ navigation }) {
       return;
     }
 
+    console.log(request);
     var request = JSON.stringify({
-      token: tokenCode.value,
+      resetToken: parseInt(tokenCode.value),
       phone: parseInt(phone.value),
       password: password.value,
     });
+    console.log(request);
     var config = {
       method: "POST",
       url: `${baseUrl}/wallets/reset-password`,
@@ -70,7 +74,7 @@ export default function ResetPasswordScreen({ navigation }) {
     };
     axios(config)
       .then(function (response) {
-        if (response.data.success === true) {
+        if (response.data.status === true) {
           // console.log(JSON.stringify(response.data));
           navigation.reset({
             index: 0,
@@ -79,7 +83,13 @@ export default function ResetPasswordScreen({ navigation }) {
         }
       })
       .catch(function (error) {
-        console.log(error);
+        const err = JSON.parse(JSON.stringify(error));
+        if (err.status == 403) {
+          setTokenCode({
+            ...requestPhone,
+            error: "Сэргээх код хүчингүй байна",
+          });
+        }
       });
   };
 
@@ -96,10 +106,12 @@ export default function ResetPasswordScreen({ navigation }) {
             <TextInput
               label="Сэргээх код"
               returnKeyType="next"
-              value={phone.value}
-              onChangeText={(number) => setPhone({ value: number, error: "" })}
-              error={!!phone.error}
-              errorText={phone.error}
+              value={tokenCode.value}
+              onChangeText={(numbers) =>
+                setTokenCode({ value: numbers, error: "" })
+              }
+              error={!!tokenCode.error}
+              errorText={tokenCode.error}
               textContentType="telephoneNumber"
               keyboardType="number-pad"
             />
@@ -144,15 +156,10 @@ export default function ResetPasswordScreen({ navigation }) {
             onPress={onSignUpPressed}
             style={{ marginTop: 10 }}
           >
-            Бүртгүүлэх
+            Нууц үг сэргээх
           </Button>
 
-          <View style={styles.row}>
-            <Text>Та бүртгэлтэй юу? </Text>
-            <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
-              <Text style={styles.link}>Тийм</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.row}></View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </Background>

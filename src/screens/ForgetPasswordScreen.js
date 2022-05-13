@@ -43,11 +43,19 @@ export default function ForgetPasswordScreen({ navigation }) {
           // }
         })
         .catch(function (error) {
-          console.log(error);
-          setRequestPhone({
-            ...requestPhone,
-            error: "Утасны дугаар эсвэл нууц үг буруу байна",
-          });
+          const err = JSON.parse(JSON.stringify(error));
+
+          if (err.status == 401) {
+            setRequestPhone({
+              ...requestPhone,
+              error: "Хэрэглэгч олдсонгүй утасны дугаараа шалгана уу",
+            });
+          } else if (err.status == 402) {
+            setRequestPhone({
+              ...requestPhone,
+              error: "3 хоногт 1 удаа нууц үг сэргээх боломжтой",
+            });
+          }
         });
     } catch (err) {
       // Handle Error Here
@@ -80,7 +88,7 @@ export default function ForgetPasswordScreen({ navigation }) {
           onPress={sendResetPasswordMessage}
           style={{ marginTop: 16 }}
         >
-          Send Instructions
+          Нууц үг сэргээх
         </Button>
       </SafeAreaView>
     </Background>
