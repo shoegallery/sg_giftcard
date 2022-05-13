@@ -7,11 +7,12 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import { Text } from "react-native-paper";
+
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Background from "../components/Background";
 import Logo from "../components/Logo";
@@ -72,31 +73,34 @@ export default function RegisterScreen({ navigation }) {
     };
     axios(config)
       .then(function (response) {
-        console.log(response.data);
         if (response.data.success === true) {
           // console.log(JSON.stringify(response.data));
           navigation.reset({
             index: 0,
             routes: [{ name: "LoginScreen" }],
           });
+        } else {
+          setPhone({
+            ...phone,
+            error: response.data.message,
+          });
         }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch(function (error) {});
   };
 
   return (
     <Background style={{ paddingTop: 100 }}>
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
-      <SafeAreaView style={{ width: wp("80%"), height: hp("60%") }}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-          enabled={false}
+      <SafeAreaView style={{ width: wp("80%") }}>
+        <KeyboardAwareScrollView
+          enableAutomaticScroll={true}
+          enableOnAndroid={true}
+          extraHeight={200}
+          extraScrollHeight={0}
         >
-          <TouchableOpacity>
+          <View>
             <TextInput
               label="Нэр"
               returnKeyType="next"
@@ -140,18 +144,18 @@ export default function RegisterScreen({ navigation }) {
               secureTextEntry
               keyboardType="default"
             />
-          </TouchableOpacity>
-          <Button mode="contained" onPress={onSignUpPressed}>
-            Бүртгүүлэх
-          </Button>
 
+            <Button mode="contained" onPress={onSignUpPressed}>
+              Бүртгүүлэх
+            </Button>
+          </View>
           <View style={styles.row}>
             <Text>Та бүртгэлтэй юу? </Text>
             <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
               <Text style={styles.link}>Тийм</Text>
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Background>
   );

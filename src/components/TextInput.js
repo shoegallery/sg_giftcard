@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     height: hp("10%"),
     width: wp("80%"),
-    marginVertical: hp("0.5%"),
+    marginVertical: hp("1%"),
   },
   input: {
     backgroundColor: theme.colors.surface,
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 13,
     color: theme.colors.error,
-    paddingTop: hp("0.5%"),
+    paddingTop: hp("0%"),
+    marginBottom: hp("1%"),
   },
 });

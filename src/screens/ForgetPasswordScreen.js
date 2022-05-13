@@ -10,7 +10,10 @@ import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 export default function ForgetPasswordScreen({ navigation }) {
   const [requestPhone, setRequestPhone] = useState({ value: null, error: "" });
 
@@ -67,8 +70,9 @@ export default function ForgetPasswordScreen({ navigation }) {
   }, []);
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
       <Header>Нууц үгээ сэргээх</Header>
+
+      <BackButton goBack={navigation.goBack} />
       <SafeAreaView style={{ width: "100%" }}>
         <TextInput
           label="Утасны дугаар"
@@ -86,7 +90,7 @@ export default function ForgetPasswordScreen({ navigation }) {
         <Button
           mode="contained"
           onPress={sendResetPasswordMessage}
-          style={{ marginTop: 16 }}
+          style={{ marginTop: 30 }}
         >
           Нууц үг сэргээх
         </Button>

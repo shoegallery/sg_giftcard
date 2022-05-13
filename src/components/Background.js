@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: wp("100%"),
     backgroundColor: theme.colors.surface,
+    position: "absolute",
+    height: hp("110%"),
   },
   container: {
     flex: 1,
