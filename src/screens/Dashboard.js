@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import Background from "../components/Background";
-import Logo from "../components/Logo";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
 import NumberFormat from "react-number-format";
-
+import { amountValidator } from "../helpers/amountValidator";
 import { StateContext } from "../Context/StateContext";
 import {
   Button,
-  VStack,
   Modal,
   Text,
   NativeBaseProvider,
   FormControl,
   Input,
-  Center,
-  NavigationContainer,
+  ZStack,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -27,21 +24,47 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
-
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [receiverPhone, setReceiverPhone] = useState("");
+
+  const [receiverAmount, setReceiverAmount] = useState({
+    value: "",
+    error: "",
+  });
+
+  const checkOut = () => {
+    const receiverAmountError = amountValidator(receiverAmount.value);
+    if (receiverAmountError) {
+      setReceiverAmount({ ...receiverAmount, error: receiverAmountError });
+      return;
+    }
+
+    console.log(receiverAmount);
+    console.log(receiverPhone);
+  };
 
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
+    setShowModal(false);
+    setCameraOpen(false);
+    setScanned(false);
+    setHasPermission(false);
+    setReceiverAmount({
+      value: "",
+      error: "",
+    });
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({ data }) => {
+    setReceiverPhone(data);
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    alert(`Амжилттай уншигдлаа. ${data} ok дээр дарна уу`);
+    setCameraOpen(false);
   };
 
   if (hasPermission === null) {
@@ -54,7 +77,7 @@ export default function Dashboard({ navigation }) {
   console.log(userData.wallets.walletType);
 
   var imageSource;
-
+  console.log(receiverAmount);
   if (userData.wallets.walletType === "member") {
     imageSource = require("../assets/cardTypes/member.png");
   } else if (userData.wallets.walletType === "rosegold") {
@@ -136,61 +159,91 @@ export default function Dashboard({ navigation }) {
                 success
                 onPress={() => {
                   setShowModal(true);
+                  setCameraOpen(true);
                 }}
               >
                 <Text bold fontSize="lg" color="#4E3620">
                   Худалдан авалт
                 </Text>
               </Button>
-              <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                <Modal.Content width={wp("80%")} height={hp("60%")}>
-                  <Modal.CloseButton />
-                  <Modal.Header>Contact Us</Modal.Header>
-                  <BarCodeScanner
-                    onBarCodeScanned={
-                      scanned ? undefined : handleBarCodeScanned
-                    }
-                    style={StyleSheet.absoluteFillObject}
-                  >
-                    {scanned && (
-                      <Button
-                        title={"Tap to Scan Again"}
-                        onPress={() => setScanned(false)}
-                      />
+              {showModal ? (
+                <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                  <Modal.Content width={wp("80%")} height={hp("60%")}>
+                    <Modal.CloseButton />
+                    <Modal.Header>Төлбөр төлөх</Modal.Header>
+                    {cameraOpen ? (
+                      <BarCodeScanner
+                        onBarCodeScanned={
+                          scanned ? undefined : handleBarCodeScanned
+                        }
+                        style={StyleSheet.absoluteFillObject}
+                      >
+                        {scanned && (
+                          <Button
+                            height={hp("8%")}
+                            onPress={() => {
+                              setScanned(false);
+                              setReceiverPhone(false);
+                            }}
+                          >
+                            Дахин скан хийх
+                          </Button>
+                        )}
+                      </BarCodeScanner>
+                    ) : (
+                      <View></View>
                     )}
-                  </BarCodeScanner>
-                  <Modal.Body>
-                    <FormControl>
-                      <FormControl.Label>Name</FormControl.Label>
-                      <Input />
-                    </FormControl>
-                    <FormControl mt="3">
-                      <FormControl.Label>Email</FormControl.Label>
-                      <Input />
-                    </FormControl>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button.Group space={2}>
-                      <Button
-                        variant="ghost"
-                        colorScheme="blueGray"
-                        onPress={() => {
-                          setShowModal(false);
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onPress={() => {
-                          setShowModal(false);
-                        }}
-                      >
-                        Save
-                      </Button>
-                    </Button.Group>
-                  </Modal.Footer>
-                </Modal.Content>
-              </Modal>
+
+                    <Modal.Body>
+                      <FormControl>
+                        <FormControl.Label>Хүлээн авагч</FormControl.Label>
+
+                        <Input value={receiverPhone} />
+                      </FormControl>
+                      <FormControl mt="3">
+                        <FormControl.Label>Үнийн дүн</FormControl.Label>
+                        <Input
+                          returnKeyType="done"
+                          value={receiverAmount.value}
+                          onChangeText={(receiverAmountNumber) =>
+                            setReceiverAmount({
+                              value: receiverAmountNumber,
+                              error: "",
+                            })
+                          }
+                          error={!!receiverAmount.error}
+                          errorText={receiverAmount.error}
+                          keyboardType="number-pad"
+                        />
+                      </FormControl>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                      <Button.Group space={2}>
+                        <Button
+                          variant="ghost"
+                          colorScheme="blueGray"
+                          onPress={() => {
+                            setShowModal(false);
+                          }}
+                        >
+                          Болих
+                        </Button>
+                        <Button
+                          onPress={() => {
+                            setShowModal(false);
+                            checkOut();
+                          }}
+                        >
+                          Төлөх
+                        </Button>
+                      </Button.Group>
+                    </Modal.Footer>
+                  </Modal.Content>
+                </Modal>
+              ) : (
+                <View></View>
+              )}
 
               <Button
                 isDisabled
@@ -210,9 +263,9 @@ export default function Dashboard({ navigation }) {
                 </Text>
               </Button>
             </View>
+
             <View style={{ paddingTop: 100 }}>
               <Header style={{}}>Let’s start</Header>
-
               <Paragraph style={{ position: "relative" }}>
                 Your amazing app starts here. Open you favorite code editor and
                 start editing this project.

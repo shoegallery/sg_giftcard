@@ -40,6 +40,7 @@ export default function LoginScreen({ navigation }) {
   const onLoginPressed = () => {
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
+
     if (phoneError || passwordError) {
       setPhone({ ...phone, error: phoneError });
       setPassword({ ...password, error: passwordError });
