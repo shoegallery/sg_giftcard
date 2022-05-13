@@ -26,7 +26,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+import {
+  Button,
+  VStack,
+  Text,
+  NativeBaseProvider,
+  ScrollView,
+} from "native-base";
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });
@@ -92,70 +98,70 @@ export default function RegisterScreen({ navigation }) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
-      <SafeAreaView style={{ width: wp("80%") }}>
+      <SafeAreaView style={{ width: wp("80%"), height: hp("75%") }}>
         <KeyboardAwareScrollView
           enableAutomaticScroll={true}
           enableOnAndroid={true}
           extraHeight={200}
-          extraScrollHeight={0}
+          extraScrollHeight={-50}
         >
-          <View>
-            <TextInput
-              label="Нэр"
-              returnKeyType="next"
-              value={name.value}
-              onChangeText={(text) => setName({ value: text, error: "" })}
-              error={!!name.error}
-              errorText={name.error}
-            />
-            <TextInput
-              label="Утасны дугаар"
-              returnKeyType="next"
-              value={phone.value}
-              onChangeText={(number) => setPhone({ value: number, error: "" })}
-              error={!!phone.error}
-              errorText={phone.error}
-              textContentType="telephoneNumber"
-              keyboardType="number-pad"
-            />
-            <TextInput
-              label="Нууц үг"
-              returnKeyType="next"
-              value={password.value}
-              onChangeText={(text) => setPassword({ value: text, error: "" })}
-              error={!!password.error}
-              errorText={password.error}
-              textContentType="password"
-              secureTextEntry
-              keyboardType="default"
-            />
+          <TextInput
+            label="Нэр"
+            returnKeyType="next"
+            value={name.value}
+            onChangeText={(text) => setName({ value: text, error: "" })}
+            error={!!name.error}
+            errorText={name.error}
+          />
+          <TextInput
+            label="Утасны дугаар"
+            returnKeyType="next"
+            value={phone.value}
+            onChangeText={(number) => setPhone({ value: number, error: "" })}
+            error={!!phone.error}
+            errorText={phone.error}
+            textContentType="telephoneNumber"
+            keyboardType="number-pad"
+          />
+          <TextInput
+            label="Нууц үг"
+            returnKeyType="next"
+            value={password.value}
+            onChangeText={(text) => setPassword({ value: text, error: "" })}
+            error={!!password.error}
+            errorText={password.error}
+            textContentType="password"
+            secureTextEntry
+            keyboardType="default"
+          />
 
-            <TextInput
-              label="Нууц үгээ давтана уу."
-              returnKeyType="done"
-              value={passwordConfirm.value}
-              onChangeText={(textConfirm) =>
-                setPasswordConfirm({ value: textConfirm, error: "" })
-              }
-              error={!!passwordConfirm.error}
-              errorText={passwordConfirm.error}
-              textContentType="newPassword"
-              secureTextEntry
-              keyboardType="default"
-            />
+          <TextInput
+            label="Нууц үгээ давтана уу."
+            returnKeyType="done"
+            value={passwordConfirm.value}
+            onChangeText={(textConfirm) =>
+              setPasswordConfirm({ value: textConfirm, error: "" })
+            }
+            error={!!passwordConfirm.error}
+            errorText={passwordConfirm.error}
+            textContentType="newPassword"
+            secureTextEntry
+            keyboardType="default"
+          />
 
-            <Button
-              backgroundColor="#7986CB"
-              shadow={2}
-              size="md"
-              mode="contained"
-              onPress={onSignUpPressed}
-            >
-              <Text fontSize="xl" bold color="white">
-                Болсон
-              </Text>
-            </Button>
-          </View>
+          <Button
+            marginTop={hp("2%")}
+            backgroundColor="#7986CB"
+            shadow={2}
+            size="md"
+            mode="contained"
+            onPress={onSignUpPressed}
+          >
+            <Text fontSize="xl" bold color="white">
+              Болсон
+            </Text>
+          </Button>
+
           <View style={styles.row}>
             <Text>Та бүртгэлтэй юу? </Text>
             <TouchableOpacity onPress={() => navigation.replace("LoginScreen")}>
