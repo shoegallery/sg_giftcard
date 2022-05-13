@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
-
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
 import NumberFormat from "react-number-format";
@@ -32,15 +31,13 @@ export default function Dashboard({ navigation }) {
 
   return (
     <Background>
-      <View style={{ flexDirection: "column", display: "flex" }}>
-        <View style={{ position: "relative" }}>
+      <View style={{ display: "flex" }}>
+        <View>
           <Image
             source={imageSource}
             style={{
-              flex: 1,
-
               alignSelf: "center",
-              position: "absolute",
+              position: "relative",
               maxHeight: hp("35%"),
               width: wp("95%"),
               resizeMode: "contain",
@@ -50,7 +47,9 @@ export default function Dashboard({ navigation }) {
             style={{
               position: "absolute",
               marginTop: hp("20%"),
-              marginLeft: wp("1%"),
+              marginLeft: wp("10%"),
+
+              padding: 1,
             }}
           >
             <NumberFormat
@@ -70,32 +69,82 @@ export default function Dashboard({ navigation }) {
             />
           </View>
         </View>
-        <View style={{ height: hp("65%"), paddingTop: hp("35%") }}>
-          <Button bordered success>
-            <Text>Success</Text>
-          </Button>
-          <Header style={{ position: "relative" }}>Let’s start</Header>
-          <Paragraph style={{ position: "relative" }}>
-            Your amazing app starts here. Open you favorite code editor and
-            start editing this project.
-          </Paragraph>
-
-          <Button
-            backgroundColor="#7986CB"
-            shadow={2}
-            size="md"
-            mode="contained"
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "LoginScreen" }],
-              })
-            }
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+            height: hp("45%"),
+            width: wp("95%"),
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              width: wp("95%"),
+              position: "absolute",
+              height: hp("6%"),
+            }}
           >
-            <Text fontSize="xl" bold color="white">
-              Logout
-            </Text>
-          </Button>
+            <Button
+              variant="subtle"
+              borderWidth={3}
+              backgroundColor="#EEE4AB"
+              borderColor="#ECB390"
+              borderRadius={10}
+              height={16}
+              marginRight={1}
+              flex={1}
+              bordered
+              success
+            >
+              <Text bold fontSize="lg" color="#4E3620">
+                Худалдан авалт
+              </Text>
+            </Button>
+            <Button
+              isDisabled
+              variant="subtle"
+              borderWidth={3}
+              backgroundColor="#EEEDDE"
+              borderColor="#898B8A"
+              borderRadius={10}
+              marginLeft={1}
+              height={16}
+              flex={1}
+              bordered
+              success
+            >
+              <Text bold fontSize="lg" color="#898B8A">
+                Цэнэглэлт
+              </Text>
+            </Button>
+          </View>
+          <View style={{ paddingTop: 100 }}>
+            <Header style={{}}>Let’s start</Header>
+            <Paragraph style={{ position: "relative" }}>
+              Your amazing app starts here. Open you favorite code editor and
+              start editing this project.
+            </Paragraph>
+            <View style={{ justifyContent: "flex-end" }}>
+              <Button
+                backgroundColor="#7986CB"
+                shadow={2}
+                size="md"
+                mode="contained"
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "LoginScreen" }],
+                  })
+                }
+              >
+                <Text fontSize="xl" bold color="white">
+                  Logout
+                </Text>
+              </Button>
+            </View>
+          </View>
         </View>
       </View>
     </Background>

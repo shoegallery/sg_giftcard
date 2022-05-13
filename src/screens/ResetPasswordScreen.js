@@ -151,7 +151,7 @@ export default function ResetPasswordScreen({ navigation }) {
 
           <Button
             style={{ marginTop: 20 }}
-            backgroundColor="#7986CB"
+            backgroundColor="#0D7377"
             shadow={2}
             size="md"
             mode="contained"

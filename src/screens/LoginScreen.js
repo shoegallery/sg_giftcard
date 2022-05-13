@@ -142,7 +142,7 @@ export default function LoginScreen({ navigation }) {
             </KeyboardAvoidingView>
             <View style={{ marginVertical: 0 }}>
               <Button
-                backgroundColor="#7986CB"
+                backgroundColor="#0D7377"
                 shadow={2}
                 size="md"
                 mode="contained"
@@ -159,12 +159,12 @@ export default function LoginScreen({ navigation }) {
               bordered
               margin="0"
               variant="Subtle"
-              borderColor="#7986CB"
+              borderColor="#0D7377"
               borderWidth="2"
               size="md"
               onPress={() => navigation.navigate("RegisterScreen")}
             >
-              <Text fontSize="xl" bold color="#7986CB">
+              <Text fontSize="xl" bold color="#0D7377">
                 Шинээр бүртгүүлэх
               </Text>
             </Button>
