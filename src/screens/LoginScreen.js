@@ -31,7 +31,7 @@ import { Button, VStack, Text, NativeBaseProvider } from "native-base";
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: "86218721", error: "" });
-  const [password, setPassword] = useState({ value: "86218721", error: "" });
+  const [password, setPassword] = useState({ value: "123456", error: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [request, setRequest] = useState();

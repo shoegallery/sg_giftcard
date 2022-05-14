@@ -2,7 +2,7 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { View, Image, StyleSheet, Alert } from "react-native";
+import { View, Image, StyleSheet, Alert, RefreshControl } from "react-native";
 import Background from "../components/Background";
 import Header from "../components/Header";
 import Paragraph from "../components/Paragraph";
@@ -27,6 +27,10 @@ import {
 } from "react-native-responsive-screen";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
@@ -38,6 +42,12 @@ export default function Dashboard({ navigation }) {
     value: "",
     error: "",
   });
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const checkOut = () => {
     const receiverPhoneError = phoneValidator(receiverPhone.value);
@@ -68,9 +78,10 @@ export default function Dashboard({ navigation }) {
       .then(function (response) {
         if (response.data.success === true) {
           // console.log(JSON.stringify(response.data));
+
           Alert.alert(
             "Гүйлгээ амжилттай",
-            "Таны худалдан авалтын төлбөр амжилттай төлөгдлөө",
+            `Таны худалдан авалтын төлбөр ${receiverAmount.value}₮ амжилттай төлөгдлөө`,
             [
               {
                 text: "OK",
@@ -108,6 +119,28 @@ export default function Dashboard({ navigation }) {
       });
   };
 
+  const dataRefresher = () => {
+    var data = JSON.stringify({ phone: "86218721" });
+    var configRefresh = {
+      method: "post",
+      url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `Bearer=${userData.token}`,
+      },
+      data: data,
+    };
+    console.log(data);
+    axios(configRefresh)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        const err = JSON.parse(JSON.stringify(error));
+        console.log(err);
+      });
+  };
+
   const handleBarCodeScanned = ({ data }) => {
     setReceiverPhone({ value: data, error: "" });
     setScanned(true);
@@ -131,7 +164,7 @@ export default function Dashboard({ navigation }) {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-
+    dataRefresher();
     setShowModal(false);
     setCameraOpen(false);
     setScanned(false);
@@ -400,12 +433,7 @@ export default function Dashboard({ navigation }) {
                   shadow={2}
                   size="md"
                   mode="contained"
-                  onPress={() =>
-                    navigation.reset({
-                      index: 0,
-                      routes: [{ name: "LoginScreen" }],
-                    })
-                  }
+                  onPress={() => dataRefresher()}
                 >
                   <Text fontSize="xl" bold color="white">
                     Logout
