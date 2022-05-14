@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
   },
   description: {
+    fontWeight: "200",
     fontSize: 13,
     color: theme.colors.secondary,
     paddingTop: hp("1%"),
