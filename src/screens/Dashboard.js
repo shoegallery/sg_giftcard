@@ -19,7 +19,7 @@ import {
   NativeBaseProvider,
   FormControl,
   Input,
-  ZStack,
+  Box,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -33,7 +33,7 @@ export default function Dashboard({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
   const [receiverAmount, setReceiverAmount] = useState({
     value: "",
     error: "",
@@ -48,7 +48,6 @@ export default function Dashboard({ navigation }) {
       return;
     }
 
-    console.log("shaa");
     var request = JSON.stringify({
       fromPhone: userData.wallets.phone,
       toPhone: parseInt(receiverPhone.value),
@@ -110,7 +109,7 @@ export default function Dashboard({ navigation }) {
   };
 
   const handleBarCodeScanned = ({ data }) => {
-    setReceiverPhone(data);
+    setReceiverPhone({ value: data, error: "" });
     setScanned(true);
     alert(`Амжилттай уншигдлаа. ok дээр дарна уу`);
     setCameraOpen(false);
@@ -129,7 +128,6 @@ export default function Dashboard({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      console.log("first");
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
@@ -139,6 +137,7 @@ export default function Dashboard({ navigation }) {
     setScanned(false);
     checkOut();
     setHasPermission(null);
+    setReceiverPhone({ value: "", error: "" });
     setReceiverAmount({
       value: "",
       error: "",
@@ -146,8 +145,8 @@ export default function Dashboard({ navigation }) {
   }, []);
   if (hasPermission === false && cameraOpen === false && showModal === false) {
     Alert.alert(
-      "Санамж*",
-      "Та камерны зөвшөөрлөө манай апп-д өгөөгүй байна. Та худалдан авалт хийхдээ хүлээн авагчийн дугаарыг сайтар нягтална уу.",
+      "Санамж",
+      "Та апп-д камер ашиглах зөвшөөрөл олгоогүй байна. Та худалдан авалт хийхдээ хүлээн авагчийн дугаарыг сайтар нягтална уу.",
       [
         {
           text: "OK",
@@ -155,8 +154,7 @@ export default function Dashboard({ navigation }) {
       ]
     );
   }
-  console.log(hasPermission);
-  console.log(cameraOpen + " sss");
+
   return (
     <NativeBaseProvider>
       <Background>
@@ -171,7 +169,7 @@ export default function Dashboard({ navigation }) {
                 width: wp("95%"),
                 resizeMode: "contain",
               }}
-            ></Image>
+            />
             <View
               style={{
                 position: "absolute",
@@ -256,8 +254,11 @@ export default function Dashboard({ navigation }) {
                             height={hp("8%")}
                             onPress={() => {
                               setScanned(false);
-                              setReceiverPhone("");
-                              setReceiverAmount("");
+
+                              setReceiverAmount({
+                                value: "",
+                                error: "",
+                              });
                               setShowModal(true);
                               setCameraOpen(true);
                             }}
@@ -283,44 +284,45 @@ export default function Dashboard({ navigation }) {
                         </FormControl.Label>
 
                         {hasPermission === true ? (
-                          <View>
+                          <Box>
                             <Input
                               fontSize={20}
                               readonly="readonly"
-                              value={receiverPhone}
+                              value={String(receiverPhone.value)}
                             />
-                          </View>
+                          </Box>
                         ) : (
                           <View>
-                            <Input
-                              fontSize={20}
-                              returnKeyType="next"
-                              onChangeText={(receiverAmountPhone) =>
-                                setReceiverPhone({
-                                  value: receiverAmountPhone,
-                                  error: "",
-                                })
-                              }
-                              error={!!receiverPhone.error}
-                              errorText={receiverPhone.error}
-                              keyboardType="number-pad"
-                            ></Input>
+                            <Box>
+                              <Input
+                                fontSize={20}
+                                returnKeyType="next"
+                                onChangeText={(receiverAmountPhone) =>
+                                  setReceiverPhone({
+                                    value: receiverAmountPhone,
+                                    error: "",
+                                  })
+                                }
+                                keyboardType="number-pad"
+                              />
+                            </Box>
                           </View>
                         )}
                       </FormControl>
-                      <FormControl>
-                        <FormControl.Label>
-                          <Text
-                            fontSize={20}
-                            fontWeight="semibold"
-                            color="gray.700"
-                          >
-                            Үнийн дүн
-                          </Text>
-                        </FormControl.Label>
+
+                      <FormControl.Label>
+                        <Text
+                          fontSize={20}
+                          fontWeight="semibold"
+                          color="gray.700"
+                        >
+                          Үнийн дүн
+                        </Text>
+                      </FormControl.Label>
+                      <Box>
                         <Input
                           fontSize={20}
-                          value={receiverAmount.value}
+                          value={String(receiverAmount.value)}
                           returnKeyType="done"
                           onChangeText={(receiverAmountNumber) =>
                             setReceiverAmount({
@@ -328,11 +330,9 @@ export default function Dashboard({ navigation }) {
                               error: "",
                             })
                           }
-                          error={!!receiverAmount.error}
-                          errorText={receiverAmount.error}
                           keyboardType="number-pad"
-                        ></Input>
-                      </FormControl>
+                        />
+                      </Box>
                     </Modal.Body>
 
                     <Modal.Footer>
@@ -342,8 +342,11 @@ export default function Dashboard({ navigation }) {
                           colorScheme="blueGray"
                           onPress={() => {
                             setShowModal(false);
-                            setReceiverPhone("");
-                            setReceiverAmount("");
+                            setReceiverPhone({ value: "", error: "" });
+                            setReceiverAmount({
+                              value: "",
+                              error: "",
+                            });
                             setScanned(false);
                           }}
                         >
@@ -353,8 +356,6 @@ export default function Dashboard({ navigation }) {
                           onPress={() => {
                             setShowModal(false);
                             checkOut();
-                            setReceiverPhone("");
-                            setReceiverAmount("");
                             setScanned(false);
                           }}
                         >
