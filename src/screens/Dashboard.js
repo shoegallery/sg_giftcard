@@ -77,8 +77,9 @@ export default function Dashboard({ navigation }) {
     axios(config)
       .then(function (response) {
         if (response.data.success === true) {
-          // console.log(JSON.stringify(response.data));
-
+          setReceiverPhone({ value: "", error: "" });
+          setReceiverAmount({ value: "", error: "" });
+          dataRefresher();
           Alert.alert(
             "Гүйлгээ амжилттай",
             `Таны худалдан авалтын төлбөр ${receiverAmount.value}₮ амжилттай төлөгдлөө`,
@@ -97,7 +98,6 @@ export default function Dashboard({ navigation }) {
         }
       })
       .catch(function (error) {
-        console.log(error);
         const err = JSON.parse(JSON.stringify(error));
         if (err.status == 405) {
           Alert.alert(
@@ -120,25 +120,33 @@ export default function Dashboard({ navigation }) {
   };
 
   const dataRefresher = () => {
-    var data = JSON.stringify({ phone: "86218721" });
-    var configRefresh = {
-      method: "post",
-      url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `Bearer=${userData.token}`,
-      },
-      data: data,
-    };
-    console.log(data);
-    axios(configRefresh)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        const err = JSON.parse(JSON.stringify(error));
-        console.log(err);
+    console.log("first");
+    try {
+      var requests = JSON.stringify({
+        phone: userData.wallets.phone,
       });
+
+      var configs = {
+        method: "POST",
+        url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `Bearer=${userData.token}`,
+        },
+        maxRedirects: 0,
+        data: requests,
+      };
+      axios(configs)
+        .then(function (response) {
+          setUserData({
+            token: userData.token,
+            wallets: response.data.wallets,
+          });
+        })
+        .catch(function (error) {});
+    } catch (err) {
+      console;
+    }
   };
 
   const handleBarCodeScanned = ({ data }) => {
@@ -164,7 +172,6 @@ export default function Dashboard({ navigation }) {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-    dataRefresher();
     setShowModal(false);
     setCameraOpen(false);
     setScanned(false);

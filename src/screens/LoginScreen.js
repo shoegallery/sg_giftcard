@@ -66,8 +66,6 @@ export default function LoginScreen({ navigation }) {
 
     axios(config)
       .then(function (response) {
-        // if (response.data.status === true) {
-        // console.log(JSON.stringify(response.data));
         setUserData(response.data);
         navigation.reset({
           index: 0,
