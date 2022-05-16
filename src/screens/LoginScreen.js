@@ -21,7 +21,7 @@ import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StateContext } from "../Context/StateContext";
+import { StateContext, StateContextHistory } from "../Context/StateContext";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -31,7 +31,7 @@ import { Button, VStack, Text, NativeBaseProvider } from "native-base";
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: "86218721", error: "" });
-  const [password, setPassword] = useState({ value: "123456", error: "" });
+  const [password, setPassword] = useState({ value: "12345678", error: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [request, setRequest] = useState();
@@ -61,8 +61,6 @@ export default function LoginScreen({ navigation }) {
       maxRedirects: 0,
       data: request,
     };
-    console.log(config.url);
-    console.log(config.data);
 
     axios(config)
       .then(function (response) {

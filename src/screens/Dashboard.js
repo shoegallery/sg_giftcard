@@ -2,16 +2,15 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { View, Image, StyleSheet, Alert, RefreshControl } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import Background from "../components/Background";
-import Header from "../components/Header";
+
 import Paragraph from "../components/Paragraph";
 
-import NumberFormat from "react-number-format";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
-import { StateContext } from "../Context/StateContext";
-
+import { StateContext, StateContextHistory } from "../Context/StateContext";
+import Statement from "../components/Statement";
 import {
   Button,
   Modal,
@@ -20,19 +19,22 @@ import {
   FormControl,
   Input,
   Box,
+  VStack,
+  Heading,
+  View,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { BarCodeScanner } from "expo-barcode-scanner";
-
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
+import CartStyle from "../components/CartStyle";
 
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
+  const [userTransactionData, setUserTransactionData] =
+    useContext(StateContextHistory);
+
   const [showModal, setShowModal] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -42,12 +44,6 @@ export default function Dashboard({ navigation }) {
     value: "",
     error: "",
   });
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
   const checkOut = () => {
     const receiverPhoneError = phoneValidator(receiverPhone.value);
@@ -64,13 +60,13 @@ export default function Dashboard({ navigation }) {
       amount: parseInt(receiverAmount.value),
       summary: `Худалдан авалтын гүйлгээ`,
       id: userData.wallets._id,
+      walletSuperId: userData.wallets.walletSuperId,
     });
     var config = {
       method: "POST",
       url: `${baseUrl}/transactions/purchase`,
       headers: {
         "Content-Type": "application/json",
-        Cookie: `Bearer=${userData.token}`,
       },
       data: request,
     };
@@ -79,6 +75,7 @@ export default function Dashboard({ navigation }) {
         if (response.data.success === true) {
           setReceiverPhone({ value: "", error: "" });
           setReceiverAmount({ value: "", error: "" });
+          userTransactionHistory();
           dataRefresher();
           Alert.alert(
             "Гүйлгээ амжилттай",
@@ -90,7 +87,7 @@ export default function Dashboard({ navigation }) {
             ]
           );
         } else {
-          Alert.alert("Гүйлгээ 0", "Танысс ", [
+          Alert.alert("", "Гүйлгээ амжилтгүй ", [
             {
               text: "OK",
             },
@@ -120,10 +117,9 @@ export default function Dashboard({ navigation }) {
   };
 
   const dataRefresher = () => {
-    console.log("first");
     try {
       var requests = JSON.stringify({
-        phone: userData.wallets.phone,
+        walletSuperId: userData.wallets.walletSuperId,
       });
 
       var configs = {
@@ -131,24 +127,47 @@ export default function Dashboard({ navigation }) {
         url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
         headers: {
           "Content-Type": "application/json",
-          Cookie: `Bearer=${userData.token}`,
         },
         maxRedirects: 0,
         data: requests,
       };
       axios(configs)
         .then(function (response) {
+          console.log("first");
           setUserData({
             token: userData.token,
             wallets: response.data.wallets,
           });
         })
         .catch(function (error) {});
-    } catch (err) {
-      console;
-    }
+    } catch (err) {}
   };
 
+  const userTransactionHistory = () => {
+    var datas = JSON.stringify({
+      walletSuperId: userData.wallets.walletSuperId,
+    });
+
+    var config = {
+      method: "POST",
+      url: `${baseUrl}/transactions/wallet/${userData.wallets._id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      data: datas,
+    };
+
+    axios(config)
+      .then((response) => {
+        setUserTransactionData(response.data.data);
+      })
+      .catch((error) => {
+        const err = JSON.parse(JSON.stringify(error));
+        // console.log(err);
+        console.log(err);
+      });
+  };
   const handleBarCodeScanned = ({ data }) => {
     setReceiverPhone({ value: data, error: "" });
     setScanned(true);
@@ -156,26 +175,17 @@ export default function Dashboard({ navigation }) {
     setCameraOpen(false);
   };
 
-  var imageSource;
-  if (userData.wallets.walletType === "member") {
-    imageSource = require("../assets/cardTypes/member.png");
-  } else if (userData.wallets.walletType === "rosegold") {
-    imageSource = require("../assets/cardTypes/rosegold.png");
-  } else if (userData.wallets.walletType === "golden") {
-    imageSource = require("../assets/cardTypes/golden.png");
-  } else if (userData.wallets.walletType === "platnium") {
-    imageSource = require("../assets/cardTypes/platnium.png");
-  }
-
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
+
     setShowModal(false);
     setCameraOpen(false);
     setScanned(false);
-    checkOut();
+    userTransactionHistory();
+    setUserTransactionData("");
     setHasPermission(null);
     setReceiverPhone({ value: "", error: "" });
     setReceiverAmount({
@@ -199,237 +209,209 @@ export default function Dashboard({ navigation }) {
     <NativeBaseProvider>
       <Background>
         <View style={{ display: "flex" }}>
-          <View>
-            <Image
-              source={imageSource}
-              style={{
-                alignSelf: "center",
-                position: "relative",
-                maxHeight: hp("35%"),
-                width: wp("95%"),
-                resizeMode: "contain",
-              }}
-            />
-            <View
-              style={{
-                position: "absolute",
-                marginTop: hp("20%"),
-                marginLeft: wp("10%"),
-
-                padding: 1,
-              }}
-            >
-              <NumberFormat
-                value={userData.wallets.balance.$numberDecimal}
-                displayType={"text"}
-                thousandSeparator={true}
-                renderText={(formattedValue) => (
-                  <View>
-                    <Text color="white" fontSize="xl">
-                      Хэтэвчинд
-                    </Text>
-                    <Text bold paddingTop={0} color="white" fontSize="2xl">
-                      {formattedValue}₮
-                    </Text>
-                  </View>
-                )}
-              />
-            </View>
-          </View>
+          <CartStyle />
           <View
             style={{
+              paddingTop: 1,
               display: "flex",
               flexDirection: "column",
               position: "relative",
-              height: hp("45%"),
+              height: hp("40%"),
               width: wp("95%"),
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                width: wp("95%"),
-                position: "relative",
-                height: hp("6%"),
-              }}
-            >
-              <Button
-                variant="subtle"
-                borderWidth={3}
-                backgroundColor="#EEE4AB"
-                borderColor="#ECB390"
-                borderRadius={10}
-                height={16}
-                marginRight={1}
-                flex={1}
-                bordered
-                success
-                onPress={() => {
-                  setShowModal(true);
-                  setCameraOpen(true);
+            <VStack>
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: wp("95%"),
+                  position: "relative",
+                  height: hp("8%"),
                 }}
               >
-                <Text bold fontSize="lg" color="#4E3620">
-                  Худалдан авалт
-                </Text>
-              </Button>
-              {showModal ? (
-                <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                  <Modal.Content width={wp("80%")} height={hp("60%")}>
-                    <Modal.CloseButton />
-                    <Modal.Header>
-                      <Text fontWeight="bold" color="gray.700" fontSize={20}>
-                        Төлбөр төлөх
-                      </Text>
-                    </Modal.Header>
-                    {cameraOpen === hasPermission ? (
-                      <BarCodeScanner
-                        onBarCodeScanned={
-                          scanned ? undefined : handleBarCodeScanned
-                        }
-                        style={StyleSheet.absoluteFillObject}
-                      >
-                        {scanned && (
-                          <Button
-                            height={hp("8%")}
-                            onPress={() => {
-                              setScanned(false);
+                <Button
+                  variant="subtle"
+                  borderWidth={3}
+                  backgroundColor="#EEE4AB"
+                  borderColor="#ECB390"
+                  borderRadius={10}
+                  height={16}
+                  marginRight={1}
+                  flex={1}
+                  bordered
+                  success
+                  onPress={() => {
+                    setShowModal(true);
+                    setCameraOpen(true);
+                  }}
+                >
+                  <Text bold fontSize="lg" color="#4E3620">
+                    Худалдан авалт
+                  </Text>
+                </Button>
+                {showModal ? (
+                  <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                    <Modal.Content width={wp("80%")} height={hp("60%")}>
+                      <Modal.CloseButton />
+                      <Modal.Header>
+                        <Text fontWeight="bold" color="gray.700" fontSize={20}>
+                          Төлбөр төлөх
+                        </Text>
+                      </Modal.Header>
+                      {cameraOpen === hasPermission ? (
+                        <BarCodeScanner
+                          onBarCodeScanned={
+                            scanned ? undefined : handleBarCodeScanned
+                          }
+                          style={StyleSheet.absoluteFillObject}
+                        >
+                          {scanned && (
+                            <Button
+                              height={hp("8%")}
+                              onPress={() => {
+                                setScanned(false);
 
-                              setReceiverAmount({
-                                value: "",
-                                error: "",
-                              });
-                              setShowModal(true);
-                              setCameraOpen(true);
-                            }}
-                          >
-                            Дахин скан хийх
-                          </Button>
-                        )}
-                      </BarCodeScanner>
-                    ) : (
-                      <View></View>
-                    )}
+                                setReceiverAmount({
+                                  value: "",
+                                  error: "",
+                                });
+                                setShowModal(true);
+                                setCameraOpen(true);
+                              }}
+                            >
+                              Дахин скан хийх
+                            </Button>
+                          )}
+                        </BarCodeScanner>
+                      ) : (
+                        <View></View>
+                      )}
 
-                    <Modal.Body>
-                      <FormControl>
+                      <Modal.Body>
+                        <FormControl>
+                          <FormControl.Label>
+                            <Text
+                              fontSize={20}
+                              fontWeight="semibold"
+                              color="gray.700"
+                            >
+                              Хүлээн авагч
+                            </Text>
+                          </FormControl.Label>
+
+                          {hasPermission === true ? (
+                            <Box>
+                              <Input
+                                fontSize={20}
+                                readonly="readonly"
+                                value={String(receiverPhone.value)}
+                              />
+                            </Box>
+                          ) : (
+                            <View>
+                              <Box>
+                                <Input
+                                  fontSize={20}
+                                  returnKeyType="next"
+                                  onChangeText={(receiverAmountPhone) =>
+                                    setReceiverPhone({
+                                      value: receiverAmountPhone,
+                                      error: "",
+                                    })
+                                  }
+                                  keyboardType="number-pad"
+                                />
+                              </Box>
+                            </View>
+                          )}
+                        </FormControl>
+
                         <FormControl.Label>
                           <Text
                             fontSize={20}
                             fontWeight="semibold"
                             color="gray.700"
                           >
-                            Хүлээн авагч
+                            Үнийн дүн
                           </Text>
                         </FormControl.Label>
+                        <Box>
+                          <Input
+                            fontSize={20}
+                            value={String(receiverAmount.value)}
+                            returnKeyType="done"
+                            onChangeText={(receiverAmountNumber) =>
+                              setReceiverAmount({
+                                value: receiverAmountNumber,
+                                error: "",
+                              })
+                            }
+                            keyboardType="number-pad"
+                          />
+                        </Box>
+                      </Modal.Body>
 
-                        {hasPermission === true ? (
-                          <Box>
-                            <Input
-                              fontSize={20}
-                              readonly="readonly"
-                              value={String(receiverPhone.value)}
-                            />
-                          </Box>
-                        ) : (
-                          <View>
-                            <Box>
-                              <Input
-                                fontSize={20}
-                                returnKeyType="next"
-                                onChangeText={(receiverAmountPhone) =>
-                                  setReceiverPhone({
-                                    value: receiverAmountPhone,
-                                    error: "",
-                                  })
-                                }
-                                keyboardType="number-pad"
-                              />
-                            </Box>
-                          </View>
-                        )}
-                      </FormControl>
+                      <Modal.Footer>
+                        <Button.Group space={2}>
+                          <Button
+                            variant="ghost"
+                            colorScheme="blueGray"
+                            onPress={() => {
+                              setShowModal(false);
+                              setReceiverPhone({ value: "", error: "" });
+                              setReceiverAmount({
+                                value: "",
+                                error: "",
+                              });
+                              setScanned(false);
+                            }}
+                          >
+                            Болих
+                          </Button>
+                          <Button
+                            onPress={() => {
+                              setShowModal(false);
+                              checkOut();
+                              setScanned(false);
+                            }}
+                          >
+                            Төлөх
+                          </Button>
+                        </Button.Group>
+                      </Modal.Footer>
+                    </Modal.Content>
+                  </Modal>
+                ) : (
+                  <View></View>
+                )}
 
-                      <FormControl.Label>
-                        <Text
-                          fontSize={20}
-                          fontWeight="semibold"
-                          color="gray.700"
-                        >
-                          Үнийн дүн
-                        </Text>
-                      </FormControl.Label>
-                      <Box>
-                        <Input
-                          fontSize={20}
-                          value={String(receiverAmount.value)}
-                          returnKeyType="done"
-                          onChangeText={(receiverAmountNumber) =>
-                            setReceiverAmount({
-                              value: receiverAmountNumber,
-                              error: "",
-                            })
-                          }
-                          keyboardType="number-pad"
-                        />
-                      </Box>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                      <Button.Group space={2}>
-                        <Button
-                          variant="ghost"
-                          colorScheme="blueGray"
-                          onPress={() => {
-                            setShowModal(false);
-                            setReceiverPhone({ value: "", error: "" });
-                            setReceiverAmount({
-                              value: "",
-                              error: "",
-                            });
-                            setScanned(false);
-                          }}
-                        >
-                          Болих
-                        </Button>
-                        <Button
-                          onPress={() => {
-                            setShowModal(false);
-                            checkOut();
-                            setScanned(false);
-                          }}
-                        >
-                          Төлөх
-                        </Button>
-                      </Button.Group>
-                    </Modal.Footer>
-                  </Modal.Content>
-                </Modal>
-              ) : (
-                <View></View>
-              )}
-
-              <Button
-                isDisabled
-                variant="subtle"
-                borderWidth={3}
-                backgroundColor="#EEEDDE"
-                borderColor="#898B8A"
-                borderRadius={10}
-                marginLeft={1}
-                height={16}
-                flex={1}
-                bordered
-                success
-              >
-                <Text bold fontSize="lg" color="#898B8A">
-                  Цэнэглэлт
-                </Text>
-              </Button>
-            </View>
-
-            <View style={{ paddingTop: 100 }}>
-              <Header style={{}}>Let’s start</Header>
+                <Button
+                  isDisabled
+                  variant="subtle"
+                  borderWidth={3}
+                  backgroundColor="#EEEDDE"
+                  borderColor="#898B8A"
+                  borderRadius={10}
+                  marginLeft={1}
+                  height={16}
+                  flex={1}
+                  bordered
+                  success
+                >
+                  <Text bold fontSize="lg" color="#898B8A">
+                    Цэнэглэлт
+                  </Text>
+                </Button>
+              </View>
+            </VStack>
+            <View style={{ paddingTop: 10 }}>
+              <Box alignItems="center" justifyContent="center" height={6}>
+                <Heading size="sm" color="red.200" bgColor="red">
+                  Төлбөрийн хуулга
+                </Heading>
+              </Box>
+              {/* 555555555555555555555555555 */}
+              <Statement data={userTransactionData} />
               <Paragraph style={{ position: "relative" }}>
                 Your amazing app starts here. Open you favorite code editor and
                 start editing this project.
@@ -440,7 +422,7 @@ export default function Dashboard({ navigation }) {
                   shadow={2}
                   size="md"
                   mode="contained"
-                  onPress={() => dataRefresher()}
+                  onPress={() => userTransactionHistory()}
                 >
                   <Text fontSize="xl" bold color="white">
                     Logout

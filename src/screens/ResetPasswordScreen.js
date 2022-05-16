@@ -17,13 +17,13 @@ import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { tokenCodeValidator } from "../helpers/tokenCodeValidator";
 import { passwordConfirmValidator } from "../helpers/passwordConfirmValidator";
-import { ScrollView } from "react-native-gesture-handler";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+import { Button, Text } from "native-base";
 export default function ResetPasswordScreen({ navigation }) {
   const [tokenCode, setTokenCode] = useState({ value: null, error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });

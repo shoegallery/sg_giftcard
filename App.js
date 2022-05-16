@@ -14,7 +14,7 @@ import {
 import { Text, TextInput } from "react-native";
 import { SSRProvider } from "@react-aria/ssr";
 
-import { StateProvider } from "./src/Context/StateContext";
+import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider, Box } from "native-base";
 

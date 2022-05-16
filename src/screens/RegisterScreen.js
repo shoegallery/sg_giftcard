@@ -3,17 +3,9 @@ import axios from "axios";
 import BackButton from "../components/BackButton";
 
 import React, { useState, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Background from "../components/Background";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-import Logo from "../components/Logo";
 
 import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
@@ -26,13 +18,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import {
-  Button,
-  VStack,
-  Text,
-  NativeBaseProvider,
-  ScrollView,
-} from "native-base";
+import { Button, Text } from "native-base";
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: "", error: "" });

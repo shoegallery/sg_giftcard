@@ -4,8 +4,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Background from "../components/Background";
 import BackButton from "../components/BackButton";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
 import TextInput from "../components/TextInput";
 
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -17,24 +15,21 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { View, Image, StyleSheet, Alert } from "react-native";
+import { View, Alert } from "react-native";
 
 import {
   WarningOutlineIcon,
   Button,
   Modal,
   Text,
-  NativeBaseProvider,
   FormControl,
   Input,
-  Box,
 } from "native-base";
 
 export default function ForgetPasswordScreen({ navigation }) {
   const [requestPhone, setRequestPhone] = useState({ value: "", error: "" });
   const [showModal, setShowModal] = useState(false);
   const [showReset, setShowReset] = useState(false);
-  const [showText, setShowText] = useState(false);
 
   const [tokenCode, setTokenCode] = useState({ value: null, error: "" });
   const [phone, setPhone] = useState({ value: null, error: "" });
@@ -132,14 +127,8 @@ export default function ForgetPasswordScreen({ navigation }) {
     try {
       axios(config)
         .then(function (responseTokenCode) {
-          // if (response.data.status === true) {
-          // console.log(JSON.stringify(response.data));
-
           setShowReset(true);
           setShowModal(true);
-          // navigation.navigate("ResetPasswordScreen");
-
-          // }
         })
         .catch(function (error) {
           const err = JSON.parse(JSON.stringify(error));
@@ -170,6 +159,7 @@ export default function ForgetPasswordScreen({ navigation }) {
   return (
     <Background>
       <BackButton goBack={navigation.goBack} style={{ color: "red" }} />
+
       <SafeAreaView style={{ paddingTop: hp("5%"), width: "100%" }}>
         <TextInput
           label="Утасны дугаар"
@@ -219,7 +209,6 @@ export default function ForgetPasswordScreen({ navigation }) {
                     label="Утасны дугаар"
                     returnKeyType="next"
                     value={phone.value}
-                    textContentType="telephoneNumber"
                     keyboardType="number-pad"
                   />
                   <FormControl.ErrorMessage
