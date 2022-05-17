@@ -160,7 +160,7 @@ export default function ForgetPasswordScreen({ navigation }) {
     <Background>
       <BackButton goBack={navigation.goBack} style={{ color: "red" }} />
 
-      <SafeAreaView style={{ paddingTop: hp("5%"), width: "100%" }}>
+      <SafeAreaView style={{ width: "100%" }}>
         <TextInput
           label="Утасны дугаар"
           returnKeyType="next"
@@ -189,7 +189,7 @@ export default function ForgetPasswordScreen({ navigation }) {
         </Button>
         {showModal ? (
           <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-            <Modal.Content width={wp("90%")} height={hp("60%")}>
+            <Modal.Content width={"90%"} height={"60%"}>
               <Modal.CloseButton />
               <Modal.Header>
                 <Text fontWeight="bold" color="gray.700" fontSize={20}>

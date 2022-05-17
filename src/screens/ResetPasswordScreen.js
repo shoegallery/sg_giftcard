@@ -55,13 +55,12 @@ export default function ResetPasswordScreen({ navigation }) {
       return;
     }
 
-    console.log(request);
     var request = JSON.stringify({
       resetToken: parseInt(tokenCode.value),
       phone: parseInt(phone.value),
       password: password.value,
     });
-    console.log(request);
+
     var config = {
       method: "POST",
       url: `${baseUrl}/wallets/reset-password`,

@@ -1,11 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Alert,
-  RefreshControl,
-  ScrollView,
-} from "react-native";
+import { Image, ScrollView } from "react-native";
 import { StateContextHistory, StateContext } from "../Context/StateContext";
 import {
   widthPercentageToDP as wp,
@@ -20,82 +14,77 @@ import {
   View,
   Modal,
   Button,
-  SectionList,
-  Container,
-  Center,
-  NativeBaseProvider,
-  Heading,
-  Avatar,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import QRCode from "react-native-qrcode-svg";
 
 const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
   return (
     <Box>
-      <ScrollView>
-        {userTransactionData.map((item, index) => (
-          <Box
-            height="10%"
-            alignItems="center"
-            justifyContent="center"
-            width={wp("80%")}
-            key={item._id}
-            borderBottomWidth="2"
-            _dark={{
-              borderColor: "gray.600",
-            }}
-            borderColor="gray.300"
-          >
-            <HStack height={16} justifyContent="space-between">
-              <VStack
+      <SafeAreaView>
+        <ScrollView>
+          <View>
+            {userTransactionData.map((item) => (
+              <Box
+                alignItems="center"
                 justifyContent="center"
-                width={wp("50%")}
-                backgroundColor="red"
+                width={"100%"}
+                key={item._id}
+                borderBottomWidth="2"
+                _dark={{
+                  borderColor: "gray.600",
+                }}
+                borderColor="gray.300"
               >
-                <Text fontSize={16} color="coolGray.800" bold>
-                  {item.trnxType}
-                </Text>
-                <Text
-                  fontSize={10}
-                  color="coolGray.600"
-                  _dark={{
-                    color: "warmGray.200",
-                  }}
-                >
-                  {item.summary}
-                </Text>
+                <HStack height={75} justifyContent="space-between">
+                  <VStack justifyContent="center" width="70%">
+                    <Text fontSize={16} color="coolGray.800" bold>
+                      {item.trnxType}
+                    </Text>
+                    <Text
+                      fontSize={10}
+                      color="coolGray.600"
+                      _dark={{
+                        color: "warmGray.200",
+                      }}
+                    >
+                      {item.summary}
+                    </Text>
 
-                <Text fontSize={10} color="coolGray.800" bold>
-                  {item.createdAt}
-                </Text>
-              </VStack>
-              <Spacer />
+                    <Text fontSize={10} color="coolGray.800" bold>
+                      {item.createdAt}
+                    </Text>
+                  </VStack>
+                  <Spacer />
 
-              <NumberFormat
-                value={item.amount.$numberDecimal}
-                displayType={"text"}
-                thousandSeparator={true}
-                renderText={(formattedValue) => (
-                  <Text
-                    bold
-                    textAlign="right"
-                    justifyContent="flex-end"
-                    alignSelf="center"
-                    fontSize="md"
-                    color="coolGray.800"
-                  >
-                    {formattedValue}₮
-                  </Text>
-                )}
-              />
-            </HStack>
-          </Box>
-        ))}
-      </ScrollView>
+                  <NumberFormat
+                    value={item.amount.$numberDecimal}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    renderText={(formattedValue) => (
+                      <Text
+                        bold
+                        width="30%"
+                        textAlign="right"
+                        justifyContent="flex-end"
+                        alignSelf="center"
+                        fontSize={14}
+                        color="coolGray.800"
+                      >
+                        {formattedValue}₮
+                      </Text>
+                    )}
+                  />
+                </HStack>
+              </Box>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </Box>
   );
 };
@@ -119,7 +108,7 @@ export default function CartStyle() {
       <Image
         source={imageSource}
         style={{
-          alignSelf: "center",
+          justifyContent: "center",
           position: "relative",
           maxHeight: hp("35%"),
           width: wp("95%"),
@@ -129,7 +118,7 @@ export default function CartStyle() {
       <View
         style={{
           position: "absolute",
-          paddingTop: hp("19%"),
+          paddingTop: hp("10%"),
           marginLeft: wp("10%"),
         }}
       >
@@ -139,15 +128,29 @@ export default function CartStyle() {
           thousandSeparator={true}
           renderText={(formattedValue) => (
             <View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "white",
+                  marginLeft: wp("-2%"),
+                  height: wp("20%"),
+                  width: wp("20%"),
+                  marginBottom: hp("1%"),
+                }}
+              >
+                <QRCode size={wp("18%")} value={userData.phone} />
+              </View>
+
               <Text color="white" bold fontSize="md">
                 Хэтэвчинд
               </Text>
-              <Text bold paddingTop={-10} color="white" fontSize="2xl">
+              <Text bold color="white" fontSize="2xl">
                 {formattedValue}₮
               </Text>
               <Button
                 position="relative"
-                marginLeft={wp("58%")}
+                marginLeft={wp("57%")}
                 alignContent="center"
                 marginTop={-5}
                 variant="Outline"
@@ -157,49 +160,37 @@ export default function CartStyle() {
                 height={12}
               >
                 {modalVisible ? (
-                  <SafeAreaView>
-                    <ScrollView scrollEnabled={true}>
-                      <Modal
-                        alignItems="center"
-                        justifyContent="center"
-                        size="xl"
-                        isOpen={modalVisible}
-                        onClose={setModalVisible}
-                        width={wp("100%")}
-                      >
-                        <Modal.Content height={hp("90%")}>
-                          <Modal.Header textAlign="center">
-                            Гүйлгээний хуулга
-                          </Modal.Header>
-                          <Modal.Body>
-                            {modalVisible ? (
-                              <NativeBaseProvider>
-                                <Center flex={1}>
-                                  <TransActionsList />
-                                </Center>
-                              </NativeBaseProvider>
-                            ) : (
-                              <View></View>
-                            )}
-                          </Modal.Body>
+                  <Modal
+                    alignItems="center"
+                    justifyContent="center"
+                    size="xl"
+                    isOpen={modalVisible}
+                    onClose={setModalVisible}
+                    width={"100%"}
+                  >
+                    <Modal.Content height={"90%"}>
+                      <Modal.Header textAlign="center">
+                        Гүйлгээний хуулга
+                      </Modal.Header>
+                      <Modal.Body height="full">
+                        {modalVisible ? <TransActionsList /> : <View></View>}
+                      </Modal.Body>
 
-                          <Modal.Footer>
-                            <Button.Group space={2}>
-                              <Button
-                                onPress={() => {
-                                  setModalVisible(false);
-                                }}
-                              >
-                                Болсон
-                              </Button>
-                            </Button.Group>
-                          </Modal.Footer>
-                        </Modal.Content>
-                      </Modal>
-                    </ScrollView>
-                  </SafeAreaView>
+                      <Modal.Footer>
+                        <Button.Group space={2}>
+                          <Button
+                            onPress={() => {
+                              setModalVisible(false);
+                            }}
+                          >
+                            Болсон
+                          </Button>
+                        </Button.Group>
+                      </Modal.Footer>
+                    </Modal.Content>
+                  </Modal>
                 ) : (
-                  <SafeAreaView></SafeAreaView>
+                  <View></View>
                 )}
 
                 <Text alignItems="flex-start" bold color="white" fontSize="lg">

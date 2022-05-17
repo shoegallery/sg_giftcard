@@ -18,6 +18,7 @@ import {
   Button,
   Center,
 } from "native-base";
+import moment from "moment";
 
 export default function Statement() {
   const [userTransactionData, setUserTransactionData] =
@@ -38,7 +39,7 @@ export default function Statement() {
                 data={userTransactionData}
                 alignSelf="center"
                 height={hp("40%")}
-                width={wp("95%")}
+                width={wp("90%")}
                 renderItem={({ item }) => (
                   <Box
                     borderBottomWidth="1"
@@ -57,7 +58,7 @@ export default function Statement() {
                     >
                       <VStack
                         justifyContent="center"
-                        width="75%"
+                        width="100%"
                         backgroundColor="red"
                       >
                         <Text fontSize={16} color="coolGray.800" bold>
@@ -74,7 +75,7 @@ export default function Statement() {
                         </Text>
 
                         <Text fontSize={10} color="coolGray.800" bold>
-                          {item.createdAt}
+                          {moment(item.createdAt).format("YYYY-MM-DD")}
                         </Text>
                       </VStack>
                       <Spacer />

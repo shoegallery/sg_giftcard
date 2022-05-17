@@ -6,11 +6,12 @@ import { StyleSheet, Alert } from "react-native";
 import Background from "../components/Background";
 
 import Paragraph from "../components/Paragraph";
+import QRCode from "react-native-qrcode-svg";
 
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
-import Statement from "../components/Statement";
+import Product from "../components/Product";
 import {
   Button,
   Modal,
@@ -22,6 +23,7 @@ import {
   VStack,
   Heading,
   View,
+  PresenceTransition,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -29,8 +31,9 @@ import {
 } from "react-native-responsive-screen";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import CartStyle from "../components/CartStyle";
+import MyActionButtonComponent from "../components/MyActionButtonComponent";
 
-export default function Dashboard({ navigation }) {
+export default function Dashboard({ navigation }, props) {
   const [userData, setUserData] = useContext(StateContext);
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
@@ -51,6 +54,15 @@ export default function Dashboard({ navigation }) {
     if (receiverAmountError || receiverPhoneError) {
       setReceiverAmount({ ...receiverAmount, error: receiverAmountError });
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
+      Alert.alert(
+        "Та шилжүүлгийн мэдээллээ зөв оруулна уу",
+        `Утасны дугаар зөвхөн 8 орноос бүрдэх ёстой. Үнийн дүн зөвхөн тоо агуулна.`,
+        [
+          {
+            text: "OK",
+          },
+        ]
+      );
       return;
     }
 
@@ -97,6 +109,7 @@ export default function Dashboard({ navigation }) {
       })
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
+        setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
           Alert.alert(
             "Хүлээн авах хэрэглэгч олдсонгүй",
@@ -134,7 +147,6 @@ export default function Dashboard({ navigation }) {
       };
       axios(configs)
         .then(function (response) {
-          console.log("first");
           setUserData({
             token: userData.token,
             wallets: response.data.wallets,
@@ -219,21 +231,22 @@ export default function Dashboard({ navigation }) {
           <CartStyle />
           <View
             style={{
-              paddingTop: 1,
+              paddingTop: hp("0.5%"),
               display: "flex",
               flexDirection: "column",
               position: "relative",
-              height: hp("40%"),
+              height: hp("10%"),
               width: wp("95%"),
             }}
           >
-            <VStack>
+            <VStack justifyContent="center" alignItems="center">
               <View
                 style={{
                   flexDirection: "row",
-                  width: wp("95%"),
+                  alignItems: "center",
+                  width: "100%",
                   position: "relative",
-                  height: hp("8%"),
+                  height: "100%",
                 }}
               >
                 <Button
@@ -242,7 +255,7 @@ export default function Dashboard({ navigation }) {
                   backgroundColor="#EEE4AB"
                   borderColor="#ECB390"
                   borderRadius={10}
-                  height={16}
+                  height={"90%"}
                   marginRight={1}
                   flex={1}
                   bordered
@@ -258,7 +271,7 @@ export default function Dashboard({ navigation }) {
                 </Button>
                 {showModal ? (
                   <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                    <Modal.Content width={wp("80%")} height={hp("60%")}>
+                    <Modal.Content width={wp("80%")} height="60%">
                       <Modal.CloseButton />
                       <Modal.Header>
                         <Text fontWeight="bold" color="gray.700" fontSize={20}>
@@ -272,9 +285,18 @@ export default function Dashboard({ navigation }) {
                           }
                           style={StyleSheet.absoluteFillObject}
                         >
+                          <Button
+                            onPress={() => {
+                              setCameraOpen(false),
+                                setHasPermission(false),
+                                setShowModal(false);
+                            }}
+                          >
+                            Камер хаах
+                          </Button>
                           {scanned && (
                             <Button
-                              height={hp("8%")}
+                              height={"8%"}
                               onPress={() => {
                                 setScanned(false);
 
@@ -400,7 +422,7 @@ export default function Dashboard({ navigation }) {
                   borderColor="#898B8A"
                   borderRadius={10}
                   marginLeft={1}
-                  height={16}
+                  height={"90%"}
                   flex={1}
                   bordered
                   success
@@ -411,30 +433,44 @@ export default function Dashboard({ navigation }) {
                 </Button>
               </View>
             </VStack>
-            <View style={{ paddingTop: 10 }}>
-              <Box alignItems="center" justifyContent="center" height={6}>
-                <Heading size="sm" color="red.200" bgColor="red">
-                  Төлбөрийн хуулга
-                </Heading>
-              </Box>
+            <View
+              style={{
+                width: "100%",
 
-              <Paragraph style={{ position: "relative" }}>
-                Your amazing app starts here. Open you favorite code editor and
-                start editing this project.
-              </Paragraph>
-              <View style={{ justifyContent: "flex-end" }}>
-                <Button
-                  backgroundColor="#7986CB"
-                  shadow={2}
-                  size="md"
-                  mode="contained"
-                  onPress={() => userTransactionHistory()}
-                >
-                  <Text fontSize="xl" bold color="white">
-                    Logout
-                  </Text>
-                </Button>
-              </View>
+                position: "absolute",
+                marginTop: hp("12%"),
+              }}
+              borderRadius="1"
+              borderBottomWidth="2"
+              borderBottomColor="gray.500"
+            ></View>
+            <View style={{ marginTop: hp("4%"), height: hp("3%") }}>
+              <Heading
+                textAlign="center"
+                size="sm"
+                color="#242B2E"
+                bgColor="red"
+              >
+                ШИНЭ ЗАГВАРУУД
+              </Heading>
+            </View>
+
+            <View
+              style={{
+                marginTop: hp("1%"),
+                width: wp("95%"),
+                height: hp("30%"),
+              }}
+            >
+              <Product />
+            </View>
+            <View
+              style={{
+                width: wp("95%"),
+                height: hp("18%"),
+              }}
+            >
+              <MyActionButtonComponent navigation={navigation} />
             </View>
           </View>
         </View>

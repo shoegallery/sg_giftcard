@@ -85,7 +85,7 @@ export default function LoginScreen({ navigation }) {
       <VStack w="100%" space={4} px="2" mt="4">
         <Background>
           <Logo style={{ width: wp("25%"), heigth: wp("25%") }} />
-          <Header>Welcome back.</Header>
+
           <SafeAreaView style={{ width: "100%", height: hp("50%") }}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -139,7 +139,7 @@ export default function LoginScreen({ navigation }) {
             </KeyboardAvoidingView>
             <View style={{ marginVertical: 0 }}>
               <Button
-                backgroundColor="#0D7377"
+                backgroundColor="#03a9f4"
                 shadow={2}
                 size="md"
                 mode="contained"
@@ -156,12 +156,12 @@ export default function LoginScreen({ navigation }) {
               bordered
               margin="0"
               variant="Subtle"
-              borderColor="#0D7377"
+              borderColor="#03a9f4"
               borderWidth="2"
               size="md"
               onPress={() => navigation.navigate("RegisterScreen")}
             >
-              <Text fontSize="xl" bold color="#0D7377">
+              <Text fontSize="xl" bold color="#03a9f4">
                 Шинээр бүртгүүлэх
               </Text>
             </Button>

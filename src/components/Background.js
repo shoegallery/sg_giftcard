@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: hp("3%") + getStatusBarHeight(),
+    paddingTop: hp("1%") + getStatusBarHeight(),
     padding: wp("10%"),
     width: wp("100%"),
     alignSelf: "center",
