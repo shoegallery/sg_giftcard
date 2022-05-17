@@ -34,7 +34,7 @@ export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useContext(StateContext);
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-
+  const [alartView, setAlartView] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -76,6 +76,7 @@ export default function Dashboard({ navigation }) {
           setReceiverPhone({ value: "", error: "" });
           setReceiverAmount({ value: "", error: "" });
           userTransactionHistory();
+          setAlartView(false);
           dataRefresher();
           Alert.alert(
             "Гүйлгээ амжилттай",
@@ -193,7 +194,13 @@ export default function Dashboard({ navigation }) {
       error: "",
     });
   }, []);
-  if (hasPermission === false && cameraOpen === false && showModal === false) {
+  if (
+    hasPermission === false &&
+    cameraOpen === false &&
+    showModal === false &&
+    alartView === false
+  ) {
+    setAlartView(true);
     Alert.alert(
       "Санамж",
       "Та апп-д камер ашиглах зөвшөөрөл олгоогүй байна. Та худалдан авалт хийхдээ хүлээн авагчийн дугаарыг сайтар нягтална уу.",
@@ -410,8 +417,7 @@ export default function Dashboard({ navigation }) {
                   Төлбөрийн хуулга
                 </Heading>
               </Box>
-              {/* 555555555555555555555555555 */}
-              <Statement data={userTransactionData} />
+
               <Paragraph style={{ position: "relative" }}>
                 Your amazing app starts here. Open you favorite code editor and
                 start editing this project.

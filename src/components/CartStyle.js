@@ -1,18 +1,107 @@
-import React, { useContext } from "react";
-import { Image, StyleSheet, Alert, RefreshControl } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  Image,
+  StyleSheet,
+  Alert,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import { StateContextHistory, StateContext } from "../Context/StateContext";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Text, View, Button } from "native-base";
+import {
+  Text,
+  Box,
+  HStack,
+  Spacer,
+  VStack,
+  View,
+  Modal,
+  Button,
+  SectionList,
+  Container,
+  Center,
+  NativeBaseProvider,
+  Heading,
+  Avatar,
+} from "native-base";
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function CartStyle() {
+const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
+  return (
+    <Box>
+      <ScrollView>
+        {userTransactionData.map((item, index) => (
+          <Box
+            height="10%"
+            alignItems="center"
+            justifyContent="center"
+            width={wp("80%")}
+            key={item._id}
+            borderBottomWidth="2"
+            _dark={{
+              borderColor: "gray.600",
+            }}
+            borderColor="gray.300"
+          >
+            <HStack height={16} justifyContent="space-between">
+              <VStack
+                justifyContent="center"
+                width={wp("50%")}
+                backgroundColor="red"
+              >
+                <Text fontSize={16} color="coolGray.800" bold>
+                  {item.trnxType}
+                </Text>
+                <Text
+                  fontSize={10}
+                  color="coolGray.600"
+                  _dark={{
+                    color: "warmGray.200",
+                  }}
+                >
+                  {item.summary}
+                </Text>
 
+                <Text fontSize={10} color="coolGray.800" bold>
+                  {item.createdAt}
+                </Text>
+              </VStack>
+              <Spacer />
+
+              <NumberFormat
+                value={item.amount.$numberDecimal}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(formattedValue) => (
+                  <Text
+                    bold
+                    textAlign="right"
+                    justifyContent="flex-end"
+                    alignSelf="center"
+                    fontSize="md"
+                    color="coolGray.800"
+                  >
+                    {formattedValue}₮
+                  </Text>
+                )}
+              />
+            </HStack>
+          </Box>
+        ))}
+      </ScrollView>
+    </Box>
+  );
+};
+
+export default function CartStyle() {
+  const [modalVisible, setModalVisible] = useState(false);
   const [userData, setUserData] = useContext(StateContext);
 
   var imageSource;
@@ -59,13 +148,60 @@ export default function CartStyle() {
               <Button
                 position="relative"
                 marginLeft={wp("58%")}
-                paddingTop={-hp("1%")}
+                alignContent="center"
+                marginTop={-5}
                 variant="Outline"
                 onPress={() => {
-                  console.log("aahaiaaa");
+                  setModalVisible(true);
                 }}
                 height={12}
               >
+                {modalVisible ? (
+                  <SafeAreaView>
+                    <ScrollView scrollEnabled={true}>
+                      <Modal
+                        alignItems="center"
+                        justifyContent="center"
+                        size="xl"
+                        isOpen={modalVisible}
+                        onClose={setModalVisible}
+                        width={wp("100%")}
+                      >
+                        <Modal.Content height={hp("90%")}>
+                          <Modal.Header textAlign="center">
+                            Гүйлгээний хуулга
+                          </Modal.Header>
+                          <Modal.Body>
+                            {modalVisible ? (
+                              <NativeBaseProvider>
+                                <Center flex={1}>
+                                  <TransActionsList />
+                                </Center>
+                              </NativeBaseProvider>
+                            ) : (
+                              <View></View>
+                            )}
+                          </Modal.Body>
+
+                          <Modal.Footer>
+                            <Button.Group space={2}>
+                              <Button
+                                onPress={() => {
+                                  setModalVisible(false);
+                                }}
+                              >
+                                Болсон
+                              </Button>
+                            </Button.Group>
+                          </Modal.Footer>
+                        </Modal.Content>
+                      </Modal>
+                    </ScrollView>
+                  </SafeAreaView>
+                ) : (
+                  <SafeAreaView></SafeAreaView>
+                )}
+
                 <Text alignItems="flex-start" bold color="white" fontSize="lg">
                   Хуулга <AntDesign name="right" size={14} color="white" />
                 </Text>
