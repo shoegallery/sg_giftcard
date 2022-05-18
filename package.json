@@ -11,6 +11,7 @@
     "@expo/vector-icons": "^13.0.0",
     "@react-aria/ssr": "^3.1.2",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/netinfo": "^8.3.0",
     "@react-native-masked-view/masked-view": "0.2.6",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/native-stack": "^6.6.2",

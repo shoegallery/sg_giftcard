@@ -39,7 +39,6 @@ export default function ForgetPasswordScreen({ navigation }) {
     error: "",
   });
 
-  console.log(phone);
   const sendChangePassword = () => {
     setShowModal(false);
     const tokenCodeError = tokenCodeValidator(tokenCode.value);
@@ -81,7 +80,6 @@ export default function ForgetPasswordScreen({ navigation }) {
     axios(config)
       .then(function (response) {
         if (response.data.status === true) {
-          // console.log(JSON.stringify(response.data));
           Alert.alert("", "Нууц үг амжилттай солигдлоо", [
             {
               text: "OK",
@@ -145,10 +143,7 @@ export default function ForgetPasswordScreen({ navigation }) {
             });
           }
         });
-    } catch (err) {
-      // Handle Error Here
-      console.error(err);
-    }
+    } catch (err) {}
   };
   useEffect(() => {
     sendResetPasswordMessage();

@@ -65,7 +65,6 @@ export default function RegisterScreen({ navigation }) {
     axios(config)
       .then(function (response) {
         if (response.data.success === true) {
-          // console.log(JSON.stringify(response.data));
           navigation.reset({
             index: 0,
             routes: [{ name: "LoginScreen" }],

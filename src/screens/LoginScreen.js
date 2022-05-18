@@ -1,5 +1,5 @@
 import { baseUrl } from "../baseUrl";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -7,16 +7,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
 } from "react-native";
 
 import axios from "axios";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
-import Header from "../components/Header";
+
 // import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -27,15 +26,29 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-import { Button, VStack, Text, NativeBaseProvider } from "native-base";
+import NetInfo from "@react-native-community/netinfo";
+import {
+  Button,
+  VStack,
+  Text,
+  NativeBaseProvider,
+  Box,
+  Slide,
+  Alert,
+  useColorModeValue,
+} from "native-base";
 
 export default function LoginScreen({ navigation }) {
-  const [phone, setPhone] = useState({ value: "86218721", error: "" });
-  const [password, setPassword] = useState({ value: "12345678", error: "" });
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [request, setRequest] = useState();
+  const [phone, setPhone] = useState({ value: "", error: "" });
+  const [password, setPassword] = useState({ value: "", error: "" });
+
   const [userData, setUserData] = useContext(StateContext);
+  const [internetCheck, setInternetCheck] = useState(false);
+
+  console.log(internetCheck);
+  NetInfo.fetch().then((networkState) => {
+    setInternetCheck(networkState.isConnected);
+  });
 
   const onLoginPressed = () => {
     const phoneError = phoneValidator(phone.value);
@@ -78,14 +91,33 @@ export default function LoginScreen({ navigation }) {
         });
       });
   };
-  useEffect(() => {}, []);
+
+  useEffect(() => {
+    setInternetCheck(false);
+
+    setPassword({ value: "12345678", error: "" });
+    setPhone({ value: "86218721", error: "" });
+  }, []);
 
   return (
     <NativeBaseProvider>
-      <VStack w="100%" space={4} px="2" mt="4">
+      <VStack>
+        {internetCheck ? (
+          <View></View>
+        ) : (
+          <Box h="32" w="300">
+            <Slide in={internetCheck} placement="top">
+              <Alert justifyContent="center" status="error">
+                <Alert.Icon />
+                <Text color="error.600" fontWeight="medium">
+                  No Internet Connection
+                </Text>
+              </Alert>
+            </Slide>
+          </Box>
+        )}
         <Background>
           <Logo style={{ width: wp("25%"), heigth: wp("25%") }} />
-
           <SafeAreaView style={{ width: "100%", height: hp("50%") }}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -195,5 +227,39 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: "bold",
     color: theme.colors.primary,
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 40,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "600",
+  },
+  modalText: {
+    fontSize: 18,
+    color: "#555",
+    marginTop: 14,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#000",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    width: "100%",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
   },
 });

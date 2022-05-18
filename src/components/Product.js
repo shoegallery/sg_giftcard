@@ -27,9 +27,7 @@ const Product = () => {
           }
         });
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   const exampleItems = [

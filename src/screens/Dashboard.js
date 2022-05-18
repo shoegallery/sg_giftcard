@@ -175,11 +175,7 @@ export default function Dashboard({ navigation }, props) {
       .then((response) => {
         setUserTransactionData(response.data.data);
       })
-      .catch((error) => {
-        const err = JSON.parse(JSON.stringify(error));
-        // console.log(err);
-        console.log(err);
-      });
+      .catch((error) => {});
   };
   const handleBarCodeScanned = ({ data }) => {
     setReceiverPhone({ value: data, error: "" });

@@ -72,7 +72,6 @@ export default function ResetPasswordScreen({ navigation }) {
     axios(config)
       .then(function (response) {
         if (response.data.status === true) {
-          // console.log(JSON.stringify(response.data));
           navigation.reset({
             index: 0,
             routes: [{ name: "LoginScreen" }],

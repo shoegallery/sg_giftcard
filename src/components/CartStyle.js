@@ -56,7 +56,7 @@ const TransActionsList = () => {
                     </Text>
 
                     <Text fontSize={10} color="coolGray.800" bold>
-                      {item.createdAt}
+                      {Date(item.createdAt)}
                     </Text>
                   </VStack>
                   <Spacer />
