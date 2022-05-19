@@ -94,9 +94,8 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     setInternetCheck(false);
-
-    setPassword({ value: "12345678", error: "" });
-    setPhone({ value: "86218721", error: "" });
+    setPassword({ value: "", error: "" });
+    setPhone({ value: "", error: "" });
   }, []);
 
   return (
