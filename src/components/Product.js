@@ -20,7 +20,10 @@ const Product = () => {
     axios(config)
       .then((response) => {
         response.data.products.map((el) => {
-          safebox.push(JSON.parse(el.images)[0]);
+          safebox.push({
+            headImage: JSON.parse(el.images)[0].url,
+            link: `https://shoegallery.mn/products/${el.category_id}/${el.id}`,
+          });
 
           if (safebox.length == response.data.count) {
             setCarouselItems(safebox);
@@ -74,7 +77,7 @@ const Product = () => {
           size="full"
           alt="fallback text"
           source={{
-            uri: item.url,
+            uri: item.headImage,
           }}
         />
       </View>

@@ -1,18 +1,6 @@
 import React from "react";
-import { TouchableOpacity, Image, StyleSheet } from "react-native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import {
-  Box,
-  useDisclose,
-  IconButton,
-  Stagger,
-  HStack,
-  Icon,
-  Center,
-  NativeBaseProvider,
-  Text,
-  View,
-} from "native-base";
+
+import { IconButton, Icon, View } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import {
   widthPercentageToDP as wp,
@@ -32,7 +20,7 @@ export default function BackButton({ goBack }) {
         mb="4"
         variant="solid"
         bg="white"
-        colorScheme="red"
+        colorScheme="blue"
         borderRadius="full"
         icon={
           <Icon
@@ -50,16 +38,3 @@ export default function BackButton({ goBack }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    top: wp("6%") + getStatusBarHeight(),
-    left: wp("8%"),
-  },
-  image: {
-    backgroundColor: "red",
-    width: hp("8%"),
-    height: hp("8%"),
-  },
-});

@@ -5,9 +5,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Alert } from "react-native";
 import Background from "../components/Background";
 
-import Paragraph from "../components/Paragraph";
-import QRCode from "react-native-qrcode-svg";
-
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
@@ -23,7 +20,7 @@ import {
   VStack,
   Heading,
   View,
-  PresenceTransition,
+  useToast,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -34,6 +31,8 @@ import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
 
 export default function Dashboard({ navigation }, props) {
+  const successToast = useToast();
+  const warnToast = useToast();
   const [userData, setUserData] = useContext(StateContext);
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
@@ -42,6 +41,7 @@ export default function Dashboard({ navigation }, props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [receiverOrder, setReceiverOrder] = useState({ value: "", error: "" });
   const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
   const [receiverAmount, setReceiverAmount] = useState({
     value: "",
@@ -51,6 +51,7 @@ export default function Dashboard({ navigation }, props) {
   const checkOut = () => {
     const receiverPhoneError = phoneValidator(receiverPhone.value);
     const receiverAmountError = amountValidator(receiverAmount.value);
+
     if (receiverAmountError || receiverPhoneError) {
       setReceiverAmount({ ...receiverAmount, error: receiverAmountError });
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
@@ -73,6 +74,7 @@ export default function Dashboard({ navigation }, props) {
       summary: `Худалдан авалтын гүйлгээ`,
       id: userData.wallets._id,
       walletSuperId: userData.wallets.walletSuperId,
+      OrderNumber: parseInt(receiverOrder.value),
     });
     var config = {
       method: "POST",
@@ -90,21 +92,33 @@ export default function Dashboard({ navigation }, props) {
           userTransactionHistory();
           setAlartView(false);
           dataRefresher();
-          Alert.alert(
-            "Гүйлгээ амжилттай",
-            `Таны худалдан авалтын төлбөр ${receiverAmount.value}₮ амжилттай төлөгдлөө`,
-            [
-              {
-                text: "OK",
-              },
-            ]
-          );
+          successToast.show({
+            backgroundColor: "emerald.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Гүйлгээ амжилттай",
+            placement: "top",
+          });
         } else {
-          Alert.alert("", "Гүйлгээ амжилтгүй ", [
-            {
-              text: "OK",
-            },
-          ]);
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Гүйлгээ aмжилтгүй",
+            placement: "top",
+          });
         }
       })
       .catch(function (error) {
@@ -120,13 +134,20 @@ export default function Dashboard({ navigation }, props) {
               },
             ]
           );
-        } else if (err.status == 406) {
-          Alert.alert("Мэдэгдэл", "Таны хэтэвчний үлдэгдэл хүрэлцэхгүй байна", [
-            {
-              text: "OK",
-            },
-          ]);
         }
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Гүйлгээ aмжилтгүй",
+          placement: "top",
+        });
       });
   };
 
@@ -147,13 +168,31 @@ export default function Dashboard({ navigation }, props) {
       };
       axios(configs)
         .then(function (response) {
+          userTransactionHistory();
           setUserData({
             token: userData.token,
             wallets: response.data.wallets,
           });
         })
-        .catch(function (error) {});
-    } catch (err) {}
+        .catch(function (error) {
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Сервер түр унтарсан.",
+            placement: "top",
+          });
+        });
+    } catch (err) {
+      {
+      }
+    }
   };
 
   const userTransactionHistory = () => {
@@ -175,13 +214,20 @@ export default function Dashboard({ navigation }, props) {
       .then((response) => {
         setUserTransactionData(response.data.data);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        {
+        }
+      });
   };
   const handleBarCodeScanned = ({ data }) => {
     setReceiverPhone({ value: data, error: "" });
     setScanned(true);
-    alert(`Амжилттай уншигдлаа. ok дээр дарна уу`);
     setCameraOpen(false);
+    Alert.alert("Амжилттай уншигдлаа", "OK дээр дарна уу", [
+      {
+        text: "OK",
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -209,6 +255,7 @@ export default function Dashboard({ navigation }, props) {
     alartView === false
   ) {
     setAlartView(true);
+
     Alert.alert(
       "Санамж",
       "Та апп-д камер ашиглах зөвшөөрөл олгоогүй байна. Та худалдан авалт хийхдээ хүлээн авагчийн дугаарыг сайтар нягтална уу.",
@@ -267,10 +314,15 @@ export default function Dashboard({ navigation }, props) {
                 </Button>
                 {showModal ? (
                   <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                    <Modal.Content width={wp("80%")} height="60%">
+                    <Modal.Content width={wp("80%")} height={hp("60%")}>
                       <Modal.CloseButton />
                       <Modal.Header>
-                        <Text fontWeight="bold" color="gray.700" fontSize={20}>
+                        <Text
+                          bold
+                          color="#242B2E"
+                          fontSize={20}
+                          textAlign="center"
+                        >
                           Төлбөр төлөх
                         </Text>
                       </Modal.Header>
@@ -374,10 +426,37 @@ export default function Dashboard({ navigation }, props) {
                             keyboardType="number-pad"
                           />
                         </Box>
+
+                        <FormControl.Label>
+                          <Text
+                            fontSize={20}
+                            fontWeight="semibold"
+                            color="gray.700"
+                          >
+                            Гүйлгээний утга
+                          </Text>
+                        </FormControl.Label>
+                        <Box>
+                          <Input
+                            fontSize={20}
+                            value={String(receiverOrder.value)}
+                            returnKeyType="done"
+                            onChangeText={(receiverSummeryNumber) =>
+                              setReceiverOrder({
+                                value: receiverSummeryNumber,
+                                error: "",
+                              })
+                            }
+                            keyboardType="number-pad"
+                          />
+                        </Box>
+                        <Text fontSize={12} bold color="red.700">
+                          Худалдааны зөвлөх танд тайлбарлах болно
+                        </Text>
                       </Modal.Body>
 
                       <Modal.Footer>
-                        <Button.Group space={2}>
+                        <Button.Group space={5}>
                           <Button
                             variant="ghost"
                             colorScheme="blueGray"
@@ -391,7 +470,9 @@ export default function Dashboard({ navigation }, props) {
                               setScanned(false);
                             }}
                           >
-                            Болих
+                            <Text bold color="#242B2E">
+                              Хаах
+                            </Text>
                           </Button>
                           <Button
                             onPress={() => {
@@ -400,7 +481,9 @@ export default function Dashboard({ navigation }, props) {
                               setScanned(false);
                             }}
                           >
-                            Төлөх
+                            <Text bold color="white">
+                              Төлөх
+                            </Text>
                           </Button>
                         </Button.Group>
                       </Modal.Footer>

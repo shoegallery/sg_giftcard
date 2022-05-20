@@ -16,7 +16,7 @@ import { SSRProvider } from "@react-aria/ssr";
 
 import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NativeBaseProvider, Box } from "native-base";
+import { NativeBaseProvider, ToastProvider } from "native-base";
 
 const Stack = createStackNavigator();
 
@@ -29,7 +29,7 @@ export default function App() {
   return (
     <SSRProvider>
       <NativeBaseProvider>
-        <NativeBaseProvider>
+        <ToastProvider>
           <SafeAreaProvider>
             <StateProvider>
               <Provider theme={theme}>
@@ -59,7 +59,7 @@ export default function App() {
               </Provider>
             </StateProvider>
           </SafeAreaProvider>
-        </NativeBaseProvider>
+        </ToastProvider>
       </NativeBaseProvider>
     </SSRProvider>
   );
