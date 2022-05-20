@@ -256,8 +256,8 @@ export default function ForgetPasswordScreen({ navigation }) {
     } catch (err) {}
   };
   useEffect(() => {
-    setShowReset(false);
-    setShowModal(true);
+    setShowReset(true);
+    setShowModal(false);
     setRequestPhone({ value: "" });
   }, []);
   return (
