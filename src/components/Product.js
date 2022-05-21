@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { Text, View, SafeAreaView } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import axios from "axios";
 import Carousel from "react-native-snap-carousel";
 import {

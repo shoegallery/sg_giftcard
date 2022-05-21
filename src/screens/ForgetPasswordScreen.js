@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Background from "../components/Background";
 import BackButton from "../components/BackButton";
-import TextInput from "../components/TextInput";
 
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -15,10 +14,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { View, Alert } from "react-native";
+import { View } from "react-native";
 
 import {
-  WarningOutlineIcon,
   Button,
   Modal,
   Text,
@@ -289,10 +287,10 @@ export default function ForgetPasswordScreen({ navigation }) {
         />
 
         <Button
-          mt={"5%"}
-          backgroundColor="#0D7377"
-          shadow={2}
-          h={16}
+          colorScheme="blue"
+          mt={"10%"}
+          bg="#1B98F5"
+          shadow="5"
           size="md"
           mode="contained"
           onPress={sendResetPasswordMessage}
@@ -413,17 +411,17 @@ export default function ForgetPasswordScreen({ navigation }) {
         <View>
           {showReset ? (
             <Button
-              h={16}
-              style={{ marginTop: 30 }}
+              shadow="5"
               size="md"
-              backgroundColor="white"
-              borderColor="#0D7377"
+              style={{ marginTop: 10 }}
+              bg="white"
+              borderColor="#1B98F5"
               borderWidth="2"
               onPress={() => {
                 setShowModal(true);
               }}
             >
-              <Text fontSize="xl" bold color="#0D7377">
+              <Text fontSize="xl" bold color="#1B98F5">
                 Нууц үг сэргээх
               </Text>
             </Button>

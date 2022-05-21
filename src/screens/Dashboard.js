@@ -293,23 +293,25 @@ export default function Dashboard({ navigation }, props) {
                 }}
               >
                 <Button
+                  colorScheme="yellow"
+                  shadow="5"
                   variant="subtle"
-                  borderWidth={3}
-                  backgroundColor="#EEE4AB"
-                  borderColor="#ECB390"
+                  bg="yellow.200"
                   borderRadius={10}
                   height={"90%"}
                   marginRight={1}
                   flex={1}
-                  bordered
                   success
                   onPress={() => {
                     setShowModal(true);
                     setCameraOpen(true);
                   }}
                 >
-                  <Text bold fontSize="lg" color="#4E3620">
-                    Худалдан авалт
+                  <Text bold textAlign="center" fontSize="lg" color="#242B2E">
+                    Худалдан
+                  </Text>
+                  <Text bold textAlign="center" fontSize="lg" color="#242B2E">
+                    авалт хийх
                   </Text>
                 </Button>
                 {showModal ? (
@@ -494,10 +496,11 @@ export default function Dashboard({ navigation }, props) {
                 )}
 
                 <Button
-                  isDisabled
+                  shadow="5"
                   variant="subtle"
                   borderWidth={3}
-                  backgroundColor="#EEEDDE"
+                  bg="#EEEDDE"
+                  colorScheme="gray"
                   borderColor="#898B8A"
                   borderRadius={10}
                   marginLeft={1}
@@ -505,6 +508,21 @@ export default function Dashboard({ navigation }, props) {
                   flex={1}
                   bordered
                   success
+                  onPress={() => {
+                    warnToast.show({
+                      backgroundColor: "red.400",
+                      px: "2",
+                      py: "1",
+                      rounded: "sm",
+                      height: "50",
+                      width: "250",
+                      textAlign: "center",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      title: "Тун удахгүй",
+                      placement: "top",
+                    });
+                  }}
                 >
                   <Text bold fontSize="lg" color="#898B8A">
                     Цэнэглэлт
@@ -546,11 +564,24 @@ export default function Dashboard({ navigation }, props) {
             <View
               style={{
                 width: wp("95%"),
-                height: hp("18%"),
+                height: hp("13%"),
               }}
             >
               <MyActionButtonComponent navigation={navigation} />
             </View>
+            <Text
+              position="absolute"
+              height={wp("10%")}
+              width={wp("95%")}
+              mt={hp("55%")}
+              backgroundColor="red"
+              fontSize="md"
+              color="gray.700"
+              bold
+              textAlign="center"
+            >
+              © 2022 Shoe Gallery Mongolia
+            </Text>
           </View>
         </View>
       </Background>

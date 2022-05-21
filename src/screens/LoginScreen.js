@@ -14,8 +14,6 @@ import axios from "axios";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 
-// import Button from "../components/Button";
-import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -95,60 +93,62 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password });
     }
 
-    var request = JSON.stringify({
-      phone: parseInt(phone.value),
-      password: password.value,
-    });
-
-    var config = {
-      method: "POST",
-      url: `${baseUrl}/wallets/login`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      maxRedirects: 0,
-      data: request,
-    };
-
-    axios(config)
-      .then(function (response) {
-        setUserData(response.data);
-        warnToast.show({
-          backgroundColor: "emerald.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "300",
-          fontSize: 20,
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Амжилттай нэвтэрлээ",
-          placement: "top",
-        });
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Dashboard" }],
-        });
-        // }
-      })
-      .catch(function (error) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "300",
-          fontSize: 18,
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Утасны дугаар эсвэл нууц үг буруу",
-          placement: "top",
-        });
+    if (phone.value !== "" && password.value !== "") {
+      var request = JSON.stringify({
+        phone: parseInt(phone.value),
+        password: password.value,
       });
+
+      var config = {
+        method: "POST",
+        url: `${baseUrl}/wallets/login`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        maxRedirects: 0,
+        data: request,
+      };
+
+      axios(config)
+        .then(function (response) {
+          setUserData(response.data);
+          warnToast.show({
+            backgroundColor: "emerald.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "300",
+            fontSize: 20,
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Амжилттай нэвтэрлээ",
+            placement: "top",
+          });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Dashboard" }],
+          });
+          // }
+        })
+        .catch(function (error) {
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "300",
+            fontSize: 18,
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Утасны дугаар эсвэл нууц үг буруу",
+            placement: "top",
+          });
+        });
+    }
   };
 
   useEffect(() => {
@@ -264,10 +264,10 @@ export default function LoginScreen({ navigation }) {
               </KeyboardAvoidingView>
               <View style={{ marginVertical: 0 }}>
                 <Button
-                  backgroundColor="#1B98F5"
-                  shadow={2}
+                  colorScheme="blue"
+                  bg="#1B98F5"
                   size="md"
-                  h={16}
+                  shadow="5"
                   mode="contained"
                   onPress={onLoginPressed}
                 >
@@ -278,9 +278,11 @@ export default function LoginScreen({ navigation }) {
               </View>
 
               <Button
+                colorScheme="blue"
+                shadow="5"
                 marginTop={hp("2%")}
                 bordered
-                h={16}
+                bg="white"
                 margin="0"
                 variant="Subtle"
                 borderColor="#1B98F5"
@@ -316,8 +318,9 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   forgot: {
-    paddingTop: 2,
-    fontSize: 13,
+    fontWeight: "bold",
+    paddingTop: 4,
+    fontSize: 14,
     color: theme.colors.secondary,
   },
   link: {

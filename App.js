@@ -4,20 +4,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { theme } from "./src/core/theme";
 import {
-  StartScreen,
   LoginScreen,
   RegisterScreen,
   ForgetPasswordScreen,
   Dashboard,
-  ResetPasswordScreen,
 } from "./src/screens";
-import { Text, TextInput } from "react-native";
+import { Text, TextInput, LogBox } from "react-native";
 import { SSRProvider } from "@react-aria/ssr";
 
 import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider, ToastProvider } from "native-base";
-
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed",
+  "ColorPropType will be removed",
+]);
 const Stack = createStackNavigator();
 
 if (Text.defaultProps == null) Text.defaultProps = {};
@@ -49,10 +50,6 @@ export default function App() {
                     <Stack.Screen
                       name="ForgetPasswordScreen"
                       component={ForgetPasswordScreen}
-                    />
-                    <Stack.Screen
-                      name="ResetPasswordScreen"
-                      component={ResetPasswordScreen}
                     />
                   </Stack.Navigator>
                 </NavigationContainer>

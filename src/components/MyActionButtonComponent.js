@@ -10,7 +10,7 @@ import {
   Button,
   VStack,
   Spacer,
-  NativeBaseProvider,
+
   Text,
 } from "native-base";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";

@@ -5,9 +5,7 @@ import BackButton from "../components/BackButton";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Background from "../components/Background";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -259,12 +257,12 @@ export default function RegisterScreen({ navigation }) {
         />
 
         <Button
-          h={16}
+          colorScheme="blue"
+          shadow="5"
+          size="md"
           mt={"5%"}
           onPress={onSignUpPressed}
-          backgroundColor="#1B98F5"
-          shadow={2}
-          size="md"
+          bg="#1B98F5"
           mode="contained"
         >
           <Text fontSize="xl" bold color="white">
