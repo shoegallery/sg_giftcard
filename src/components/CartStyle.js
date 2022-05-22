@@ -41,7 +41,7 @@ const TransActionsList = () => {
                   }}
                   borderColor="gray.300"
                 >
-                  <HStack height={75} justifyContent="space-between">
+                  <HStack height={100} justifyContent="space-between">
                     <VStack justifyContent="center" width="70%">
                       <Text
                         fontSize={16}
@@ -133,7 +133,7 @@ export default function CartStyle() {
       <View
         style={{
           position: "absolute",
-          paddingTop: hp("10%"),
+          paddingTop: hp("13%"),
           marginLeft: wp("10%"),
         }}
       >
@@ -143,88 +143,71 @@ export default function CartStyle() {
           thousandSeparator={true}
           renderText={(formattedValue) => (
             <View>
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  marginLeft: wp("-2%"),
-                  height: wp("20%"),
-                  width: wp("20%"),
-                  marginBottom: hp("1%"),
-                }}
-              >
-                <QRCode size={wp("18%")} value={userData.phone} />
-              </View>
-
               <Text color="white" bold fontSize="md">
                 Хэтэвчинд
               </Text>
               <Text bold color="white" fontSize="2xl">
                 {formattedValue}₮
               </Text>
-              <Button
-                position="relative"
-                marginLeft={wp("57%")}
-                alignContent="center"
-                marginTop={-5}
-                variant="Outline"
-                onPress={() => {
-                  setModalVisible(true);
-                }}
-                height={12}
-              >
-                {modalVisible ? (
-                  <Modal
-                    alignItems="center"
-                    justifyContent="center"
-                    size="xl"
-                    isOpen={modalVisible}
-                    onClose={setModalVisible}
-                    width={"100%"}
-                  >
-                    <Modal.Content height={"90%"}>
-                      <Modal.Header>
-                        <Text
-                          bold
-                          color="#242B2E"
-                          fontSize={20}
-                          textAlign="center"
-                        >
-                          Гүйлгээний хуулга
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body height="full">
-                        {modalVisible ? <TransActionsList /> : <View></View>}
-                      </Modal.Body>
-
-                      <Modal.Footer>
-                        <Button.Group space={2}>
-                          <Button
-                            borderRadius={5}
-                            onPress={() => {
-                              setModalVisible(false);
-                            }}
-                          >
-                            <Text bold color="white">
-                              Хаах
-                            </Text>
-                          </Button>
-                        </Button.Group>
-                      </Modal.Footer>
-                    </Modal.Content>
-                  </Modal>
-                ) : (
-                  <View></View>
-                )}
-
-                <Text alignItems="flex-start" bold color="white" fontSize="lg">
-                  Хуулга <AntDesign name="right" size={14} color="white" />
-                </Text>
-              </Button>
             </View>
           )}
         />
+        <View position="absolute" marginTop={3} paddingLeft={wp("50%")}>
+          <Button
+            alignItems="center"
+            justifyContent="center"
+            height={16}
+            width={150}
+            alignContent="center"
+            variant="Outline"
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            {modalVisible ? (
+              <Modal
+                alignItems="center"
+                justifyContent="center"
+                size="xl"
+                isOpen={modalVisible}
+                onClose={setModalVisible}
+                width={"100%"}
+              >
+                <Modal.Content height={"90%"}>
+                  <Modal.Header>
+                    <Text bold color="#242B2E" fontSize={20} textAlign="center">
+                      Гүйлгээний хуулга
+                    </Text>
+                  </Modal.Header>
+                  <Modal.Body height="full">
+                    {modalVisible ? <TransActionsList /> : <View></View>}
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <Button.Group space={2}>
+                      <Button
+                        borderRadius={5}
+                        onPress={() => {
+                          setModalVisible(false);
+                        }}
+                      >
+                        <Text bold color="white">
+                          Хаах
+                        </Text>
+                      </Button>
+                    </Button.Group>
+                  </Modal.Footer>
+                </Modal.Content>
+              </Modal>
+            ) : (
+              <View></View>
+            )}
+
+            <Text alignItems="flex-start" bold color="white" fontSize="md">
+              Хуулга <AntDesign name="right" size={14} color="white" />
+            </Text>
+          </Button>
+        </View>
       </View>
     </View>
   );

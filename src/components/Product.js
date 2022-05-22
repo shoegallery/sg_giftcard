@@ -64,12 +64,15 @@ const Product = () => {
     ({ item, index }) => (
       <View
         style={{
+          alignContent: "center",
+          alignContent: "center",
           backgroundColor: "floralwhite",
           borderRadius: 5,
-          height: hp("25%"),
-          width: hp("24%"),
+          height: hp("26%"),
+          width: hp("26%"),
+          alignItems: "center",
 
-          marginLeft: 5,
+          marginLeft: 50,
           marginRight: 100,
         }}
       >
@@ -109,10 +112,9 @@ const Product = () => {
           layout="default"
           ref={ref}
           data={carouselItems}
-          sliderWidth={100}
-          itemHeight={hp("25%")}
-          paddingRight={50}
-          itemWidth={hp("25%")}
+          sliderWidth={120}
+          itemHeight={hp("27%")}
+          itemWidth={hp("27%")}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
         />

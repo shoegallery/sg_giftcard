@@ -311,7 +311,7 @@ export default function Dashboard({ navigation }, props) {
                     Худалдан
                   </Text>
                   <Text bold textAlign="center" fontSize="lg" color="#242B2E">
-                    авалт хийх
+                    авалт
                   </Text>
                 </Button>
                 {showModal ? (
