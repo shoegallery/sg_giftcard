@@ -2,10 +2,15 @@
   "expo": {
     "name": "Shoe Gallery Pay",
     "slug": "sg_giftcard",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "owner": "ShoeGallery",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,25 +23,15 @@
       "**/*"
     ],
     "ios": {
-      "icon": "./assets/icon-iphone.png",
-      "bundleIdentifier": "com.shoegallery.sg_giftcard",
-      "buildNumber": "1.0.0",
-      "supportsTablet": false
+      "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "icon": "./assets/icon-android.png",
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF",
-        "package": "com.shoegallery.sg_giftcard",
-        "versionCode": 1
-      },
-      "package": "com.shoegallery.sg_giftcard"
+      "adaptiveIcon": {}
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "description": "",
-    "githubUrl": "https://github.com/shoegallery/sg_giftcard/"
+    "githubUrl": "https://github.com/shoegallery/sg_giftcard"
   }
 }
