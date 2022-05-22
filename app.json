@@ -21,9 +21,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.shoegallery.sg_giftcard",
-      "buildNumber": "1.0.1"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
