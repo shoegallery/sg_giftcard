@@ -281,7 +281,6 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingTop: 0 },
   row: {
     flexDirection: "row",
     marginTop: 1,

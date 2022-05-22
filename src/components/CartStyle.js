@@ -18,7 +18,7 @@ import {
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import QRCode from "react-native-qrcode-svg";
+
 import moment from "moment";
 const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
@@ -149,65 +149,64 @@ export default function CartStyle() {
               <Text bold color="white" fontSize="2xl">
                 {formattedValue}₮
               </Text>
+              <View justifyContent="center" height={50} width={100}>
+                <Text
+                  onPress={() => {
+                    setModalVisible(true);
+                  }}
+                  bold
+                  color="white"
+                  fontSize="md"
+                >
+                  Хуулга <AntDesign name="right" size={14} color="white" />
+                </Text>
+                {modalVisible ? (
+                  <Modal
+                    alignItems="center"
+                    justifyContent="center"
+                    size="xl"
+                    isOpen={modalVisible}
+                    onClose={setModalVisible}
+                    width={"100%"}
+                  >
+                    <Modal.Content height={"90%"}>
+                      <Modal.Header>
+                        <Text
+                          bold
+                          color="#242B2E"
+                          fontSize={20}
+                          textAlign="center"
+                        >
+                          Гүйлгээний хуулга
+                        </Text>
+                      </Modal.Header>
+                      <Modal.Body height="full">
+                        {modalVisible ? <TransActionsList /> : <View></View>}
+                      </Modal.Body>
+
+                      <Modal.Footer>
+                        <Button.Group space={2}>
+                          <Button
+                            borderRadius={5}
+                            onPress={() => {
+                              setModalVisible(false);
+                            }}
+                          >
+                            <Text bold color="white">
+                              Хаах
+                            </Text>
+                          </Button>
+                        </Button.Group>
+                      </Modal.Footer>
+                    </Modal.Content>
+                  </Modal>
+                ) : (
+                  <View></View>
+                )}
+              </View>
             </View>
           )}
         />
-        <View position="absolute" marginTop={3} paddingLeft={wp("50%")}>
-          <Button
-            alignItems="center"
-            justifyContent="center"
-            height={16}
-            width={150}
-            alignContent="center"
-            variant="Outline"
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          >
-            {modalVisible ? (
-              <Modal
-                alignItems="center"
-                justifyContent="center"
-                size="xl"
-                isOpen={modalVisible}
-                onClose={setModalVisible}
-                width={"100%"}
-              >
-                <Modal.Content height={"90%"}>
-                  <Modal.Header>
-                    <Text bold color="#242B2E" fontSize={20} textAlign="center">
-                      Гүйлгээний хуулга
-                    </Text>
-                  </Modal.Header>
-                  <Modal.Body height="full">
-                    {modalVisible ? <TransActionsList /> : <View></View>}
-                  </Modal.Body>
-
-                  <Modal.Footer>
-                    <Button.Group space={2}>
-                      <Button
-                        borderRadius={5}
-                        onPress={() => {
-                          setModalVisible(false);
-                        }}
-                      >
-                        <Text bold color="white">
-                          Хаах
-                        </Text>
-                      </Button>
-                    </Button.Group>
-                  </Modal.Footer>
-                </Modal.Content>
-              </Modal>
-            ) : (
-              <View></View>
-            )}
-
-            <Text alignItems="flex-start" bold color="white" fontSize="md">
-              Хуулга <AntDesign name="right" size={14} color="white" />
-            </Text>
-          </Button>
-        </View>
       </View>
     </View>
   );

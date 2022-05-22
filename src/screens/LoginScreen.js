@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
-  Modal,
 } from "react-native";
 
 import axios from "axios";
@@ -18,7 +17,7 @@ import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StateContext, StateContextHistory } from "../Context/StateContext";
+import { StateContext } from "../Context/StateContext";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -34,7 +33,6 @@ import {
   Box,
   Slide,
   Alert,
-  useColorModeValue,
   useToast,
   Input,
   ToastProvider,
@@ -303,62 +301,16 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  inner: {
-    padding: 0,
-    flex: 1,
-    justifyContent: "space-around",
-  },
   forgotPassword: {
     width: "100%",
     alignItems: "flex-end",
     marginBottom: 10,
   },
-  row: {
-    flexDirection: "row",
-    marginTop: 1,
-  },
+
   forgot: {
     fontWeight: "bold",
     paddingTop: 4,
     fontSize: 14,
     color: theme.colors.secondary,
-  },
-  link: {
-    fontWeight: "bold",
-    color: theme.colors.primary,
-  },
-  modal: {
-    justifyContent: "flex-end",
-    margin: 0,
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    paddingTop: 20,
-    paddingBottom: 40,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: "600",
-  },
-  modalText: {
-    fontSize: 18,
-    color: "#555",
-    marginTop: 14,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: "#000",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    width: "100%",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 20,
   },
 });

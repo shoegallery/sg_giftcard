@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { View, SafeAreaView } from "react-native";
 import axios from "axios";
-import Carousel from "react-native-snap-carousel";
+import Carousel from "react-native-snap-carousel-v4";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -26,6 +26,10 @@ const Product = () => {
           });
 
           if (safebox.length == response.data.count) {
+            safebox.push({
+              headImage: JSON.parse(el.images)[0].url,
+              link: `https://shoegallery.mn/products/${el.category_id}/${el.id}`,
+            });
             setCarouselItems(safebox);
           }
         });
@@ -109,7 +113,7 @@ const Product = () => {
         }}
       >
         <Carousel
-          layout="default"
+          layout="stack"
           ref={ref}
           data={carouselItems}
           sliderWidth={120}

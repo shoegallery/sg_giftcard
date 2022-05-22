@@ -2,7 +2,7 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { Alert } from "react-native";
 import Background from "../components/Background";
 
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -26,7 +26,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { BarCodeScanner } from "expo-barcode-scanner";
+
 import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
 
@@ -36,11 +36,9 @@ export default function Dashboard({ navigation }, props) {
   const [userData, setUserData] = useContext(StateContext);
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-  const [alartView, setAlartView] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
-  const [cameraOpen, setCameraOpen] = useState(false);
+
   const [receiverOrder, setReceiverOrder] = useState({ value: "", error: "" });
   const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
   const [receiverAmount, setReceiverAmount] = useState({
@@ -76,6 +74,7 @@ export default function Dashboard({ navigation }, props) {
       walletSuperId: userData.wallets.walletSuperId,
       OrderNumber: parseInt(receiverOrder.value),
     });
+    console.log(request);
     var config = {
       method: "POST",
       url: `${baseUrl}/transactions/purchase`,
@@ -89,8 +88,9 @@ export default function Dashboard({ navigation }, props) {
         if (response.data.success === true) {
           setReceiverPhone({ value: "", error: "" });
           setReceiverAmount({ value: "", error: "" });
+          setReceiverOrder({ value: "", error: "" });
           userTransactionHistory();
-          setAlartView(false);
+
           dataRefresher();
           successToast.show({
             backgroundColor: "emerald.400",
@@ -124,16 +124,14 @@ export default function Dashboard({ navigation }, props) {
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
         setReceiverAmount({ value: "", error: "" });
+        setReceiverOrder({ value: "", error: "" });
+        setReceiverPhone({ value: "", error: "" });
         if (err.status == 405) {
-          Alert.alert(
-            "Хүлээн авах хэрэглэгч олдсонгүй",
-            "Хүлээн авагч хэрэглэгчийн утасны дугаарыг шалгана уу",
-            [
-              {
-                text: "OK",
-              },
-            ]
-          );
+          Alert.alert("Дахин оролдоно уу", "Ямар нэгэн зүйл буруу байна.", [
+            {
+              text: "OK",
+            },
+          ]);
         }
         warnToast.show({
           backgroundColor: "red.400",
@@ -219,53 +217,19 @@ export default function Dashboard({ navigation }, props) {
         }
       });
   };
-  const handleBarCodeScanned = ({ data }) => {
-    setReceiverPhone({ value: data, error: "" });
-    setScanned(true);
-    setCameraOpen(false);
-    Alert.alert("Амжилттай уншигдлаа", "OK дээр дарна уу", [
-      {
-        text: "OK",
-      },
-    ]);
-  };
 
   useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-
     setShowModal(false);
-    setCameraOpen(false);
-    setScanned(false);
+
     userTransactionHistory();
     setUserTransactionData("");
-    setHasPermission(null);
+    setReceiverOrder({ value: "", error: "" });
     setReceiverPhone({ value: "", error: "" });
     setReceiverAmount({
       value: "",
       error: "",
     });
   }, []);
-  if (
-    hasPermission === false &&
-    cameraOpen === false &&
-    showModal === false &&
-    alartView === false
-  ) {
-    setAlartView(true);
-
-    Alert.alert(
-      "Санамж",
-      "Та апп-д камер ашиглах зөвшөөрөл олгоогүй байна. Та худалдан авалт хийхдээ хүлээн авагчийн дугаарыг сайтар нягтална уу.",
-      [
-        {
-          text: "OK",
-        },
-      ]
-    );
-  }
 
   return (
     <NativeBaseProvider>
@@ -304,7 +268,6 @@ export default function Dashboard({ navigation }, props) {
                   success
                   onPress={() => {
                     setShowModal(true);
-                    setCameraOpen(true);
                   }}
                 >
                   <Text bold textAlign="center" fontSize="lg" color="#242B2E">
@@ -328,43 +291,6 @@ export default function Dashboard({ navigation }, props) {
                           Төлбөр төлөх
                         </Text>
                       </Modal.Header>
-                      {cameraOpen === hasPermission ? (
-                        <BarCodeScanner
-                          onBarCodeScanned={
-                            scanned ? undefined : handleBarCodeScanned
-                          }
-                          style={StyleSheet.absoluteFillObject}
-                        >
-                          <Button
-                            onPress={() => {
-                              setCameraOpen(false),
-                                setHasPermission(false),
-                                setShowModal(false);
-                            }}
-                          >
-                            Камер хаах
-                          </Button>
-                          {scanned && (
-                            <Button
-                              height={"8%"}
-                              onPress={() => {
-                                setScanned(false);
-
-                                setReceiverAmount({
-                                  value: "",
-                                  error: "",
-                                });
-                                setShowModal(true);
-                                setCameraOpen(true);
-                              }}
-                            >
-                              Дахин скан хийх
-                            </Button>
-                          )}
-                        </BarCodeScanner>
-                      ) : (
-                        <View></View>
-                      )}
 
                       <Modal.Body>
                         <FormControl>
@@ -378,31 +304,21 @@ export default function Dashboard({ navigation }, props) {
                             </Text>
                           </FormControl.Label>
 
-                          {hasPermission === true ? (
+                          <View>
                             <Box>
                               <Input
                                 fontSize={20}
-                                readonly="readonly"
-                                value={String(receiverPhone.value)}
+                                returnKeyType="next"
+                                onChangeText={(receiverAmountPhone) =>
+                                  setReceiverPhone({
+                                    value: receiverAmountPhone,
+                                    error: "",
+                                  })
+                                }
+                                keyboardType="number-pad"
                               />
                             </Box>
-                          ) : (
-                            <View>
-                              <Box>
-                                <Input
-                                  fontSize={20}
-                                  returnKeyType="next"
-                                  onChangeText={(receiverAmountPhone) =>
-                                    setReceiverPhone({
-                                      value: receiverAmountPhone,
-                                      error: "",
-                                    })
-                                  }
-                                  keyboardType="number-pad"
-                                />
-                              </Box>
-                            </View>
-                          )}
+                          </View>
                         </FormControl>
 
                         <FormControl.Label>
@@ -469,7 +385,6 @@ export default function Dashboard({ navigation }, props) {
                                 value: "",
                                 error: "",
                               });
-                              setScanned(false);
                             }}
                           >
                             <Text bold color="#242B2E">
@@ -480,7 +395,6 @@ export default function Dashboard({ navigation }, props) {
                             onPress={() => {
                               setShowModal(false);
                               checkOut();
-                              setScanned(false);
                             }}
                           >
                             <Text bold color="white">

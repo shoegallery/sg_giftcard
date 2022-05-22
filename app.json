@@ -18,12 +18,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "icon": "./assets/icon-iphone.png",
+      "bundleIdentifier": "com.shoegallery.sg_giftcard",
+      "buildNumber": "1.0.0",
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
+        "icon": "./assets/icon-android.png",
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFFFFF",
+        "package": "com.shoegallery.sg_giftcard",
+        "versionCode": 1
       },
       "package": "com.shoegallery.sg_giftcard"
     },
