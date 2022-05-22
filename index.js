@@ -2,8 +2,6 @@ import { registerRootComponent } from "expo";
 import "expo-asset";
 
 import App from "./App";
-import { name as appName } from "./app.json";
-AppRegistry.registerComponent(appName, () => App);
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
