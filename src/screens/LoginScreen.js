@@ -43,6 +43,7 @@ export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
     Updates.addListener((event) => {
       if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+        alert("Апп шинэчлэж байна. Хэсэг хугацааны дараа дахин оролдоно уу");
         Updates.reloadAsync();
       }
     });
