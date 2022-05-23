@@ -29,7 +29,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.shoegallery.sg_giftcard",
-      "versionCode": 3,
+      "versionCode": 4,
       "icon": "./assets/icon.png"
     },
     "web": {
