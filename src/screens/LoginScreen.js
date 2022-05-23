@@ -23,7 +23,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import * as Updates from "expo-updates";
 import NetInfo from "@react-native-community/netinfo";
 import {
   Button,
@@ -40,6 +40,14 @@ import {
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
+  const reactToUpdates = async () => {
+    Updates.addListener((event) => {
+      if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+        Updates.reloadAsync();
+      }
+    });
+  };
+
   const warnToastPassword = useToast();
   const warnToast = useToast();
   const [show, setShow] = useState(false);
@@ -150,6 +158,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   useEffect(() => {
+    reactToUpdates();
     setShow(false);
     setInternetCheck(false);
     setPhone({ value: "" });
