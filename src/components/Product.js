@@ -72,12 +72,12 @@ const Product = () => {
           alignContent: "center",
           backgroundColor: "floralwhite",
           borderRadius: 5,
-          height: hp("26%"),
-          width: hp("26%"),
+          height: wp("50%"),
+          width: wp("50%"),
           alignItems: "center",
 
-          marginLeft: 50,
-          marginRight: 100,
+          marginLeft: wp("22,5%"),
+          marginRight: wp("22,5%"),
         }}
       >
         <Image
@@ -101,12 +101,12 @@ const Product = () => {
         borderRadius: 15,
         width: wp("95%"),
         flex: 1,
-        backgroundColor: "#ffab91",
-        paddingTop: hp("2%"),
+        backgroundColor: "white",
       }}
     >
       <View
         style={{
+          alignItems: "center",
           flex: 1,
           flexDirection: "row",
           justifyContent: "center",
@@ -116,9 +116,9 @@ const Product = () => {
           layout="stack"
           ref={ref}
           data={carouselItems}
-          sliderWidth={120}
-          itemHeight={hp("27%")}
-          itemWidth={hp("27%")}
+          sliderWidth={250}
+          itemHeight={wp("50%")}
+          itemWidth={wp("50%")}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
         />

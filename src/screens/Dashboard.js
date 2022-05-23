@@ -74,7 +74,7 @@ export default function Dashboard({ navigation }, props) {
       walletSuperId: userData.wallets.walletSuperId,
       OrderNumber: parseInt(receiverOrder.value),
     });
-    console.log(request);
+
     var config = {
       method: "POST",
       url: `${baseUrl}/transactions/purchase`,
@@ -257,10 +257,10 @@ export default function Dashboard({ navigation }, props) {
                 }}
               >
                 <Button
-                  colorScheme="yellow"
+                  colorScheme="green"
                   shadow="5"
                   variant="subtle"
-                  bg="yellow.200"
+                  bg="#74b72E"
                   borderRadius={10}
                   height={"90%"}
                   marginRight={1}
@@ -270,10 +270,10 @@ export default function Dashboard({ navigation }, props) {
                     setShowModal(true);
                   }}
                 >
-                  <Text bold textAlign="center" fontSize="lg" color="#242B2E">
+                  <Text bold textAlign="center" fontSize="lg" color="white">
                     Худалдан
                   </Text>
-                  <Text bold textAlign="center" fontSize="lg" color="#242B2E">
+                  <Text bold textAlign="center" fontSize="lg" color="white">
                     авалт
                   </Text>
                 </Button>
@@ -415,7 +415,7 @@ export default function Dashboard({ navigation }, props) {
                   borderWidth={3}
                   bg="#EEEDDE"
                   colorScheme="gray"
-                  borderColor="#898B8A"
+                  borderColor="#74b72E"
                   borderRadius={10}
                   marginLeft={1}
                   height={"90%"}
@@ -438,7 +438,7 @@ export default function Dashboard({ navigation }, props) {
                     });
                   }}
                 >
-                  <Text bold fontSize="lg" color="#898B8A">
+                  <Text bold fontSize="lg" color="#74b72E">
                     Цэнэглэлт
                   </Text>
                 </Button>

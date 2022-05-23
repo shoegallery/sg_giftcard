@@ -10,10 +10,15 @@ import {
   Button,
   VStack,
   Spacer,
-
   Text,
 } from "native-base";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Ionicons,
+  Feather,
+  Entypo,
+} from "@expo/vector-icons";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -179,20 +184,23 @@ const MyActionButtonComponent = (props) => {
           }}
         >
           <IconButton
+            shadow={5}
             mb="4"
             variant="solid"
-            bg="#40c4ff"
+            bg="white"
             colorScheme="blue"
             borderRadius="full"
+            borderWidth={3}
+            borderColor="#40c4ff"
             icon={
               <Icon
-                as={MaterialIcons}
-                size={wp("10%")}
-                name="location-pin"
+                as={Entypo}
+                size={wp("10%") - 6}
+                name="location"
                 _dark={{
                   color: "white",
                 }}
-                color="white"
+                color="#40c4ff"
                 onPress={() => {
                   setModalVisible(true);
                 }}
@@ -241,10 +249,13 @@ const MyActionButtonComponent = (props) => {
             )}
           </View>
           <IconButton
+            shadow={5}
             mb="4"
             variant="solid"
-            bg="#FF6666"
+            bg="white"
             colorScheme="red"
+            borderWidth={3}
+            borderColor="#FF6666"
             borderRadius="full"
             icon={
               <Icon
@@ -252,9 +263,9 @@ const MyActionButtonComponent = (props) => {
                 _dark={{
                   color: "white",
                 }}
-                size={wp("10%")}
-                name="shopping"
-                color="white"
+                size={wp("10%") - 6}
+                name="shopping-outline"
+                color="#FF6666"
                 onPress={() => {
                   onToggle;
                   WebBrowser.openBrowserAsync("https://shoegallery.mn");
@@ -263,17 +274,20 @@ const MyActionButtonComponent = (props) => {
             }
           />
           <IconButton
+            shadow={5}
             mb="4"
             variant="solid"
-            bg="#00c853"
+            bg="white"
+            borderWidth={3}
+            borderColor="#00c853"
             colorScheme="teal"
             borderRadius="full"
             icon={
               <Icon
-                as={MaterialCommunityIcons}
-                size={wp("10%")}
+                as={Feather}
+                size={wp("10%") - 6}
                 name="phone"
-                color="white"
+                color="#00c853"
                 onPress={() => {
                   onToggle;
                   if (Platform.OS === "android") {
@@ -287,17 +301,20 @@ const MyActionButtonComponent = (props) => {
           />
 
           <IconButton
+            shadow={5}
             mb="4"
             variant="solid"
-            backgroundColor="#607d8b"
+            borderWidth={3}
+            borderColor="#607d8b"
+            backgroundColor="white"
             colorScheme="black"
             borderRadius="full"
             icon={
               <Icon
                 as={MaterialCommunityIcons}
-                size={wp("10%")}
-                name="logout"
-                color="white"
+                size={wp("10%") - 6}
+                name="exit-to-app"
+                color="#607d8b"
                 onPress={() => {
                   props.navigation.reset({
                     index: 0,
@@ -314,17 +331,20 @@ const MyActionButtonComponent = (props) => {
       </Box>
       <HStack alignItems="center">
         <IconButton
+          shadow={5}
           variant="solid"
           borderRadius="full"
+          borderWidth={3}
+          borderColor="#03a9f4"
           size="lg"
           onPress={onToggle}
-          bg="#03a9f4"
+          bg="white"
           icon={
             <Icon
-              as={MaterialCommunityIcons}
-              size={wp("10%")}
-              name="dots-horizontal"
-              color="white"
+              as={Ionicons}
+              size={wp("10%") - 6}
+              name="ios-menu"
+              color="#03a9f4"
               _dark={{
                 color: "white",
               }}

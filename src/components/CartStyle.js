@@ -149,61 +149,60 @@ export default function CartStyle() {
               <Text bold color="white" fontSize="2xl">
                 {formattedValue}₮
               </Text>
-              <View justifyContent="center" height={50} width={100}>
-                <Text
-                  onPress={() => {
-                    setModalVisible(true);
-                  }}
-                  bold
-                  color="white"
-                  fontSize="md"
-                >
-                  Хуулга <AntDesign name="right" size={14} color="white" />
-                </Text>
-                {modalVisible ? (
-                  <Modal
-                    alignItems="center"
-                    justifyContent="center"
-                    size="xl"
-                    isOpen={modalVisible}
-                    onClose={setModalVisible}
-                    width={"100%"}
-                  >
-                    <Modal.Content height={"90%"}>
-                      <Modal.Header>
-                        <Text
-                          bold
-                          color="#242B2E"
-                          fontSize={20}
-                          textAlign="center"
-                        >
-                          Гүйлгээний хуулга
-                        </Text>
-                      </Modal.Header>
-                      <Modal.Body height="full">
-                        {modalVisible ? <TransActionsList /> : <View></View>}
-                      </Modal.Body>
 
-                      <Modal.Footer>
-                        <Button.Group space={2}>
-                          <Button
-                            borderRadius={5}
-                            onPress={() => {
-                              setModalVisible(false);
-                            }}
-                          >
-                            <Text bold color="white">
-                              Хаах
-                            </Text>
-                          </Button>
-                        </Button.Group>
-                      </Modal.Footer>
-                    </Modal.Content>
-                  </Modal>
-                ) : (
-                  <View></View>
-                )}
-              </View>
+              <Text
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+                bold
+                color="white"
+                fontSize="md"
+              >
+                Хуулга <AntDesign name="right" size={14} color="white" />
+              </Text>
+              {modalVisible ? (
+                <Modal
+                  alignItems="center"
+                  justifyContent="center"
+                  size="xl"
+                  isOpen={modalVisible}
+                  onClose={setModalVisible}
+                  width={"100%"}
+                >
+                  <Modal.Content height={"90%"}>
+                    <Modal.Header>
+                      <Text
+                        bold
+                        color="#242B2E"
+                        fontSize={20}
+                        textAlign="center"
+                      >
+                        Гүйлгээний хуулга
+                      </Text>
+                    </Modal.Header>
+                    <Modal.Body height="full">
+                      {modalVisible ? <TransActionsList /> : <View></View>}
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                      <Button.Group space={2}>
+                        <Button
+                          borderRadius={5}
+                          onPress={() => {
+                            setModalVisible(false);
+                          }}
+                        >
+                          <Text bold color="white">
+                            Хаах
+                          </Text>
+                        </Button>
+                      </Button.Group>
+                    </Modal.Footer>
+                  </Modal.Content>
+                </Modal>
+              ) : (
+                <View></View>
+              )}
             </View>
           )}
         />
