@@ -188,10 +188,10 @@ const MyActionButtonComponent = (props) => {
             mb="4"
             variant="solid"
             bg="white"
-            colorScheme="blue"
+            colorScheme="orange"
             borderRadius="full"
             borderWidth={3}
-            borderColor="#40c4ff"
+            borderColor="#CC5801"
             icon={
               <Icon
                 as={Entypo}
@@ -200,7 +200,7 @@ const MyActionButtonComponent = (props) => {
                 _dark={{
                   color: "white",
                 }}
-                color="#40c4ff"
+                color="#CC5801"
                 onPress={() => {
                   setModalVisible(true);
                 }}
@@ -253,9 +253,9 @@ const MyActionButtonComponent = (props) => {
             mb="4"
             variant="solid"
             bg="white"
-            colorScheme="red"
+            colorScheme="orange"
             borderWidth={3}
-            borderColor="#FF6666"
+            borderColor="#CC5801"
             borderRadius="full"
             icon={
               <Icon
@@ -265,7 +265,7 @@ const MyActionButtonComponent = (props) => {
                 }}
                 size={wp("10%") - 6}
                 name="shopping-outline"
-                color="#FF6666"
+                color="#CC5801"
                 onPress={() => {
                   onToggle;
                   WebBrowser.openBrowserAsync("https://shoegallery.mn");
@@ -279,15 +279,15 @@ const MyActionButtonComponent = (props) => {
             variant="solid"
             bg="white"
             borderWidth={3}
-            borderColor="#00c853"
-            colorScheme="teal"
+            borderColor="#CC5801"
+            colorScheme="orange"
             borderRadius="full"
             icon={
               <Icon
                 as={Feather}
                 size={wp("10%") - 6}
                 name="phone"
-                color="#00c853"
+                color="#CC5801"
                 onPress={() => {
                   onToggle;
                   if (Platform.OS === "android") {
@@ -305,16 +305,16 @@ const MyActionButtonComponent = (props) => {
             mb="4"
             variant="solid"
             borderWidth={3}
-            borderColor="#607d8b"
+            borderColor="#CC5801"
             backgroundColor="white"
-            colorScheme="black"
+            colorScheme="orange"
             borderRadius="full"
             icon={
               <Icon
                 as={MaterialCommunityIcons}
                 size={wp("10%") - 6}
                 name="exit-to-app"
-                color="#607d8b"
+                color="#CC5801"
                 onPress={() => {
                   props.navigation.reset({
                     index: 0,
@@ -335,7 +335,8 @@ const MyActionButtonComponent = (props) => {
           variant="solid"
           borderRadius="full"
           borderWidth={3}
-          borderColor="#03a9f4"
+          borderColor="#CC5801"
+          colorScheme="orange"
           size="lg"
           onPress={onToggle}
           bg="white"
@@ -344,7 +345,7 @@ const MyActionButtonComponent = (props) => {
               as={Ionicons}
               size={wp("10%") - 6}
               name="ios-menu"
-              color="#03a9f4"
+              color="#CC5801"
               _dark={{
                 color: "white",
               }}

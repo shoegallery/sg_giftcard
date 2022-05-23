@@ -72,8 +72,8 @@ const Product = () => {
           alignContent: "center",
           backgroundColor: "floralwhite",
           borderRadius: 5,
-          height: wp("50%"),
-          width: wp("50%"),
+          height: hp("30%"),
+          width: hp("30%"),
           alignItems: "center",
 
           marginLeft: wp("22,5%"),
@@ -117,8 +117,8 @@ const Product = () => {
           ref={ref}
           data={carouselItems}
           sliderWidth={250}
-          itemHeight={wp("50%")}
-          itemWidth={wp("50%")}
+          itemHeight={hp("30%")}
+          itemWidth={hp("30%")}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
         />

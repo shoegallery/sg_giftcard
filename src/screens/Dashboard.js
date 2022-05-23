@@ -21,6 +21,7 @@ import {
   Heading,
   View,
   useToast,
+  KeyboardAvoidingView,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -257,10 +258,10 @@ export default function Dashboard({ navigation }, props) {
                 }}
               >
                 <Button
-                  colorScheme="green"
+                  colorScheme="orange"
                   shadow="5"
                   variant="subtle"
-                  bg="#74b72E"
+                  bg="#CC5801"
                   borderRadius={10}
                   height={"90%"}
                   marginRight={1}
@@ -279,131 +280,139 @@ export default function Dashboard({ navigation }, props) {
                 </Button>
                 {showModal ? (
                   <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                    <Modal.Content width={wp("80%")} height={hp("60%")}>
-                      <Modal.CloseButton />
-                      <Modal.Header>
-                        <Text
-                          bold
-                          color="#242B2E"
-                          fontSize={20}
-                          textAlign="center"
-                        >
-                          Төлбөр төлөх
-                        </Text>
-                      </Modal.Header>
+                    <KeyboardAvoidingView
+                      h={{
+                        base: "400px",
+                        lg: "auto",
+                      }}
+                      behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    >
+                      <Modal.Content width={wp("80%")} height={hp("60%")}>
+                        <Modal.CloseButton />
+                        <Modal.Header>
+                          <Text
+                            bold
+                            color="#242B2E"
+                            fontSize={20}
+                            textAlign="center"
+                          >
+                            Төлбөр төлөх
+                          </Text>
+                        </Modal.Header>
 
-                      <Modal.Body>
-                        <FormControl>
+                        <Modal.Body>
+                          <FormControl>
+                            <FormControl.Label>
+                              <Text
+                                fontSize={20}
+                                fontWeight="semibold"
+                                color="gray.700"
+                              >
+                                Хүлээн авагч
+                              </Text>
+                            </FormControl.Label>
+
+                            <View>
+                              <Box>
+                                <Input
+                                  fontSize={20}
+                                  returnKeyType="next"
+                                  onChangeText={(receiverAmountPhone) =>
+                                    setReceiverPhone({
+                                      value: receiverAmountPhone,
+                                      error: "",
+                                    })
+                                  }
+                                  keyboardType="number-pad"
+                                />
+                              </Box>
+                            </View>
+                          </FormControl>
+
                           <FormControl.Label>
                             <Text
                               fontSize={20}
                               fontWeight="semibold"
                               color="gray.700"
                             >
-                              Хүлээн авагч
+                              Үнийн дүн
                             </Text>
                           </FormControl.Label>
+                          <Box>
+                            <Input
+                              fontSize={20}
+                              value={String(receiverAmount.value)}
+                              returnKeyType="next"
+                              onChangeText={(receiverAmountNumber) =>
+                                setReceiverAmount({
+                                  value: receiverAmountNumber,
+                                  error: "",
+                                })
+                              }
+                              keyboardType="number-pad"
+                            />
+                          </Box>
 
-                          <View>
-                            <Box>
-                              <Input
-                                fontSize={20}
-                                returnKeyType="next"
-                                onChangeText={(receiverAmountPhone) =>
-                                  setReceiverPhone({
-                                    value: receiverAmountPhone,
-                                    error: "",
-                                  })
-                                }
-                                keyboardType="number-pad"
-                              />
-                            </Box>
-                          </View>
-                        </FormControl>
-
-                        <FormControl.Label>
-                          <Text
-                            fontSize={20}
-                            fontWeight="semibold"
-                            color="gray.700"
-                          >
-                            Үнийн дүн
-                          </Text>
-                        </FormControl.Label>
-                        <Box>
-                          <Input
-                            fontSize={20}
-                            value={String(receiverAmount.value)}
-                            returnKeyType="done"
-                            onChangeText={(receiverAmountNumber) =>
-                              setReceiverAmount({
-                                value: receiverAmountNumber,
-                                error: "",
-                              })
-                            }
-                            keyboardType="number-pad"
-                          />
-                        </Box>
-
-                        <FormControl.Label>
-                          <Text
-                            fontSize={20}
-                            fontWeight="semibold"
-                            color="gray.700"
-                          >
-                            Гүйлгээний утга
-                          </Text>
-                        </FormControl.Label>
-                        <Box>
-                          <Input
-                            fontSize={20}
-                            value={String(receiverOrder.value)}
-                            returnKeyType="done"
-                            onChangeText={(receiverSummeryNumber) =>
-                              setReceiverOrder({
-                                value: receiverSummeryNumber,
-                                error: "",
-                              })
-                            }
-                            keyboardType="number-pad"
-                          />
-                        </Box>
-                        <Text fontSize={12} bold color="red.700">
-                          Худалдааны зөвлөх танд тайлбарлах болно
-                        </Text>
-                      </Modal.Body>
-
-                      <Modal.Footer>
-                        <Button.Group space={5}>
-                          <Button
-                            variant="ghost"
-                            colorScheme="blueGray"
-                            onPress={() => {
-                              setShowModal(false);
-                              setReceiverPhone({ value: "", error: "" });
-                              setReceiverAmount({
-                                value: "",
-                                error: "",
-                              });
-                            }}
-                          >
-                            <Text bold color="#242B2E">
-                              Хаах
+                          <FormControl.Label>
+                            <Text
+                              fontSize={20}
+                              fontWeight="semibold"
+                              color="gray.700"
+                            >
+                              Гүйлгээний утга
                             </Text>
-                          </Button>
-                          <Button
-                            onPress={() => {
-                              setShowModal(false);
-                              checkOut();
-                            }}
-                          >
-                            <Text bold color="white">
-                              Төлөх
-                            </Text>
-                          </Button>
-                        </Button.Group>
-                      </Modal.Footer>
-                    </Modal.Content>
+                          </FormControl.Label>
+                          <Box>
+                            <Input
+                              fontSize={20}
+                              value={String(receiverOrder.value)}
+                              returnKeyType="done"
+                              onChangeText={(receiverSummeryNumber) =>
+                                setReceiverOrder({
+                                  value: receiverSummeryNumber,
+                                  error: "",
+                                })
+                              }
+                              keyboardType="number-pad"
+                            />
+                          </Box>
+                          <Text fontSize={12} bold color="red.700">
+                            Худалдааны зөвлөх танд тайлбарлах болно
+                          </Text>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                          <Button.Group space={5}>
+                            <Button
+                              variant="ghost"
+                              colorScheme="blueGray"
+                              onPress={() => {
+                                setShowModal(false);
+                                setReceiverPhone({ value: "", error: "" });
+                                setReceiverAmount({
+                                  value: "",
+                                  error: "",
+                                });
+                              }}
+                            >
+                              <Text bold color="#242B2E">
+                                Хаах
+                              </Text>
+                            </Button>
+                            <Button
+                              onPress={() => {
+                                setShowModal(false);
+                                checkOut();
+                              }}
+                            >
+                              <Text bold color="white">
+                                Төлөх
+                              </Text>
+                            </Button>
+                          </Button.Group>
+                        </Modal.Footer>
+                      </Modal.Content>
+                    </KeyboardAvoidingView>
                   </Modal>
                 ) : (
                   <View></View>
@@ -413,9 +422,9 @@ export default function Dashboard({ navigation }, props) {
                   shadow="5"
                   variant="subtle"
                   borderWidth={3}
-                  bg="#EEEDDE"
-                  colorScheme="gray"
-                  borderColor="#74b72E"
+                  bg="white"
+                  colorScheme="brown"
+                  borderColor="#CC5801"
                   borderRadius={10}
                   marginLeft={1}
                   height={"90%"}
@@ -438,7 +447,7 @@ export default function Dashboard({ navigation }, props) {
                     });
                   }}
                 >
-                  <Text bold fontSize="lg" color="#74b72E">
+                  <Text bold fontSize="lg" color="#CC5801">
                     Цэнэглэлт
                   </Text>
                 </Button>
