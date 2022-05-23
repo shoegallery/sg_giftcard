@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ShoeGallery Wallet",
-    "slug": "sg_giftcard",
+    "slug": "https://expo.dev/@shoegallery/projects/sg_giftcard",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
