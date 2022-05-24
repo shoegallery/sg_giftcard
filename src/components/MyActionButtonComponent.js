@@ -187,7 +187,7 @@ const MyActionButtonComponent = (props) => {
             shadow={5}
             mb="4"
             variant="solid"
-            bg="white"
+            bg="#ffffff"
             colorScheme="orange"
             borderRadius="full"
             borderWidth={3}
@@ -252,7 +252,7 @@ const MyActionButtonComponent = (props) => {
             shadow={5}
             mb="4"
             variant="solid"
-            bg="white"
+            bg="#ffffff"
             colorScheme="orange"
             borderWidth={3}
             borderColor="#CC5801"
@@ -277,7 +277,7 @@ const MyActionButtonComponent = (props) => {
             shadow={5}
             mb="4"
             variant="solid"
-            bg="white"
+            bg="#ffffff"
             borderWidth={3}
             borderColor="#CC5801"
             colorScheme="orange"
@@ -306,7 +306,7 @@ const MyActionButtonComponent = (props) => {
             variant="solid"
             borderWidth={3}
             borderColor="#CC5801"
-            backgroundColor="white"
+            backgroundColor="#ffffff"
             colorScheme="orange"
             borderRadius="full"
             icon={
@@ -339,7 +339,7 @@ const MyActionButtonComponent = (props) => {
           colorScheme="orange"
           size="lg"
           onPress={onToggle}
-          bg="white"
+          bg="#ffffff"
           icon={
             <Icon
               as={Ionicons}
