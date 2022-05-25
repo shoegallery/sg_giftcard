@@ -54,6 +54,6 @@
     "prettier": "^2.2.1"
   },
   "private": true,
-  "name": "sg_giftcard",
+  "name": "sg_wallet",
   "version": "1.0.0"
 }
