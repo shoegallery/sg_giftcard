@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "ShoeGallery Wallet",
-    "slug": "sg_giftcard",
-    "version": "1.0.6",
+    "slug": "sg_wallet",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "platforms": [
@@ -28,14 +28,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shoegallery.sg_giftcard",
-      "versionCode": 5,
+      "package": "com.shoegallery.sg_wallet",
+      "versionCode": 6,
       "icon": "./assets/icon.png"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "description": "",
-    "githubUrl": "https://github.com/shoegallery/sg_giftcard"
+    "githubUrl": "https://github.com/shoegallery/sg_wallet"
   }
 }
