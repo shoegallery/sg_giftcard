@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ShoeGallery Admin",
-    "slug": "sg_admin",
+    "name": "ShoeGallery Wallet",
+    "slug": "sg_wallet",
     "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shoegallery.sg_admin",
+      "package": "com.shoegallery.sg_wallet",
       "versionCode": 6,
       "icon": "./assets/icon.png"
     },
@@ -36,6 +36,6 @@
       "favicon": "./assets/favicon.png"
     },
     "description": "",
-    "githubUrl": "https://github.com/shoegallery/sg_admin"
+    "githubUrl": "https://github.com/shoegallery/sg_wallet"
   }
 }
