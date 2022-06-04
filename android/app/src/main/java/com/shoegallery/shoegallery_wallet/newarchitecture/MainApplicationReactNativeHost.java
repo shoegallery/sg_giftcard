@@ -1,4 +1,4 @@
-package com.shoegallery.sg_wallet.newarchitecture;
+package com.shoegallery.shoegallery_wallet.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.shoegallery.sg_wallet.BuildConfig;
-import com.shoegallery.sg_wallet.newarchitecture.components.MainComponentsRegistry;
-import com.shoegallery.sg_wallet.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.shoegallery.shoegallery_wallet.BuildConfig;
+import com.shoegallery.shoegallery_wallet.newarchitecture.components.MainComponentsRegistry;
+import com.shoegallery.shoegallery_wallet.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

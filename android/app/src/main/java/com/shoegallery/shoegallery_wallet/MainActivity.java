@@ -1,4 +1,4 @@
-package com.shoegallery.sg_wallet;
+package com.shoegallery.shoegallery_wallet;
 
 import android.os.Build;
 import android.os.Bundle;

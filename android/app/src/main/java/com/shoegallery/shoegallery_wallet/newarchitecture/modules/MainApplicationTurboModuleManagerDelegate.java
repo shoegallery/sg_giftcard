@@ -1,4 +1,4 @@
-package com.shoegallery.sg_wallet.newarchitecture.modules;
+package com.shoegallery.shoegallery_wallet.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

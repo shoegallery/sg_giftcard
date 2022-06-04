@@ -1,4 +1,4 @@
-package com.shoegallery.sg_wallet.newarchitecture.components;
+package com.shoegallery.shoegallery_wallet.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;
