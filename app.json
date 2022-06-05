@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ShoeGallery Wallet",
-    "slug": "sg_wallet",
+    "name": "ShoeGallery Giftcard",
+    "slug": "sg_giftcard",
     "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shoegallery.sg_wallet",
+      "package": "com.shoegallery.sg_giftcard",
       "versionCode": 7,
       "icon": "./assets/icon.png"
     },
