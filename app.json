@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Shoe Gallery Wallet",
-    "slug": "sg_wallet_app",
+    "name": "ShoeGallery Wallet",
+    "slug": "sg_wallet",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shoegallery.sg_wallet_app",
+      "package": "com.shoegallery.sg_wallet",
       "versionCode": 8,
       "icon": "./assets/icon.png"
     },
