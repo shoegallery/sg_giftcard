@@ -139,7 +139,7 @@ export default function RegisterScreen({ navigation }) {
             textAlign: "center",
             justifyContent: "center",
             alignItems: "center",
-            title: "Амжилттай бүргүүллээ",
+            title: "Амжилттай бүртгүүллээ",
             placement: "top",
           });
           navigation.reset({
@@ -153,7 +153,7 @@ export default function RegisterScreen({ navigation }) {
           });
         }
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
   useEffect(() => {
     setShow(false);

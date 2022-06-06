@@ -2,8 +2,8 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { Alert } from "react-native";
-import Background from "../components/Background";
+import { Alert, RefreshControl, ScrollView } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
@@ -22,6 +22,7 @@ import {
   View,
   useToast,
   KeyboardAvoidingView,
+
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -30,6 +31,7 @@ import {
 
 import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dashboard({ navigation }, props) {
   const successToast = useToast();
@@ -46,6 +48,18 @@ export default function Dashboard({ navigation }, props) {
     value: "",
     error: "",
   });
+
+  const [refreshing, setRefreshing] = useState(false);
+  const wait = (timeout) => {
+    userTransactionHistory()
+    dataRefresher()
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
 
   const checkOut = () => {
     const receiverPhoneError = phoneValidator(receiverPhone.value);
@@ -234,280 +248,296 @@ export default function Dashboard({ navigation }, props) {
 
   return (
     <NativeBaseProvider>
-      <Background>
-        <View style={{ display: "flex" }}>
-          <CartStyle />
-          <View
-            style={{
-              paddingTop: hp("0.5%"),
-              display: "flex",
-              flexDirection: "column",
-              position: "relative",
-              height: hp("10%"),
-              width: wp("95%"),
-            }}
-          >
-            <VStack justifyContent="center" alignItems="center">
+      <ScrollView
+        VirtualizedList-backed
+        nestedScrollEnabled={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <SafeAreaView>
+          <View flex={1} alignSelf="center"
+            alignItems="center" width={wp("100%")} paddingTop={hp("1%")} padding={wp("10%")} height={hp("99%")} backgroundColor="white">
+            <View style={{ display: "flex" }}>
+              <CartStyle />
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "100%",
+                  paddingTop: hp("0.5%"),
+                  display: "flex",
+                  flexDirection: "column",
                   position: "relative",
-                  height: "100%",
+                  height: hp("10%"),
+                  width: wp("95%"),
                 }}
               >
-                <Button
-                  colorScheme="orange"
-                  shadow="5"
-                  variant="subtle"
-                  bg="#CC5801"
-                  borderRadius={10}
-                  height={"90%"}
-                  marginRight={1}
-                  flex={1}
-                  success
-                  onPress={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  <Text bold textAlign="center" fontSize="lg" color="white">
-                    Худалдан
-                  </Text>
-                  <Text bold textAlign="center" fontSize="lg" color="white">
-                    авалт
-                  </Text>
-                </Button>
-                {showModal ? (
-                  <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                    <KeyboardAvoidingView
-                      h={{
-                        base: "400px",
-                        lg: "auto",
+                <VStack justifyContent="center" alignItems="center">
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                      position: "relative",
+                      height: "100%",
+                    }}
+                  >
+                    <Button
+                      colorScheme="orange"
+                      shadow="5"
+                      variant="subtle"
+                      bg="#CC5801"
+                      borderRadius={10}
+                      height={"90%"}
+                      marginRight={1}
+                      flex={1}
+                      success
+                      onPress={() => {
+                        setShowModal(true);
                       }}
-                      behavior={Platform.OS === "ios" ? "padding" : "height"}
                     >
-                      <Modal.Content width={wp("80%")} height={hp("60%")}>
-                        <Modal.CloseButton />
-                        <Modal.Header>
-                          <Text
-                            bold
-                            color="#242B2E"
-                            fontSize={20}
-                            textAlign="center"
-                          >
-                            Төлбөр төлөх
-                          </Text>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                          <FormControl>
-                            <FormControl.Label>
+                      <Text bold textAlign="center" fontSize="lg" color="white">
+                        Худалдан
+                      </Text>
+                      <Text bold textAlign="center" fontSize="lg" color="white">
+                        авалт
+                      </Text>
+                    </Button>
+                    {showModal ? (
+                      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                        <KeyboardAvoidingView
+                          h={{
+                            base: "400px",
+                            lg: "auto",
+                          }}
+                          behavior={Platform.OS === "ios" ? "padding" : "height"}
+                        >
+                          <Modal.Content width={wp("80%")} height={hp("60%")}>
+                            <Modal.CloseButton />
+                            <Modal.Header>
                               <Text
+                                bold
+                                color="#242B2E"
                                 fontSize={20}
-                                fontWeight="semibold"
-                                color="gray.700"
+                                textAlign="center"
                               >
-                                Хүлээн авагч
+                                Төлбөр төлөх
                               </Text>
-                            </FormControl.Label>
+                            </Modal.Header>
 
-                            <View>
+                            <Modal.Body>
+                              <FormControl>
+                                <FormControl.Label>
+                                  <Text
+                                    fontSize={20}
+                                    fontWeight="semibold"
+                                    color="gray.700"
+                                  >
+                                    Хүлээн авагч
+                                  </Text>
+                                </FormControl.Label>
+
+                                <View>
+                                  <Box>
+                                    <Input
+                                      fontSize={20}
+                                      returnKeyType="next"
+                                      onChangeText={(receiverAmountPhone) =>
+                                        setReceiverPhone({
+                                          value: receiverAmountPhone,
+                                          error: "",
+                                        })
+                                      }
+                                      keyboardType="number-pad"
+                                    />
+                                  </Box>
+                                </View>
+                              </FormControl>
+
+                              <FormControl.Label>
+                                <Text
+                                  fontSize={20}
+                                  fontWeight="semibold"
+                                  color="gray.700"
+                                >
+                                  Үнийн дүн
+                                </Text>
+                              </FormControl.Label>
                               <Box>
                                 <Input
                                   fontSize={20}
+                                  value={String(receiverAmount.value)}
                                   returnKeyType="next"
-                                  onChangeText={(receiverAmountPhone) =>
-                                    setReceiverPhone({
-                                      value: receiverAmountPhone,
+                                  onChangeText={(receiverAmountNumber) =>
+                                    setReceiverAmount({
+                                      value: receiverAmountNumber,
                                       error: "",
                                     })
                                   }
                                   keyboardType="number-pad"
                                 />
                               </Box>
-                            </View>
-                          </FormControl>
 
-                          <FormControl.Label>
-                            <Text
-                              fontSize={20}
-                              fontWeight="semibold"
-                              color="gray.700"
-                            >
-                              Үнийн дүн
-                            </Text>
-                          </FormControl.Label>
-                          <Box>
-                            <Input
-                              fontSize={20}
-                              value={String(receiverAmount.value)}
-                              returnKeyType="next"
-                              onChangeText={(receiverAmountNumber) =>
-                                setReceiverAmount({
-                                  value: receiverAmountNumber,
-                                  error: "",
-                                })
-                              }
-                              keyboardType="number-pad"
-                            />
-                          </Box>
-
-                          <FormControl.Label>
-                            <Text
-                              fontSize={20}
-                              fontWeight="semibold"
-                              color="gray.700"
-                            >
-                              Гүйлгээний утга
-                            </Text>
-                          </FormControl.Label>
-                          <Box>
-                            <Input
-                              fontSize={20}
-                              value={String(receiverOrder.value)}
-                              returnKeyType="done"
-                              onChangeText={(receiverSummeryNumber) =>
-                                setReceiverOrder({
-                                  value: receiverSummeryNumber,
-                                  error: "",
-                                })
-                              }
-                              keyboardType="number-pad"
-                            />
-                          </Box>
-                          <Text fontSize={12} bold color="red.700">
-                            Худалдааны зөвлөх танд тайлбарлах болно
-                          </Text>
-                        </Modal.Body>
-
-                        <Modal.Footer>
-                          <Button.Group space={5}>
-                            <Button
-                              variant="ghost"
-                              colorScheme="blueGray"
-                              onPress={() => {
-                                setShowModal(false);
-                                setReceiverPhone({ value: "", error: "" });
-                                setReceiverAmount({
-                                  value: "",
-                                  error: "",
-                                });
-                              }}
-                            >
-                              <Text bold color="#242B2E">
-                                Хаах
+                              <FormControl.Label>
+                                <Text
+                                  fontSize={20}
+                                  fontWeight="semibold"
+                                  color="gray.700"
+                                >
+                                  Гүйлгээний утга
+                                </Text>
+                              </FormControl.Label>
+                              <Box>
+                                <Input
+                                  fontSize={20}
+                                  value={String(receiverOrder.value)}
+                                  returnKeyType="done"
+                                  onChangeText={(receiverSummeryNumber) =>
+                                    setReceiverOrder({
+                                      value: receiverSummeryNumber,
+                                      error: "",
+                                    })
+                                  }
+                                  keyboardType="number-pad"
+                                />
+                              </Box>
+                              <Text fontSize={12} bold color="red.700">
+                                Худалдааны зөвлөх танд тайлбарлах болно
                               </Text>
-                            </Button>
-                            <Button
-                              onPress={() => {
-                                setShowModal(false);
-                                checkOut();
-                              }}
-                            >
-                              <Text bold color="white">
-                                Төлөх
-                              </Text>
-                            </Button>
-                          </Button.Group>
-                        </Modal.Footer>
-                      </Modal.Content>
-                    </KeyboardAvoidingView>
-                  </Modal>
-                ) : (
-                  <View></View>
-                )}
+                            </Modal.Body>
 
-                <Button
-                  shadow="5"
-                  variant="subtle"
-                  borderWidth={3}
-                  bg="white"
-                  colorScheme="brown"
-                  borderColor="#CC5801"
-                  borderRadius={10}
-                  marginLeft={1}
-                  height={"90%"}
-                  flex={1}
-                  bordered
-                  success
-                  onPress={() => {
-                    warnToast.show({
-                      backgroundColor: "red.400",
-                      px: "2",
-                      py: "1",
-                      rounded: "sm",
-                      height: "50",
-                      width: "250",
-                      textAlign: "center",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      title: "Тун удахгүй",
-                      placement: "top",
-                    });
+                            <Modal.Footer>
+                              <Button.Group space={5}>
+                                <Button
+                                  variant="ghost"
+                                  colorScheme="blueGray"
+                                  onPress={() => {
+                                    setShowModal(false);
+                                    setReceiverPhone({ value: "", error: "" });
+                                    setReceiverAmount({
+                                      value: "",
+                                      error: "",
+                                    });
+                                  }}
+                                >
+                                  <Text bold color="#242B2E">
+                                    Хаах
+                                  </Text>
+                                </Button>
+                                <Button
+                                  onPress={() => {
+                                    setShowModal(false);
+                                    checkOut();
+                                  }}
+                                >
+                                  <Text bold color="white">
+                                    Төлөх
+                                  </Text>
+                                </Button>
+                              </Button.Group>
+                            </Modal.Footer>
+                          </Modal.Content>
+                        </KeyboardAvoidingView>
+                      </Modal>
+                    ) : (
+                      <View></View>
+                    )}
+
+                    <Button
+                      shadow="5"
+                      variant="subtle"
+                      borderWidth={3}
+                      bg="white"
+                      colorScheme="brown"
+                      borderColor="#CC5801"
+                      borderRadius={10}
+                      marginLeft={1}
+                      height={"90%"}
+                      flex={1}
+                      bordered
+                      success
+                      onPress={() => {
+                        warnToast.show({
+                          backgroundColor: "red.400",
+                          px: "2",
+                          py: "1",
+                          rounded: "sm",
+                          height: "50",
+                          width: "250",
+                          textAlign: "center",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          title: "Тун удахгүй",
+                          placement: "top",
+                        });
+                      }}
+                    >
+                      <Text bold fontSize="lg" color="#CC5801">
+                        Цэнэглэлт
+                      </Text>
+                    </Button>
+                  </View>
+                </VStack>
+                <View
+                  style={{
+                    width: "100%",
+
+                    position: "absolute",
+                    marginTop: hp("12%"),
+                  }}
+                  borderRadius="1"
+                  borderBottomWidth="2"
+                  borderBottomColor="gray.500"
+                ></View>
+                <View style={{ marginTop: hp("4%"), height: hp("3%") }}>
+                  <Heading
+                    textAlign="center"
+                    size="sm"
+                    color="#242B2E"
+                    bgColor="red"
+                  >
+                    ШИНЭ ЗАГВАРУУД
+                  </Heading>
+                </View>
+
+                <View
+                  style={{
+                    marginTop: hp("1%"),
+                    width: wp("95%"),
+                    height: hp("30%"),
                   }}
                 >
-                  <Text bold fontSize="lg" color="#CC5801">
-                    Цэнэглэлт
-                  </Text>
-                </Button>
+                  <Product />
+                </View>
+                <View
+                  style={{
+                    width: wp("95%"),
+                    height: hp("13%"),
+                  }}
+                >
+                  <MyActionButtonComponent navigation={navigation} />
+                </View>
+                <Text
+                  position="absolute"
+                  height={wp("10%")}
+                  width={wp("95%")}
+                  mt={hp("55%")}
+                  backgroundColor="red"
+                  fontSize="md"
+                  color="gray.700"
+                  bold
+                  textAlign="center"
+                >
+                  © 2022 Shoe Gallery Mongolia
+                </Text>
               </View>
-            </VStack>
-            <View
-              style={{
-                width: "100%",
-
-                position: "absolute",
-                marginTop: hp("12%"),
-              }}
-              borderRadius="1"
-              borderBottomWidth="2"
-              borderBottomColor="gray.500"
-            ></View>
-            <View style={{ marginTop: hp("4%"), height: hp("3%") }}>
-              <Heading
-                textAlign="center"
-                size="sm"
-                color="#242B2E"
-                bgColor="red"
-              >
-                ШИНЭ ЗАГВАРУУД
-              </Heading>
             </View>
-
-            <View
-              style={{
-                marginTop: hp("1%"),
-                width: wp("95%"),
-                height: hp("30%"),
-              }}
-            >
-              <Product />
-            </View>
-            <View
-              style={{
-                width: wp("95%"),
-                height: hp("13%"),
-              }}
-            >
-              <MyActionButtonComponent navigation={navigation} />
-            </View>
-            <Text
-              position="absolute"
-              height={wp("10%")}
-              width={wp("95%")}
-              mt={hp("55%")}
-              backgroundColor="red"
-              fontSize="md"
-              color="gray.700"
-              bold
-              textAlign="center"
-            >
-              © 2022 Shoe Gallery Mongolia
-            </Text>
           </View>
-        </View>
-      </Background>
-    </NativeBaseProvider>
+
+        </SafeAreaView >
+      </ScrollView>
+
+    </NativeBaseProvider >
   );
 }
