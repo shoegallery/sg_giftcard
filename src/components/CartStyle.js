@@ -133,7 +133,7 @@ export default function CartStyle() {
       <View
         style={{
           position: "absolute",
-          paddingTop: hp("13%"),
+          paddingTop: hp("12%"),
           marginLeft: wp("10%"),
         }}
       >
