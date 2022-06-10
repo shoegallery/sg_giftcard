@@ -42,6 +42,7 @@ import {
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
     Updates.addListener((event) => {
+      console.log(event.type)
       if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
         alert("Апп шинэчлэж байна. Хэсэг хугацааны дараа дахин оролдоно уу");
         Updates.reloadAsync();
@@ -189,7 +190,6 @@ export default function LoginScreen({ navigation }) {
     <NativeBaseProvider>
       <ToastProvider>
         <VStack>
-
           <Background>
             <Logo
               style={{
@@ -201,9 +201,10 @@ export default function LoginScreen({ navigation }) {
             />
             <SafeAreaView
               style={{
+                justifyContent: "flex-start",
+
                 width: "100%",
                 height: hp("50%"),
-                justifyContent: "center",
               }}
             >
               <Input
