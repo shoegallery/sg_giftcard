@@ -15,7 +15,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { View } from "react-native";
-
 import {
   Button,
   Modal,
@@ -25,8 +24,11 @@ import {
   Icon,
   useToast,
 } from "native-base";
+import NetInfo from "@react-native-community/netinfo";
+
 import { MaterialIcons } from "@expo/vector-icons";
 export default function ForgetPasswordScreen({ navigation }) {
+
   const [show, setShow] = useState(false);
   const warnToastPassword = useToast();
   const warnToast = useToast();
@@ -41,9 +43,29 @@ export default function ForgetPasswordScreen({ navigation }) {
     value: "",
     error: "",
   });
-
+  const InternetCheck = () => {
+    NetInfo.fetch().then((networkState) => {
+      if (networkState.isConnected !== true) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Интэрнет холболт алга",
+          placement: "top",
+        });
+        return
+      }
+    });
+  }
   const sendChangePassword = () => {
     setShowModal(false);
+    InternetCheck();
     const tokenCodeError = tokenCodeValidator(tokenCode.value);
     const phoneError = phoneValidator(requestPhone.value);
     const passwordError = passwordValidator(password.value);
@@ -187,6 +209,7 @@ export default function ForgetPasswordScreen({ navigation }) {
   };
 
   const sendResetPasswordMessage = () => {
+    InternetCheck();
     const phoneError = phoneValidator(requestPhone.value);
     if (!phoneError) {
       warnToast.show({
@@ -250,10 +273,12 @@ export default function ForgetPasswordScreen({ navigation }) {
             title: "хэрэглэгч олдсонгүй!",
             placement: "top",
           });
+
         });
-    } catch (err) {}
+    } catch (err) { }
   };
   useEffect(() => {
+    InternetCheck();
     setShowReset(true);
     setShowModal(false);
     setRequestPhone({ value: "" });

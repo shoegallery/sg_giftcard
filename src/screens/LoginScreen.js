@@ -57,13 +57,31 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState({ value: "" });
 
   const [userData, setUserData] = useContext(StateContext);
-  const [internetCheck, setInternetCheck] = useState(false);
 
-  NetInfo.fetch().then((networkState) => {
-    setInternetCheck(networkState.isConnected);
-  });
+
+  const InternetCheck = () => {
+    NetInfo.fetch().then((networkState) => {
+      if (networkState.isConnected !== true) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Интэрнет холболт алга",
+          placement: "top",
+        });
+      }
+    });
+  }
+
 
   const onLoginPressed = () => {
+    InternetCheck();
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
 
@@ -82,6 +100,7 @@ export default function LoginScreen({ navigation }) {
         placement: "top",
       });
       setPhone({ ...phone });
+      return
     }
     if (passwordError) {
       warnToastPassword.show({
@@ -98,6 +117,7 @@ export default function LoginScreen({ navigation }) {
         placement: "top",
       });
       setPassword({ ...password });
+      return
     }
 
     if (phone.value !== "" && password.value !== "") {
@@ -115,7 +135,6 @@ export default function LoginScreen({ navigation }) {
         maxRedirects: 0,
         data: request,
       };
-
       axios(config)
         .then(function (response) {
           setUserData(response.data);
@@ -161,7 +180,7 @@ export default function LoginScreen({ navigation }) {
   useEffect(() => {
     reactToUpdates();
     setShow(false);
-    setInternetCheck(false);
+    InternetCheck();
     setPhone({ value: "" });
     setPassword({ value: "" });
   }, []);
@@ -170,20 +189,7 @@ export default function LoginScreen({ navigation }) {
     <NativeBaseProvider>
       <ToastProvider>
         <VStack>
-          {internetCheck ? (
-            <View></View>
-          ) : (
-            <Box h="32" w="300">
-              <Slide in={internetCheck} placement="top">
-                <Alert justifyContent="center" status="error">
-                  <Alert.Icon />
-                  <Text color="error.600" fontWeight="medium">
-                    Интернет холболт алга.
-                  </Text>
-                </Alert>
-              </Slide>
-            </Box>
-          )}
+
           <Background>
             <Logo
               style={{

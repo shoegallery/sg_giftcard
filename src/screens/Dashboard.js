@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { Alert, RefreshControl, ScrollView } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-
+import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
@@ -51,6 +51,7 @@ export default function Dashboard({ navigation }, props) {
 
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
+    InternetCheck()
     userTransactionHistory()
     dataRefresher()
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -60,8 +61,27 @@ export default function Dashboard({ navigation }, props) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-
+  const InternetCheck = () => {
+    NetInfo.fetch().then((networkState) => {
+      if (networkState.isConnected !== true) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Интэрнет холболт алга",
+          placement: "top",
+        });
+      }
+    });
+  }
   const checkOut = () => {
+    InternetCheck()
     const receiverPhoneError = phoneValidator(receiverPhone.value);
     const receiverAmountError = amountValidator(receiverAmount.value);
 
@@ -165,6 +185,7 @@ export default function Dashboard({ navigation }, props) {
   };
 
   const dataRefresher = () => {
+    InternetCheck()
     try {
       var requests = JSON.stringify({
         walletSuperId: userData.wallets.walletSuperId,
@@ -209,6 +230,7 @@ export default function Dashboard({ navigation }, props) {
   };
 
   const userTransactionHistory = () => {
+    InternetCheck()
     var datas = JSON.stringify({
       walletSuperId: userData.wallets.walletSuperId,
     });
@@ -235,7 +257,7 @@ export default function Dashboard({ navigation }, props) {
 
   useEffect(() => {
     setShowModal(false);
-
+    InternetCheck()
     userTransactionHistory();
     setUserTransactionData("");
     setReceiverOrder({ value: "", error: "" });

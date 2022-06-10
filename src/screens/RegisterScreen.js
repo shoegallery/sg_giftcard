@@ -18,6 +18,7 @@ import {
 } from "react-native-responsive-screen";
 import { Button, Text, Input, Icon, useToast } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
+import NetInfo from "@react-native-community/netinfo";
 
 export default function RegisterScreen({ navigation }) {
   const [show, setShow] = useState(false);
@@ -30,7 +31,27 @@ export default function RegisterScreen({ navigation }) {
     value: "",
     error: "",
   });
+  const InternetCheck = () => {
+    NetInfo.fetch().then((networkState) => {
+      if (networkState.isConnected !== true) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Интэрнет холболт алга",
+          placement: "top",
+        });
+      }
+    });
+  }
   const onSignUpPressed = () => {
+    InternetCheck();
     const nameError = nameValidator(name.value);
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
@@ -50,6 +71,7 @@ export default function RegisterScreen({ navigation }) {
         title: phoneError,
         placement: "top",
       });
+      return
     }
     if (passwordError) {
       warnToastPassword.show({
@@ -65,6 +87,7 @@ export default function RegisterScreen({ navigation }) {
         title: passwordError,
         placement: "top",
       });
+      return
     }
     if (nameError) {
       warnToast.show({
@@ -80,6 +103,7 @@ export default function RegisterScreen({ navigation }) {
         title: nameError,
         placement: "top",
       });
+      return
     }
     if (passwordConfirmError) {
       warnToastPassword.show({
@@ -95,6 +119,7 @@ export default function RegisterScreen({ navigation }) {
         title: passwordConfirmError,
         placement: "top",
       });
+      return
     }
 
     if (password.value !== passwordConfirm.value) {
@@ -108,9 +133,10 @@ export default function RegisterScreen({ navigation }) {
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
-        title: "Баталжуулах нууц үг ижил байх ёстой",
+        title: "Баталгаажуулах нууц үг ижил байх ёстой",
         placement: "top",
       });
+      return
     }
 
     var request = JSON.stringify({
@@ -156,6 +182,7 @@ export default function RegisterScreen({ navigation }) {
       .catch(function (error) { });
   };
   useEffect(() => {
+    InternetCheck();
     setShow(false);
     setName({ value: "" });
     setPhone({ value: "" });
