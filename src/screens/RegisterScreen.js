@@ -166,7 +166,7 @@ export default function RegisterScreen({ navigation }) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
-      <SafeAreaView style={{ width: wp("80%"), height: hp("75%") }}>
+      <SafeAreaView style={{ width: wp("80%"), paddingTop: hp("1%"), height: hp("75%") }}>
         <Input
           returnKeyType="next"
           w={{

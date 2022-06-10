@@ -10,7 +10,7 @@ export default function Header(props) {
 const styles = StyleSheet.create({
   header: {
     position: "relative",
-    top: hp("1%"),
+    paddingTop: hp("1%"),
     fontSize: 21,
     color: theme.colors.primary,
     fontWeight: "bold",
