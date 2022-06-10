@@ -42,7 +42,7 @@ import {
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
     Updates.addListener((event) => {
-      console.log(event.type)
+
       if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
         alert("Апп шинэчлэж байна. Хэсэг хугацааны дараа дахин оролдоно уу");
         Updates.reloadAsync();
@@ -56,9 +56,7 @@ export default function LoginScreen({ navigation }) {
 
   const [phone, setPhone] = useState({ value: "" });
   const [password, setPassword] = useState({ value: "" });
-
   const [userData, setUserData] = useContext(StateContext);
-
 
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
@@ -73,7 +71,7 @@ export default function LoginScreen({ navigation }) {
           textAlign: "center",
           justifyContent: "center",
           alignItems: "center",
-          title: "Интэрнет холболт алга",
+          title: "Интернет холболт алга",
           placement: "top",
         });
       }
