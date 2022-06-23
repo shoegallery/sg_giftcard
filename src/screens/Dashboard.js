@@ -504,7 +504,7 @@ export default function Dashboard({ navigation }, props) {
                       }}
                     >
                       <Text bold fontSize="lg" color="#CC5801">
-                        Цэнэглэлт
+                        Бэлгийн карт
                       </Text>
                     </Button>
                   </View>
