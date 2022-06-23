@@ -1,21 +1,22 @@
 import { baseUrl } from "../baseUrl";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView, Platform
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
 import axios from "axios";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 
-import * as Linking from "expo-linking"
+import * as Linking from "expo-linking";
 
-
+import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -27,46 +28,40 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as Updates from "expo-updates";
+
 import NetInfo from "@react-native-community/netinfo";
 import {
   Button,
   VStack,
   Text,
   NativeBaseProvider,
-
   useToast,
   Input,
   ToastProvider,
   Icon,
   Center,
-  Modal
+  Modal,
 } from "native-base";
-
 
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
-    var dataVersion = JSON.stringify({
-    });
-
+    var dataVersion = JSON.stringify({});
     var configVersion = {
-      method: 'post',
+      method: "post",
       url: `${baseUrl}/wallets/version`,
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      data: dataVersion
+      data: dataVersion,
     };
     axios(configVersion)
       .then(function (response) {
-        if (Updates.manifest.version !== response.data.data) {
-          setShowModal(true)
-          setVersionUpdate(true)
+        if (appJson.expo.version !== response.data.data) {
+          setShowModal(true);
+          setVersionUpdate(true);
         }
       })
-      .catch(function (error) {
-
-      });
+      .catch(function (error) { });
   };
 
   const warnToastPassword = useToast();
@@ -96,8 +91,7 @@ export default function LoginScreen({ navigation }) {
         });
       }
     });
-  }
-
+  };
 
   const onLoginPressed = () => {
     InternetCheck();
@@ -120,7 +114,7 @@ export default function LoginScreen({ navigation }) {
           placement: "top",
         });
         setPhone({ ...phone });
-        return
+        return;
       }
       if (passwordError) {
         warnToastPassword.show({
@@ -137,7 +131,7 @@ export default function LoginScreen({ navigation }) {
           placement: "top",
         });
         setPassword({ ...password });
-        return
+        return;
       }
 
       if (phone.value !== "" && password.value !== "") {
@@ -195,12 +189,13 @@ export default function LoginScreen({ navigation }) {
             });
           });
       }
+    } else {
+      reactToUpdates();
     }
-    else { reactToUpdates() }
   };
 
   useEffect(() => {
-    setShowModal(false)
+    setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
@@ -212,22 +207,31 @@ export default function LoginScreen({ navigation }) {
     <NativeBaseProvider>
       <ToastProvider>
         <Center>
-          <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{
-            bg: "coolGray.800"
-          }}>
+          <Modal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            _backdrop={{
+              bg: "coolGray.800",
+            }}
+          >
             <Modal.Content maxWidth="90%" height={"300"} maxH="300">
               <Modal.Header>Шинэ хувилбар</Modal.Header>
               <Modal.Body>
-                Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна.
-                Илүү олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа шинэчилж ашиглана уу.
+                Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү олон,
+                Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа
+                шинэчилж ашиглана уу.
               </Modal.Body>
               <Modal.Footer>
                 <Button.Group space={2}>
-                  <Button onPress={() => {
-                    if (Platform.OS === "android") {
-                      Linking.openURL("https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app")
-                    }
-                  }}>
+                  <Button
+                    onPress={() => {
+                      if (Platform.OS === "android") {
+                        Linking.openURL(
+                          "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
+                        );
+                      }
+                    }}
+                  >
                     Апп шинэчлэх
                   </Button>
                 </Button.Group>
