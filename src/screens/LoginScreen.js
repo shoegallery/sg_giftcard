@@ -241,18 +241,18 @@ export default function LoginScreen({ navigation }) {
         </Center>
         <VStack>
           <Background>
-            <Logo
+            <Center><Logo
               style={{
                 width: wp("25%"),
                 heigth: wp("25%"),
                 justifyContent: "center",
                 alignItems: "center",
               }}
-            />
+            /></Center>
+
             <SafeAreaView
               style={{
                 justifyContent: "flex-start",
-
                 width: "100%",
                 height: hp("50%"),
               }}
