@@ -22,7 +22,8 @@ import {
   View,
   useToast,
   KeyboardAvoidingView,
-
+  Center,
+  HStack,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -51,11 +52,11 @@ export default function Dashboard({ navigation }, props) {
 
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
-    InternetCheck()
-    userTransactionHistory()
-    dataRefresher()
-    return new Promise(resolve => setTimeout(resolve, timeout));
-  }
+    InternetCheck();
+    userTransactionHistory();
+    dataRefresher();
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
@@ -79,9 +80,9 @@ export default function Dashboard({ navigation }, props) {
         });
       }
     });
-  }
+  };
   const checkOut = () => {
-    InternetCheck()
+    InternetCheck();
     const receiverPhoneError = phoneValidator(receiverPhone.value);
     const receiverAmountError = amountValidator(receiverAmount.value);
 
@@ -185,7 +186,7 @@ export default function Dashboard({ navigation }, props) {
   };
 
   const dataRefresher = () => {
-    InternetCheck()
+    InternetCheck();
     try {
       var requests = JSON.stringify({
         walletSuperId: userData.wallets.walletSuperId,
@@ -230,7 +231,7 @@ export default function Dashboard({ navigation }, props) {
   };
 
   const userTransactionHistory = () => {
-    InternetCheck()
+    InternetCheck();
     var datas = JSON.stringify({
       walletSuperId: userData.wallets.walletSuperId,
     });
@@ -257,7 +258,7 @@ export default function Dashboard({ navigation }, props) {
 
   useEffect(() => {
     setShowModal(false);
-    InternetCheck()
+    InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
     setReceiverOrder({ value: "", error: "" });
@@ -274,15 +275,20 @@ export default function Dashboard({ navigation }, props) {
         VirtualizedList-backed
         nestedScrollEnabled={true}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <SafeAreaView>
-          <View flex={1} alignSelf="center"
-            alignItems="center" width={wp("100%")} paddingTop={hp("1%")} padding={wp("10%")} height={hp("99%")} backgroundColor="white">
+          <View
+            flex={1}
+            alignSelf="center"
+            alignItems="center"
+            width={wp("100%")}
+            paddingTop={hp("1%")}
+            padding={wp("10%")}
+            height={hp("99%")}
+            backgroundColor="white"
+          >
             <View style={{ display: "flex" }}>
               <CartStyle />
               <View
@@ -327,14 +333,13 @@ export default function Dashboard({ navigation }, props) {
                       </Text>
                     </Button>
                     {showModal ? (
-                      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                        <KeyboardAvoidingView
-                          h={{
-                            base: "400px",
-                            lg: "auto",
-                          }}
-                          behavior={Platform.OS === "ios" ? "padding" : "height"}
+                      <Center>
+
+                        <Modal
+                          isOpen={showModal}
+                          onClose={() => setShowModal(false)}
                         >
+
                           <Modal.Content width={wp("80%")} height={hp("60%")}>
                             <Modal.CloseButton />
                             <Modal.Header>
@@ -435,7 +440,10 @@ export default function Dashboard({ navigation }, props) {
                                   colorScheme="blueGray"
                                   onPress={() => {
                                     setShowModal(false);
-                                    setReceiverPhone({ value: "", error: "" });
+                                    setReceiverPhone({
+                                      value: "",
+                                      error: "",
+                                    });
                                     setReceiverAmount({
                                       value: "",
                                       error: "",
@@ -459,8 +467,9 @@ export default function Dashboard({ navigation }, props) {
                               </Button.Group>
                             </Modal.Footer>
                           </Modal.Content>
-                        </KeyboardAvoidingView>
-                      </Modal>
+
+                        </Modal>
+                      </Center>
                     ) : (
                       <View></View>
                     )}
@@ -555,10 +564,8 @@ export default function Dashboard({ navigation }, props) {
               </View>
             </View>
           </View>
-
-        </SafeAreaView >
+        </SafeAreaView>
       </ScrollView>
-
-    </NativeBaseProvider >
+    </NativeBaseProvider>
   );
 }
