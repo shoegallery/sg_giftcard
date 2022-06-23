@@ -347,7 +347,6 @@ export default function Dashboard({ navigation }, props) {
                                 Төлбөр төлөх
                               </Text>
                             </Modal.Header>
-
                             <Modal.Body>
                               <FormControl>
                                 <FormControl.Label>

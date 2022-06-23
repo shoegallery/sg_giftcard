@@ -13,6 +13,9 @@ import axios from "axios";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 
+
+
+
 import { theme } from "../core/theme";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
@@ -41,9 +44,12 @@ import {
 
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
-    Updates.addListener((event) => {
 
+    console.log(Updates)
+    Updates.addListener((event) => {
+      console.log(Updates)
       if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+
         alert("Апп шинэчлэж байна. Хэсэг хугацааны дараа дахин оролдоно уу");
         Updates.reloadAsync();
       }
