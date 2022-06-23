@@ -2,7 +2,7 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { Alert, RefreshControl, ScrollView } from "react-native";
+import { Alert, RefreshControl, ScrollView, Platform } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";

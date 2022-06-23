@@ -6,13 +6,14 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, Platform
 } from "react-native";
 
 import axios from "axios";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 
+import * as Linking from "expo-linking"
 
 
 
@@ -33,27 +34,39 @@ import {
   VStack,
   Text,
   NativeBaseProvider,
-  Box,
-  Slide,
-  Alert,
+
   useToast,
   Input,
   ToastProvider,
   Icon,
+  Center,
+  Modal
 } from "native-base";
+
 
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = async () => {
-
-    console.log(Updates)
-    Updates.addListener((event) => {
-      console.log(Updates)
-      if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
-
-        alert("Апп шинэчлэж байна. Хэсэг хугацааны дараа дахин оролдоно уу");
-        Updates.reloadAsync();
-      }
+    var dataVersion = JSON.stringify({
     });
+
+    var configVersion = {
+      method: 'post',
+      url: `${baseUrl}/wallets/version`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: dataVersion
+    };
+    axios(configVersion)
+      .then(function (response) {
+        if (Updates.manifest.version !== response.data.data) {
+          setShowModal(true)
+          setVersionUpdate(true)
+        }
+      })
+      .catch(function (error) {
+
+      });
   };
 
   const warnToastPassword = useToast();
@@ -63,7 +76,8 @@ export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: "" });
   const [password, setPassword] = useState({ value: "" });
   const [userData, setUserData] = useContext(StateContext);
-
+  const [showModal, setShowModal] = useState(false);
+  const [versionUpdate, setVersionUpdate] = useState(false);
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -90,99 +104,103 @@ export default function LoginScreen({ navigation }) {
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
 
-    if (phoneError) {
-      warnToast.show({
-        backgroundColor: "red.400",
-        px: "2",
-        py: "1",
-        rounded: "sm",
-        height: "50",
-        width: "250",
-        textAlign: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        title: phoneError,
-        placement: "top",
-      });
-      setPhone({ ...phone });
-      return
-    }
-    if (passwordError) {
-      warnToastPassword.show({
-        backgroundColor: "red.400",
-        px: "2",
-        py: "1",
-        rounded: "sm",
-        height: "50",
-        width: "250",
-        textAlign: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        title: passwordError,
-        placement: "top",
-      });
-      setPassword({ ...password });
-      return
-    }
-
-    if (phone.value !== "" && password.value !== "") {
-      var request = JSON.stringify({
-        phone: parseInt(phone.value),
-        password: password.value,
-      });
-
-      var config = {
-        method: "POST",
-        url: `${baseUrl}/wallets/login`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        maxRedirects: 0,
-        data: request,
-      };
-      axios(config)
-        .then(function (response) {
-          setUserData(response.data);
-          warnToast.show({
-            backgroundColor: "emerald.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "300",
-            fontSize: 20,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Амжилттай нэвтэрлээ",
-            placement: "top",
-          });
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Dashboard" }],
-          });
-          // }
-        })
-        .catch(function (error) {
-          warnToast.show({
-            backgroundColor: "red.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "300",
-            fontSize: 18,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Утасны дугаар эсвэл нууц үг буруу",
-            placement: "top",
-          });
+    if (versionUpdate === false) {
+      if (phoneError) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: phoneError,
+          placement: "top",
         });
+        setPhone({ ...phone });
+        return
+      }
+      if (passwordError) {
+        warnToastPassword.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: passwordError,
+          placement: "top",
+        });
+        setPassword({ ...password });
+        return
+      }
+
+      if (phone.value !== "" && password.value !== "") {
+        var request = JSON.stringify({
+          phone: parseInt(phone.value),
+          password: password.value,
+        });
+
+        var config = {
+          method: "POST",
+          url: `${baseUrl}/wallets/login`,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          maxRedirects: 0,
+          data: request,
+        };
+        axios(config)
+          .then(function (response) {
+            setUserData(response.data);
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "300",
+              fontSize: 20,
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Амжилттай нэвтэрлээ",
+              placement: "top",
+            });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Dashboard" }],
+            });
+            // }
+          })
+          .catch(function (error) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "300",
+              fontSize: 18,
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Утасны дугаар эсвэл нууц үг буруу",
+              placement: "top",
+            });
+          });
+      }
     }
+    else { reactToUpdates() }
   };
 
   useEffect(() => {
+    setShowModal(false)
     reactToUpdates();
     setShow(false);
     InternetCheck();
@@ -193,6 +211,30 @@ export default function LoginScreen({ navigation }) {
   return (
     <NativeBaseProvider>
       <ToastProvider>
+        <Center>
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{
+            bg: "coolGray.800"
+          }}>
+            <Modal.Content maxWidth="90%" height={"300"} maxH="300">
+              <Modal.Header>Шинэ хувилбар</Modal.Header>
+              <Modal.Body>
+                Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна.
+                Илүү олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа шинэчилж ашиглана уу.
+              </Modal.Body>
+              <Modal.Footer>
+                <Button.Group space={2}>
+                  <Button onPress={() => {
+                    if (Platform.OS === "android") {
+                      Linking.openURL("https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app")
+                    }
+                  }}>
+                    Апп шинэчлэх
+                  </Button>
+                </Button.Group>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+        </Center>
         <VStack>
           <Background>
             <Logo
