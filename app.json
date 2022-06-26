@@ -31,7 +31,7 @@
         "backgroundColor": "#FFF"
       },
       "package": "com.shoegallery.sg_wallet_app",
-      "versionCode": 14,
+      "versionCode": 15,
       "icon": "./assets/icon.png"
     },
     "web": {
