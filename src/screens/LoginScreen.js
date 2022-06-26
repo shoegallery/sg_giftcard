@@ -45,7 +45,7 @@ import {
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
-  const reactToUpdates = async () => {
+  const reactToUpdates = () => {
     var dataVersion = JSON.stringify({});
     var configVersion = {
       method: "post",
@@ -60,6 +60,10 @@ export default function LoginScreen({ navigation }) {
         if (appJson.expo.version !== response.data.data) {
           setShowModal(true);
           setVersionUpdate(true);
+        }
+        else {
+          setShowModal(false);
+          setVersionUpdate(false);
         }
       })
       .catch(function (error) { });
@@ -98,6 +102,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const onLoginPressed = () => {
+    reactToUpdates();
     InternetCheck();
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
@@ -206,8 +211,9 @@ export default function LoginScreen({ navigation }) {
     }
   };
   const onLoginAuthPressed = () => {
+    reactToUpdates();
     InternetCheck();
-    console.log("first");
+
     if (loginToken.value !== "") {
       var requestToken = JSON.stringify({
         phone: parseInt(phone.value),
@@ -227,7 +233,6 @@ export default function LoginScreen({ navigation }) {
       axios(config)
         .then(function (response) {
           if (response.data.wallets.LoginLock === false) {
-            console.log(response.data);
             setShowLoginTokenModal(false);
             setLimitter(false);
             setUserData(response.data);
@@ -252,7 +257,7 @@ export default function LoginScreen({ navigation }) {
           }
         })
         .catch(function (error) {
-          console.log(error);
+
           warnToast.show({
             backgroundColor: "red.400",
             px: "2",
