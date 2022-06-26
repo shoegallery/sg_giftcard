@@ -40,7 +40,8 @@ import {
   ToastProvider,
   Icon,
   Center,
-  Modal, Box
+  Modal,
+  Box,
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
@@ -175,10 +176,9 @@ export default function LoginScreen({ navigation }) {
                   index: 0,
                   routes: [{ name: "Dashboard" }],
                 });
-              }
-              else {
-                setLimitter(true)
-                setShowLoginTokenModal(true)
+              } else {
+                setLimitter(true);
+                setShowLoginTokenModal(true);
               }
             })
             .catch(function (error) {
@@ -197,11 +197,9 @@ export default function LoginScreen({ navigation }) {
                 placement: "top",
               });
             });
+        } else {
+          setShowLoginTokenModal(true);
         }
-        else {
-          setShowLoginTokenModal(true)
-        }
-
       }
     } else {
       reactToUpdates();
@@ -209,12 +207,12 @@ export default function LoginScreen({ navigation }) {
   };
   const onLoginAuthPressed = () => {
     InternetCheck();
-    console.log("first")
+    console.log("first");
     if (loginToken.value !== "") {
       var requestToken = JSON.stringify({
         phone: parseInt(phone.value),
         password: password.value,
-        loginToken: loginToken.value
+        loginToken: loginToken.value,
       });
 
       var config = {
@@ -229,9 +227,9 @@ export default function LoginScreen({ navigation }) {
       axios(config)
         .then(function (response) {
           if (response.data.wallets.LoginLock === false) {
-            console.log(response.data)
-            setShowLoginTokenModal(false)
-            setLimitter(false)
+            console.log(response.data);
+            setShowLoginTokenModal(false);
+            setLimitter(false);
             setUserData(response.data);
             warnToast.show({
               backgroundColor: "emerald.400",
@@ -254,7 +252,7 @@ export default function LoginScreen({ navigation }) {
           }
         })
         .catch(function (error) {
-          console.log(error)
+          console.log(error);
           warnToast.show({
             backgroundColor: "red.400",
             px: "2",
@@ -269,12 +267,8 @@ export default function LoginScreen({ navigation }) {
             title: "Баталгаажуулах код буруу",
             placement: "top",
           });
-        })
-
-
-    }
-
-    else {
+        });
+    } else {
       warnToast.show({
         backgroundColor: "red.400",
         px: "2",
@@ -293,15 +287,15 @@ export default function LoginScreen({ navigation }) {
   };
 
   useEffect(() => {
-    setLimitter(false)
-    setShowLoginTokenModal(false)
+    setLimitter(false);
+    setShowLoginTokenModal(false);
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
     setPhone({ value: "86218721" });
     setPassword({ value: "123456" });
-    setLoginToken({ value: "" })
+    setLoginToken({ value: "" });
   }, []);
 
   return (
@@ -349,15 +343,16 @@ export default function LoginScreen({ navigation }) {
               bg: "coolGray.800",
             }}
           >
-            <Modal.Content maxWidth="90%" height={"300"} maxH="300">
+            <Modal.Content maxWidth="90%" height={"400"} maxH="400">
               <Modal.Header>Хандах зөвшөөрөл өгөх</Modal.Header>
               <Modal.Body>
-                <Text>Таны гар утсанд илгээсэн баталгаажуулах кодыг оруулна уу</Text>
+                <Text>
+                  Таны гар утсанд илгээсэн баталгаажуулах кодыг оруулна уу
+                </Text>
               </Modal.Body>
               <Modal.Body>
                 <Text>Баталгаажуулах код оруулах</Text>
                 <View>
-
                   <Box>
                     <Input
                       fontSize={20}
@@ -378,7 +373,7 @@ export default function LoginScreen({ navigation }) {
                   <Button
                     onPress={() => {
                       setShowModal(false);
-                      onLoginAuthPressed()
+                      onLoginAuthPressed();
                     }}
                   >
                     <Text bold color="white">
@@ -392,14 +387,16 @@ export default function LoginScreen({ navigation }) {
         </Center>
         <VStack>
           <Background>
-            <Center><Logo
-              style={{
-                width: wp("25%"),
-                heigth: wp("25%"),
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            /></Center>
+            <Center>
+              <Logo
+                style={{
+                  width: wp("25%"),
+                  heigth: wp("25%"),
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              />
+            </Center>
 
             <SafeAreaView
               style={{
