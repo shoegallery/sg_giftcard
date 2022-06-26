@@ -40,7 +40,7 @@ import {
   ToastProvider,
   Icon,
   Center,
-  Modal,
+  Modal, Box
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
@@ -67,12 +67,15 @@ export default function LoginScreen({ navigation }) {
   const warnToastPassword = useToast();
   const warnToast = useToast();
   const [show, setShow] = useState(false);
-
   const [phone, setPhone] = useState({ value: "" });
   const [password, setPassword] = useState({ value: "" });
+  const [loginToken, setLoginToken] = useState({ value: "" });
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
+  const [showLoginTokenModal, setShowLoginTokenModal] = useState(false);
   const [versionUpdate, setVersionUpdate] = useState(false);
+  const [limitter, setLimitter] = useState(false);
+
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -97,7 +100,6 @@ export default function LoginScreen({ navigation }) {
     InternetCheck();
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
-
     if (versionUpdate === false) {
       if (phoneError) {
         warnToast.show({
@@ -149,8 +151,87 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: request,
         };
-        axios(config)
-          .then(function (response) {
+
+        if (limitter === false) {
+          axios(config)
+            .then(function (response) {
+              if (response.data.wallets.LoginLock === false) {
+                setUserData(response.data);
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "300",
+                  fontSize: 20,
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Амжилттай нэвтэрлээ",
+                  placement: "top",
+                });
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "Dashboard" }],
+                });
+              }
+              else {
+                setLimitter(true)
+                setShowLoginTokenModal(true)
+              }
+            })
+            .catch(function (error) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "300",
+                fontSize: 18,
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Утасны дугаар эсвэл нууц үг буруу",
+                placement: "top",
+              });
+            });
+        }
+        else {
+          setShowLoginTokenModal(true)
+        }
+
+      }
+    } else {
+      reactToUpdates();
+    }
+  };
+  const onLoginAuthPressed = () => {
+    InternetCheck();
+    console.log("first")
+    if (loginToken.value !== "") {
+      var requestToken = JSON.stringify({
+        phone: parseInt(phone.value),
+        password: password.value,
+        loginToken: loginToken.value
+      });
+
+      var config = {
+        method: "POST",
+        url: `${baseUrl}/wallets/loginauth`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        maxRedirects: 0,
+        data: requestToken,
+      };
+      axios(config)
+        .then(function (response) {
+          if (response.data.wallets.LoginLock === false) {
+            console.log(response.data)
+            setShowLoginTokenModal(false)
+            setLimitter(false)
             setUserData(response.data);
             warnToast.show({
               backgroundColor: "emerald.400",
@@ -170,37 +251,57 @@ export default function LoginScreen({ navigation }) {
               index: 0,
               routes: [{ name: "Dashboard" }],
             });
-            // }
-          })
-          .catch(function (error) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "300",
-              fontSize: 18,
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Утасны дугаар эсвэл нууц үг буруу",
-              placement: "top",
-            });
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "300",
+            fontSize: 18,
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Баталгаажуулах код буруу",
+            placement: "top",
           });
-      }
-    } else {
-      reactToUpdates();
+        })
+
+
+    }
+
+    else {
+      warnToast.show({
+        backgroundColor: "red.400",
+        px: "2",
+        py: "1",
+        rounded: "sm",
+        height: "50",
+        width: "300",
+        fontSize: 18,
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        title: "Баталгаажуулах кодыг оруулна уу",
+        placement: "top",
+      });
     }
   };
 
   useEffect(() => {
+    setLimitter(false)
+    setShowLoginTokenModal(false)
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "" });
-    setPassword({ value: "" });
+    setPhone({ value: "86218721" });
+    setPassword({ value: "123456" });
+    setLoginToken({ value: "" })
   }, []);
 
   return (
@@ -233,6 +334,56 @@ export default function LoginScreen({ navigation }) {
                     }}
                   >
                     Апп шинэчлэх
+                  </Button>
+                </Button.Group>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+        </Center>
+
+        <Center>
+          <Modal
+            isOpen={showLoginTokenModal}
+            onClose={() => setShowLoginTokenModal(false)}
+            _backdrop={{
+              bg: "coolGray.800",
+            }}
+          >
+            <Modal.Content maxWidth="90%" height={"300"} maxH="300">
+              <Modal.Header>Хандах зөвшөөрөл өгөх</Modal.Header>
+              <Modal.Body>
+                <Text>Таны гар утсанд илгээсэн баталгаажуулах кодыг оруулна уу</Text>
+              </Modal.Body>
+              <Modal.Body>
+                <Text>Баталгаажуулах код оруулах</Text>
+                <View>
+
+                  <Box>
+                    <Input
+                      fontSize={20}
+                      returnKeyType="done"
+                      onChangeText={(tokenCode) =>
+                        setLoginToken({
+                          value: tokenCode,
+                          error: "",
+                        })
+                      }
+                      keyboardType="number-pad"
+                    />
+                  </Box>
+                </View>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button.Group space={5}>
+                  <Button
+                    onPress={() => {
+                      setShowModal(false);
+                      onLoginAuthPressed()
+                    }}
+                  >
+                    <Text bold color="white">
+                      Нэвтрэх
+                    </Text>
                   </Button>
                 </Button.Group>
               </Modal.Footer>
@@ -373,7 +524,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginBottom: 10,
   },
-
   forgot: {
     fontWeight: "bold",
     paddingTop: 4,
