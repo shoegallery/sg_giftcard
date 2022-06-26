@@ -293,8 +293,8 @@ export default function LoginScreen({ navigation }) {
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "86218721" });
-    setPassword({ value: "123456" });
+    setPhone({ value: "" });
+    setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
 
