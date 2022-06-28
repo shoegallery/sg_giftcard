@@ -330,6 +330,12 @@ export default function LoginScreen({ navigation }) {
                           "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
                         );
                       }
+                      else if (Platform.OS === "ios") {
+                        Linking.openURL(
+                          "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
+                        );
+
+                      }
                     }}
                   >
                     Апп шинэчлэх
@@ -348,18 +354,17 @@ export default function LoginScreen({ navigation }) {
               bg: "coolGray.800",
             }}
           >
-            <Modal.Content maxWidth="90%" height={"400"} maxH="400">
+            <Modal.Content maxWidth="90%" height={"300"} maxH="400">
               <Modal.Header>Хандах зөвшөөрөл өгөх</Modal.Header>
               <Modal.Body>
                 <Text>
                   Таны гар утсанд илгээсэн баталгаажуулах кодыг оруулна уу
                 </Text>
-              </Modal.Body>
-              <Modal.Body>
-                <Text>Баталгаажуулах код оруулах</Text>
                 <View>
                   <Box>
                     <Input
+                      placeholder="Энд кодоо оруулна уу"
+                      marginTop={5}
                       fontSize={20}
                       returnKeyType="done"
                       onChangeText={(tokenCode) =>
@@ -512,7 +517,10 @@ export default function LoginScreen({ navigation }) {
                   Шинээр бүртгүүлэх
                 </Text>
               </Button>
-            </SafeAreaView>
+
+            </SafeAreaView><View style={{ flex: 1, marginTop: Platform.OS === "ios" ? "25%" : "35%", alignSelf: "center", }}><Text fontSize="xl" bold color="#1B98F5">
+              {appJson.expo.version}
+            </Text></View>
           </Background>
         </VStack>
       </ToastProvider>
