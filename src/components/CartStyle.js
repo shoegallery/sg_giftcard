@@ -14,6 +14,7 @@ import {
   View,
   Modal,
   Button,
+  Flex,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
@@ -95,7 +96,18 @@ const TransActionsList = () => {
                 </Box>
               ))
             ) : (
-              <View></View>
+              <VStack >
+                <Image
+                  source={require("../assets/empty.png")}
+                  style={{
+                    alignSelf: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    width: ("50%"),
+                    resizeMode: "contain",
+                  }}
+                />
+              </VStack>
             )}
           </View>
         </ScrollView>

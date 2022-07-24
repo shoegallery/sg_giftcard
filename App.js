@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { theme } from "./src/core/theme";
+
 import {
   LoginScreen,
   RegisterScreen,
@@ -11,7 +11,7 @@ import {
 } from "./src/screens";
 import { Text, TextInput, LogBox } from "react-native";
 import { SSRProvider } from "@react-aria/ssr";
-
+import { StatusBar } from 'expo-status-bar';
 import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider, ToastProvider } from "native-base";
@@ -33,7 +33,7 @@ export default function App() {
         <ToastProvider>
           <SafeAreaProvider>
             <StateProvider>
-              <Provider theme={theme}>
+              <Provider>
                 <NavigationContainer>
                   <Stack.Navigator
                     initialRouteName="LoginScreen"

@@ -34,7 +34,7 @@ const Product = () => {
           }
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   const exampleItems = [
@@ -82,7 +82,7 @@ const Product = () => {
       >
         <Image
           size="full"
-          alt="fallback text"
+          alt=" "
           source={{
             uri: item.headImage,
           }}

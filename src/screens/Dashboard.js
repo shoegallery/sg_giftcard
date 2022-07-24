@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { Alert, RefreshControl, ScrollView, Platform } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
@@ -24,6 +25,7 @@ import {
   KeyboardAvoidingView,
   Center,
   HStack,
+  Select
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -42,14 +44,15 @@ export default function Dashboard({ navigation }, props) {
     useContext(StateContextHistory);
 
   const [showModal, setShowModal] = useState(false);
+  let [language, setLanguage] = useState("0");
 
-  const [receiverOrder, setReceiverOrder] = useState({ value: "", error: "" });
+
   const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
   const [receiverAmount, setReceiverAmount] = useState({
     value: "",
     error: "",
   });
-
+  console.log(receiverPhone.value)
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
     InternetCheck();
@@ -108,7 +111,7 @@ export default function Dashboard({ navigation }, props) {
       summary: `Худалдан авалтын гүйлгээ`,
       id: userData.wallets._id,
       walletSuperId: userData.wallets.walletSuperId,
-      OrderNumber: parseInt(receiverOrder.value),
+
     });
 
     var config = {
@@ -124,7 +127,7 @@ export default function Dashboard({ navigation }, props) {
         if (response.data.success === true) {
           setReceiverPhone({ value: "", error: "" });
           setReceiverAmount({ value: "", error: "" });
-          setReceiverOrder({ value: "", error: "" });
+
           userTransactionHistory();
 
           dataRefresher();
@@ -160,7 +163,7 @@ export default function Dashboard({ navigation }, props) {
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
         setReceiverAmount({ value: "", error: "" });
-        setReceiverOrder({ value: "", error: "" });
+
         setReceiverPhone({ value: "", error: "" });
         if (err.status == 405) {
           Alert.alert("Дахин оролдоно уу", "Ямар нэгэн зүйл буруу байна.", [
@@ -261,7 +264,7 @@ export default function Dashboard({ navigation }, props) {
     InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
-    setReceiverOrder({ value: "", error: "" });
+
     setReceiverPhone({ value: "", error: "" });
     setReceiverAmount({
       value: "",
@@ -286,7 +289,7 @@ export default function Dashboard({ navigation }, props) {
             width={wp("100%")}
             paddingTop={hp("1%")}
             padding={wp("10%")}
-            height={hp("99%")}
+            height={hp("100%")}
             backgroundColor="white"
           >
             <View style={{ display: "flex" }}>
@@ -340,7 +343,7 @@ export default function Dashboard({ navigation }, props) {
                           onClose={() => setShowModal(false)}
                         >
 
-                          <Modal.Content width={wp("80%")} height={hp("60%")}>
+                          <Modal.Content width={wp("80%")} height={hp("50%")}>
                             <Modal.CloseButton />
                             <Modal.Header>
                               <Text
@@ -349,7 +352,7 @@ export default function Dashboard({ navigation }, props) {
                                 fontSize={20}
                                 textAlign="center"
                               >
-                                Төлбөр төлөх
+                                Худалдан авалт
                               </Text>
                             </Modal.Header>
                             <Modal.Body>
@@ -360,13 +363,36 @@ export default function Dashboard({ navigation }, props) {
                                     fontWeight="semibold"
                                     color="gray.700"
                                   >
-                                    Хүлээн авагч
+                                    Салбар
                                   </Text>
                                 </FormControl.Label>
 
                                 <View>
+
                                   <Box>
-                                    <Input
+                                    <Select
+                                      width={"100%"}
+                                      placeholder="Салбар сонгоно уу"
+                                      selectedValue={receiverPhone.value}
+
+                                      onValueChange={(itemValue) => setReceiverPhone({
+                                        value: itemValue,
+                                        error: "",
+                                      })}
+                                    >
+                                      <Select.Item label="Гранд плаза | Shoe Gallery" value="10000001" />
+                                      <Select.Item label="УБИД | BASCONI" value="10000002" />
+                                      <Select.Item label="УБИД | Sasha Fabiani" value="10000003" />
+                                      <Select.Item label="УБИД | Bugatti" value="10000004" />
+                                      <Select.Item label="Максмоол | BASCONI" value="10000005" />
+                                      <Select.Item label="Максмоол | Sasha Fabiani" value="10000006" />
+                                      <Select.Item label="Максмоол | Shoe Gallery" value="10000007" />
+                                      <Select.Item label="Хүннү-Моол | Shoe Gallery" value="10000008" />
+                                      <Select.Item label="Имарт Хан-уул | Shoe Gallery" value="10000009" />
+                                    </Select>
+                                  </Box>
+                                  {/* <Box>
+                                     <Input
                                       fontSize={20}
                                       returnKeyType="next"
                                       onChangeText={(receiverAmountPhone) =>
@@ -376,8 +402,8 @@ export default function Dashboard({ navigation }, props) {
                                         })
                                       }
                                       keyboardType="number-pad"
-                                    />
-                                  </Box>
+                                    /> 
+                                  </Box> */}
                                 </View>
                               </FormControl>
 
@@ -405,32 +431,8 @@ export default function Dashboard({ navigation }, props) {
                                 />
                               </Box>
 
-                              <FormControl.Label>
-                                <Text
-                                  fontSize={20}
-                                  fontWeight="semibold"
-                                  color="gray.700"
-                                >
-                                  Гүйлгээний утга
-                                </Text>
-                              </FormControl.Label>
-                              <Box>
-                                <Input
-                                  fontSize={20}
-                                  value={String(receiverOrder.value)}
-                                  returnKeyType="done"
-                                  onChangeText={(receiverSummeryNumber) =>
-                                    setReceiverOrder({
-                                      value: receiverSummeryNumber,
-                                      error: "",
-                                    })
-                                  }
-                                  keyboardType="number-pad"
-                                />
-                              </Box>
-                              <Text fontSize={12} bold color="red.700">
-                                Худалдааны зөвлөх танд тайлбарлах болно
-                              </Text>
+
+
                             </Modal.Body>
 
                             <Modal.Footer>
@@ -455,6 +457,7 @@ export default function Dashboard({ navigation }, props) {
                                   </Text>
                                 </Button>
                                 <Button
+
                                   onPress={() => {
                                     setShowModal(false);
                                     checkOut();
@@ -552,7 +555,7 @@ export default function Dashboard({ navigation }, props) {
                   position="absolute"
                   height={wp("10%")}
                   width={wp("95%")}
-                  mt={hp("55%")}
+                  mt={hp("56%")}
                   backgroundColor="red"
                   fontSize="md"
                   color="gray.700"
