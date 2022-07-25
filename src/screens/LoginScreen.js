@@ -12,6 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import axios from "axios";
 import Background from "../components/Background";
@@ -45,6 +46,7 @@ import {
   Center,
   Modal,
   Box,
+  Checkbox,
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
@@ -83,7 +85,12 @@ export default function LoginScreen({ navigation }) {
   const [versionUpdate, setVersionUpdate] = useState(false);
   const [limitter, setLimitter] = useState(false);
   const [limitterUUID, setLimitterUUID] = useState(true);
-  const [userUUID, setUserUUID] = useState();
+  const [userUUID, setUserUUID] = useState(undefined);
+  const [passwordSave, SetPasswordSave] = useState(false);
+  const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
+  const [passwordSaveLimitter, SetPasswordLimitter] = useState(false);
+  const [seeLockPassword, setSeeLockPassword] = useState(false);
+
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -106,27 +113,57 @@ export default function LoginScreen({ navigation }) {
         .then((result) => {
           if (result === null) {
             AsyncStorage.setItem("user_uuid", uuid.v4())
-              .then((result) => console.log("uuid ok"))
-              .catch((err) => console.log("uuid error"));
-          }
-          else {
+              .then(() => console.log("uuid ok"))
+              .catch(() => console.log("uuid error"));
+          } else {
             AsyncStorage.getItem("user_uuid")
               .then((result) => {
                 setUserUUID(result);
               })
-              .catch((err) => {
-                console.log("baihgui");
+              .catch(() => {
+                console.log("uuid baihgui");
               });
           }
         })
         .catch((err) => {
-          console.log("baihgui");
+          console.log("uuid error");
+        });
+
+      AsyncStorage.getItem("user_phone")
+        .then((result) => {
+
+          if (result !== null) {
+            setPhone({ value: result, error: "" });
+            setSeeLockPassword(true);
+            SetPasswordSave(true);
+            SetPasswordSaveSwitch(true);
+          } else {
+            setSeeLockPassword(false);
+            SetPasswordSave(false);
+          }
+        })
+        .catch((err) => {
+          console.log("user_phone baihgui");
+        });
+
+      AsyncStorage.getItem("user_password")
+        .then((result) => {
+          if (result !== null) {
+            setPassword({ value: result, error: "" });
+            setSeeLockPassword(true);
+            SetPasswordSave(true);
+            SetPasswordSaveSwitch(true);
+          } else {
+            setSeeLockPassword(false);
+            SetPasswordSave(false);
+          }
+        })
+        .catch((err) => {
+          console.log("user_password baihgui");
         });
     });
   };
 
-
-  console.log(userUUID)
   const onLoginPressed = () => {
     reactToUpdates();
     InternetCheck();
@@ -172,7 +209,7 @@ export default function LoginScreen({ navigation }) {
         var request = JSON.stringify({
           phone: parseInt(phone.value),
           password: password.value,
-          uuid: userUUID
+          uuid: userUUID,
         });
 
         var config = {
@@ -189,6 +226,21 @@ export default function LoginScreen({ navigation }) {
           axios(config)
             .then(function (response) {
               if (response.data.wallets.LoginLock === false) {
+
+                if (passwordSave === true) {
+                  AsyncStorage.setItem("user_phone", phone.value)
+                    .then(() => {
+
+                      SetPasswordSave(true);
+                    })
+                    .catch(() => console.log("phone error"));
+                  AsyncStorage.setItem("user_password", password.value)
+                    .then(() => {
+
+                      SetPasswordSave(true);
+                    })
+                    .catch(() => console.log("password error"));
+                }
                 setUserData(response.data);
                 warnToast.show({
                   backgroundColor: "emerald.400",
@@ -316,16 +368,44 @@ export default function LoginScreen({ navigation }) {
       });
     }
   };
+  if (
+    passwordSave === false &&
+    passwordSaveSwitch === true &&
+    passwordSaveLimitter === false
+  ) {
+    AsyncStorage.removeItem("user_phone")
+      .then(() => {
+
+        setPhone({ value: "" });
+        setSeeLockPassword(false);
+        SetPasswordSave(false);
+      })
+      .catch(() => console.log("phone error"));
+    AsyncStorage.removeItem("user_password")
+      .then(() => {
+
+        SetPasswordSave(false);
+        setPassword({ value: "" });
+        setSeeLockPassword(false);
+      })
+      .catch(() => console.log("password error"));
+    SetPasswordLimitter(true);
+  }
 
   useEffect(() => {
+    SetPasswordSave(false);
+    SetPasswordSaveSwitch(false)
+    SetPasswordLimitter(false)
+    setSeeLockPassword(false);
+    setUserUUID(undefined);
     setLimitter(false);
     setShowLoginTokenModal(false);
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "10000001" });
-    setPassword({ value: "12345678" });
+    setPhone({ value: "" });
+    setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
 
@@ -460,8 +540,11 @@ export default function LoginScreen({ navigation }) {
                 textContentType="telephoneNumber"
                 keyboardType="number-pad"
                 value={phone.value}
-                onChangeText={(number) =>
-                  setPhone({ value: number, error: "" })
+                onChangeText={(number) => {
+                  setPhone({ value: number, error: "" }); if (passwordSaveSwitch === true && passwordSave === true && seeLockPassword === true) {
+                    SetPasswordSave(false)
+                  }
+                }
                 }
               />
 
@@ -475,17 +558,21 @@ export default function LoginScreen({ navigation }) {
                 fontSize={24}
                 type={show ? "text" : "password"}
                 InputRightElement={
-                  <Icon
-                    as={
-                      <MaterialIcons
-                        name={show ? "visibility" : "visibility-off"}
-                      />
-                    }
-                    size={8}
-                    mr="2"
-                    color="muted.400"
-                    onPress={() => setShow(!show)}
-                  />
+                  seeLockPassword === false ? (
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={show ? "visibility" : "visibility-off"}
+                        />
+                      }
+                      size={8}
+                      mr="2"
+                      color="muted.400"
+                      onPress={() => setShow(!show)}
+                    />
+                  ) : (
+                    <View></View>
+                  )
                 }
                 placeholder="Нууц үг"
                 label="Нууц үг"
@@ -493,24 +580,57 @@ export default function LoginScreen({ navigation }) {
                 textContentType="password"
                 keyboardType="default"
                 value={password.value}
-                onChangeText={(text) => setPassword({ value: text, error: "" })}
+                onChangeText={(text) => {
+                  setPassword({ value: text, error: "" }); if (passwordSaveSwitch === true && passwordSave === true && seeLockPassword === true) {
+                    SetPasswordSave(false)
+                  }
+                }}
               />
               <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
               >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                  <View style={styles.forgotPassword}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("ForgetPasswordScreen")
-                      }
-                    >
-                      <Text style={styles.forgot}>Нууц үгээ мартсан уу?</Text>
-                    </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 5,
+                    }}
+                  >
+                    <View style={{ flex: 4 }}>
+                      <BouncyCheckbox
+                        isChecked={passwordSave}
+                        size={20}
+                        fillColor="#1B98F5"
+                        unfillColor="#FFFFFF"
+                        text="Нууц үг сануулах"
+                        iconStyle={{ borderColor: "#1B98F5" }}
+                        textStyle={{
+                          color: "#1B98F5",
+                          textDecorationLine: "none",
+                          fontWeight: "bold",
+                        }}
+                        disableBuiltInState
+                        onPress={() => SetPasswordSave(!passwordSave)}
+                      />
+                    </View>
+                    <View style={{ flex: 5, marginTop: -5 }}>
+                      <View style={styles.forgotPassword}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("ForgetPasswordScreen")
+                          }
+                        >
+                          <Text style={styles.forgot}>
+                            Нууц үгээ мартсан уу?
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
                 </TouchableWithoutFeedback>
               </KeyboardAvoidingView>
-              <View style={{ marginVertical: 0 }}>
+              <View style={{ marginVertical: 0, marginTop: 10 }}>
                 <Button
                   colorScheme="blue"
                   bg="#1B98F5"

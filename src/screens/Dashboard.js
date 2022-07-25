@@ -52,7 +52,7 @@ export default function Dashboard({ navigation }, props) {
     value: "",
     error: "",
   });
-  console.log(receiverPhone.value)
+
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
     InternetCheck();

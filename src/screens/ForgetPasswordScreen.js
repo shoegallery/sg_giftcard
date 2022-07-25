@@ -28,7 +28,6 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { MaterialIcons } from "@expo/vector-icons";
 export default function ForgetPasswordScreen({ navigation }) {
-
   const [show, setShow] = useState(false);
   const warnToastPassword = useToast();
   const warnToast = useToast();
@@ -59,12 +58,13 @@ export default function ForgetPasswordScreen({ navigation }) {
           title: "Интэрнет холболт алга",
           placement: "top",
         });
-        return
+        return;
       }
     });
-  }
+  };
   const sendChangePassword = () => {
     setShowModal(false);
+
     InternetCheck();
     const tokenCodeError = tokenCodeValidator(tokenCode.value);
     const phoneError = phoneValidator(requestPhone.value);
@@ -87,6 +87,7 @@ export default function ForgetPasswordScreen({ navigation }) {
         title: tokenCodeError,
         placement: "top",
       });
+      return;
     }
     if (phoneError) {
       warnToast.show({
@@ -95,13 +96,14 @@ export default function ForgetPasswordScreen({ navigation }) {
         py: "1",
         rounded: "sm",
         height: "50",
-        width: "250",
+        width: "300",
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
         title: phoneError,
         placement: "top",
       });
+      return;
     }
     if (passwordError) {
       warnToast.show({
@@ -110,13 +112,15 @@ export default function ForgetPasswordScreen({ navigation }) {
         py: "1",
         rounded: "sm",
         height: "50",
-        width: "250",
+        width: "300",
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
         title: passwordError,
         placement: "top",
       });
+      setPassword({ value: "" });
+      return;
     }
     if (passwordConfirmError) {
       warnToast.show({
@@ -125,13 +129,15 @@ export default function ForgetPasswordScreen({ navigation }) {
         py: "1",
         rounded: "sm",
         height: "50",
-        width: "250",
+        width: "300",
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
         title: passwordConfirmError,
         placement: "top",
       });
+      setPasswordConfirm({ value: "" });
+      return;
     }
 
     if (password.value !== passwordConfirm.value) {
@@ -141,7 +147,7 @@ export default function ForgetPasswordScreen({ navigation }) {
         py: "1",
         rounded: "sm",
         height: "50",
-        width: "250",
+        width: "300",
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
@@ -273,7 +279,6 @@ export default function ForgetPasswordScreen({ navigation }) {
             title: "хэрэглэгч олдсонгүй!",
             placement: "top",
           });
-
         });
     } catch (err) { }
   };
