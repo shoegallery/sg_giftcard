@@ -9,6 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import uuid from "react-native-uuid";
 
 import axios from "axios";
 import Background from "../components/Background";
@@ -60,8 +63,7 @@ export default function LoginScreen({ navigation }) {
         if (appJson.expo.version !== response.data.data) {
           setShowModal(true);
           setVersionUpdate(true);
-        }
-        else {
+        } else {
           setShowModal(false);
           setVersionUpdate(false);
         }
@@ -80,7 +82,8 @@ export default function LoginScreen({ navigation }) {
   const [showLoginTokenModal, setShowLoginTokenModal] = useState(false);
   const [versionUpdate, setVersionUpdate] = useState(false);
   const [limitter, setLimitter] = useState(false);
-
+  const [limitterUUID, setLimitterUUID] = useState(true);
+  const [userUUID, setUserUUID] = useState();
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -98,9 +101,32 @@ export default function LoginScreen({ navigation }) {
           placement: "top",
         });
       }
+
+      AsyncStorage.getItem("user_uuid")
+        .then((result) => {
+          if (result === null) {
+            AsyncStorage.setItem("user_uuid", uuid.v4())
+              .then((result) => console.log("uuid ok"))
+              .catch((err) => console.log("uuid error"));
+          }
+          else {
+            AsyncStorage.getItem("user_uuid")
+              .then((result) => {
+                setUserUUID(result);
+              })
+              .catch((err) => {
+                console.log("baihgui");
+              });
+          }
+        })
+        .catch((err) => {
+          console.log("baihgui");
+        });
     });
   };
 
+
+  console.log(userUUID)
   const onLoginPressed = () => {
     reactToUpdates();
     InternetCheck();
@@ -146,6 +172,7 @@ export default function LoginScreen({ navigation }) {
         var request = JSON.stringify({
           phone: parseInt(phone.value),
           password: password.value,
+          uuid: userUUID
         });
 
         var config = {
@@ -257,7 +284,6 @@ export default function LoginScreen({ navigation }) {
           }
         })
         .catch(function (error) {
-
           warnToast.show({
             backgroundColor: "red.400",
             px: "2",
@@ -329,12 +355,10 @@ export default function LoginScreen({ navigation }) {
                         Linking.openURL(
                           "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
                         );
-                      }
-                      else if (Platform.OS === "ios") {
+                      } else if (Platform.OS === "ios") {
                         Linking.openURL(
                           "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
                         );
-
                       }
                     }}
                   >
@@ -518,10 +542,18 @@ export default function LoginScreen({ navigation }) {
                   Шинээр бүртгүүлэх
                 </Text>
               </Button>
-
-            </SafeAreaView><View style={{ flex: 1, marginTop: Platform.OS === "ios" ? "25%" : "35%", alignSelf: "center", }}><Text fontSize="xl" bold color="#1B98F5">
-              {appJson.expo.version}
-            </Text></View>
+            </SafeAreaView>
+            <View
+              style={{
+                flex: 1,
+                marginTop: Platform.OS === "ios" ? "25%" : "35%",
+                alignSelf: "center",
+              }}
+            >
+              <Text fontSize="xl" bold color="#1B98F5">
+                {appJson.expo.version}
+              </Text>
+            </View>
           </Background>
         </VStack>
       </ToastProvider>
