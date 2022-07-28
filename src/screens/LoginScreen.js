@@ -62,13 +62,25 @@ export default function LoginScreen({ navigation }) {
     };
     axios(configVersion)
       .then(function (response) {
-        if (appJson.expo.version !== response.data.data) {
-          setShowModal(true);
-          setVersionUpdate(true);
-        } else {
-          setShowModal(false);
-          setVersionUpdate(false);
+        if (Platform.OS === "android") {
+          if (appJson.expo.version !== response.data.android) {
+            setShowModal(true);
+            setVersionUpdate(true);
+          } else {
+            setShowModal(false);
+            setVersionUpdate(false);
+          }
         }
+        else if (Platform.OS === 'ios') {
+          if (appJson.expo.version !== response.data.ios) {
+            setShowModal(true);
+            setVersionUpdate(true);
+          } else {
+            setShowModal(false);
+            setVersionUpdate(false);
+          }
+        }
+
       })
       .catch(function (error) { });
   };
@@ -90,7 +102,7 @@ export default function LoginScreen({ navigation }) {
   const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
   const [passwordSaveLimitter, SetPasswordLimitter] = useState(false);
   const [seeLockPassword, setSeeLockPassword] = useState(false);
-
+  const [loginPressLimitter, setLoginPressLimitter] = useState(false);
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -131,7 +143,6 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-
           if (result !== null) {
             setPhone({ value: result, error: "" });
             setSeeLockPassword(true);
@@ -169,6 +180,7 @@ export default function LoginScreen({ navigation }) {
     InternetCheck();
     const phoneError = phoneValidator(phone.value);
     const passwordError = passwordValidator(password.value);
+
     if (versionUpdate === false) {
       if (phoneError) {
         warnToast.show({
@@ -221,73 +233,77 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: request,
         };
+        if (loginPressLimitter === false) {
 
-        if (limitter === false) {
-          axios(config)
-            .then(function (response) {
-              if (response.data.wallets.LoginLock === false) {
 
-                if (passwordSave === true) {
-                  AsyncStorage.setItem("user_phone", phone.value)
-                    .then(() => {
+          if (limitter === false) {
+            axios(config)
+              .then(function (response) {
+                if (response.data.wallets.LoginLock === false) {
+                  if (passwordSave === true) {
+                    AsyncStorage.setItem("user_phone", phone.value)
+                      .then(() => {
+                        SetPasswordSave(true);
+                      })
+                      .catch(() => console.log("phone error"));
+                    AsyncStorage.setItem("user_password", password.value)
+                      .then(() => {
+                        SetPasswordSave(true);
+                      })
+                      .catch(() => console.log("password error"));
+                  }
+                  setUserData(response.data);
 
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("phone error"));
-                  AsyncStorage.setItem("user_password", password.value)
-                    .then(() => {
-
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("password error"));
+                  warnToast.show({
+                    backgroundColor: "emerald.400",
+                    px: "2",
+                    py: "1",
+                    rounded: "sm",
+                    height: "50",
+                    width: "300",
+                    fontSize: 20,
+                    textAlign: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    title: "Амжилттай нэвтэрлээ",
+                    placement: "top",
+                  });
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Dashboard" }],
+                  });
+                } else {
+                  setLimitter(true);
+                  setShowLoginTokenModal(true);
                 }
-                setUserData(response.data);
+              })
+              .catch(function (error) {
                 warnToast.show({
-                  backgroundColor: "emerald.400",
+                  backgroundColor: "red.400",
                   px: "2",
                   py: "1",
                   rounded: "sm",
                   height: "50",
                   width: "300",
-                  fontSize: 20,
+                  fontSize: 18,
                   textAlign: "center",
                   justifyContent: "center",
                   alignItems: "center",
-                  title: "Амжилттай нэвтэрлээ",
+                  title: "Утасны дугаар эсвэл нууц үг буруу",
                   placement: "top",
                 });
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Dashboard" }],
-                });
-              } else {
-                setLimitter(true);
-                setShowLoginTokenModal(true);
-              }
-            })
-            .catch(function (error) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "300",
-                fontSize: 18,
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Утасны дугаар эсвэл нууц үг буруу",
-                placement: "top",
               });
-            });
-        } else {
-          setShowLoginTokenModal(true);
+          } else {
+            setShowLoginTokenModal(true);
+            setLoginPressLimitter(false);
+          }
         }
       }
     } else {
+      setLoginPressLimitter(false);
       reactToUpdates();
     }
+    setLoginPressLimitter(true);
   };
   const onLoginAuthPressed = () => {
     reactToUpdates();
@@ -375,7 +391,6 @@ export default function LoginScreen({ navigation }) {
   ) {
     AsyncStorage.removeItem("user_phone")
       .then(() => {
-
         setPhone({ value: "" });
         setSeeLockPassword(false);
         SetPasswordSave(false);
@@ -383,7 +398,6 @@ export default function LoginScreen({ navigation }) {
       .catch(() => console.log("phone error"));
     AsyncStorage.removeItem("user_password")
       .then(() => {
-
         SetPasswordSave(false);
         setPassword({ value: "" });
         setSeeLockPassword(false);
@@ -393,9 +407,10 @@ export default function LoginScreen({ navigation }) {
   }
 
   useEffect(() => {
+    setLoginPressLimitter(false);
     SetPasswordSave(false);
-    SetPasswordSaveSwitch(false)
-    SetPasswordLimitter(false)
+    SetPasswordSaveSwitch(false);
+    SetPasswordLimitter(false);
     setSeeLockPassword(false);
     setUserUUID(undefined);
     setLimitter(false);
@@ -541,11 +556,15 @@ export default function LoginScreen({ navigation }) {
                 keyboardType="number-pad"
                 value={phone.value}
                 onChangeText={(number) => {
-                  setPhone({ value: number, error: "" }); if (passwordSaveSwitch === true && passwordSave === true && seeLockPassword === true) {
-                    SetPasswordSave(false)
+                  setPhone({ value: number, error: "" });
+                  if (
+                    passwordSaveSwitch === true &&
+                    passwordSave === true &&
+                    seeLockPassword === true
+                  ) {
+                    SetPasswordSave(false);
                   }
-                }
-                }
+                }}
               />
 
               <Input
@@ -581,8 +600,13 @@ export default function LoginScreen({ navigation }) {
                 keyboardType="default"
                 value={password.value}
                 onChangeText={(text) => {
-                  setPassword({ value: text, error: "" }); if (passwordSaveSwitch === true && passwordSave === true && seeLockPassword === true) {
-                    SetPasswordSave(false)
+                  setPassword({ value: text, error: "" });
+                  if (
+                    passwordSaveSwitch === true &&
+                    passwordSave === true &&
+                    seeLockPassword === true
+                  ) {
+                    SetPasswordSave(false);
                   }
                 }}
               />
