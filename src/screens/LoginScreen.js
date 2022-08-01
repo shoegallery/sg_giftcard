@@ -102,7 +102,7 @@ export default function LoginScreen({ navigation }) {
   const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
   const [passwordSaveLimitter, SetPasswordLimitter] = useState(false);
   const [seeLockPassword, setSeeLockPassword] = useState(false);
-  const [loginPressLimitter, setLoginPressLimitter] = useState(false);
+
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -233,77 +233,75 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: request,
         };
-        if (loginPressLimitter === false) {
 
-
-          if (limitter === false) {
-            axios(config)
-              .then(function (response) {
-                if (response.data.wallets.LoginLock === false) {
-                  if (passwordSave === true) {
-                    AsyncStorage.setItem("user_phone", phone.value)
-                      .then(() => {
-                        SetPasswordSave(true);
-                      })
-                      .catch(() => console.log("phone error"));
-                    AsyncStorage.setItem("user_password", password.value)
-                      .then(() => {
-                        SetPasswordSave(true);
-                      })
-                      .catch(() => console.log("password error"));
-                  }
-                  setUserData(response.data);
-
-                  warnToast.show({
-                    backgroundColor: "emerald.400",
-                    px: "2",
-                    py: "1",
-                    rounded: "sm",
-                    height: "50",
-                    width: "300",
-                    fontSize: 20,
-                    textAlign: "center",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    title: "Амжилттай нэвтэрлээ",
-                    placement: "top",
-                  });
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Dashboard" }],
-                  });
-                } else {
-                  setLimitter(true);
-                  setShowLoginTokenModal(true);
+        if (limitter === false) {
+          axios(config)
+            .then(function (response) {
+              if (response.data.wallets.LoginLock === false) {
+                if (passwordSave === true) {
+                  AsyncStorage.setItem("user_phone", phone.value)
+                    .then(() => {
+                      SetPasswordSave(true);
+                    })
+                    .catch(() => console.log("phone error"));
+                  AsyncStorage.setItem("user_password", password.value)
+                    .then(() => {
+                      SetPasswordSave(true);
+                    })
+                    .catch(() => console.log("password error"));
                 }
-              })
-              .catch(function (error) {
+                setUserData(response.data);
+
                 warnToast.show({
-                  backgroundColor: "red.400",
+                  backgroundColor: "emerald.400",
                   px: "2",
                   py: "1",
                   rounded: "sm",
                   height: "50",
                   width: "300",
-                  fontSize: 18,
+                  fontSize: 20,
                   textAlign: "center",
                   justifyContent: "center",
                   alignItems: "center",
-                  title: "Утасны дугаар эсвэл нууц үг буруу",
+                  title: "Амжилттай нэвтэрлээ",
                   placement: "top",
                 });
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "Dashboard" }],
+                });
+              } else {
+                setLimitter(true);
+                setShowLoginTokenModal(true);
+              }
+            })
+            .catch(function (error) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "300",
+                fontSize: 18,
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Утасны дугаар эсвэл нууц үг буруу",
+                placement: "top",
               });
-          } else {
-            setShowLoginTokenModal(true);
-            setLoginPressLimitter(false);
-          }
+            });
+        } else {
+          setShowLoginTokenModal(true);
+
         }
+
       }
     } else {
-      setLoginPressLimitter(false);
+
       reactToUpdates();
     }
-    setLoginPressLimitter(true);
+
   };
   const onLoginAuthPressed = () => {
     reactToUpdates();
@@ -407,7 +405,6 @@ export default function LoginScreen({ navigation }) {
   }
 
   useEffect(() => {
-    setLoginPressLimitter(false);
     SetPasswordSave(false);
     SetPasswordSaveSwitch(false);
     SetPasswordLimitter(false);
