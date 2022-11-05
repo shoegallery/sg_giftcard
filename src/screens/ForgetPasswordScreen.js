@@ -22,7 +22,7 @@ import {
   FormControl,
   Input,
   Icon,
-  useToast,
+  useToast, StatusBar
 } from "native-base";
 import NetInfo from "@react-native-community/netinfo";
 
@@ -290,6 +290,7 @@ export default function ForgetPasswordScreen({ navigation }) {
   }, []);
   return (
     <Background>
+      <StatusBar barStyle="dark-content" />
       <BackButton goBack={navigation.goBack} style={{ color: "red" }} />
 
       <SafeAreaView style={{ width: wp("80%"), height: hp("75%") }}>

@@ -31,59 +31,61 @@ import * as WebBrowser from "expo-web-browser";
 const StoreAddress = () => {
   const storeData = [
     {
-      name: "Хан-Уул Имарт Shoe Gallery салбар",
+      name: "Хан-Уул Имарт - Shoe Gallery",
       location: "ХУД, 15 хороо, Имарт Хан-Уул салбар, 1 давхарт Shoe Gallery",
       googlemap: "",
       maps: "",
     },
     {
-      name: "Гранд Плаза Shoe Gallery салбар",
-      location: "БГД, 2 хороо, Гранд плаза 3 давхарт 326 тоот Shoe Gallery",
+      name: "Гранд Плаза - Shoe Gallery",
+      location: "БГД, 2 хороо, Гранд плаза 3 давхарт 326, Shoe Gallery",
       googlemap: "",
       maps: "",
     },
     {
-      name: "Хүннү-молл Shoe Gallery салбар",
+      name: "Хүннү-молл - Shoe Gallery",
       location: "ХУД, 4 хороо, Хүннү молл B1 давхарт Shoe Gallery",
       googlemap: "",
       maps: "",
     },
     {
-      name: "УБИД BASCONI салбар",
-      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр 5 давхарт BASCONI",
+      name: "УБИД - BASCONI",
+      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр, 5 давхарт BASCONI",
       googlemap: "",
       maps: "",
     },
     {
-      name: "УБИД Sasha Fabiani салбар",
-      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр 5 давхарт Sasha Fabiani",
+      name: "УБИД - Bugatti",
+      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр, 5 давхарт Bugatti",
       googlemap: "",
       maps: "",
     },
     {
-      name: "УБИД Bugatti салбар",
-      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр 5 давхарт Bugatti",
+      name: "УБИД - Sasha Fabiani",
+      location: "СБД, 4 хороо, Улаанбаатар их дэлгүүр, 5 давхарт Sasha Fabiani",
+      googlemap: "",
+      maps: "",
+    },
+
+    {
+      name: "Максмолл - BASCONI",
+      location: "БГД, 16 хороо, Максмолл худалдааны төв, 2 давхарт BASCONI",
       googlemap: "",
       maps: "",
     },
     {
-      name: "Максмолл BASCONI салбар",
-      location: "БГД, 16 хороо, Максмолл төв, 2 давхарт BASCONI",
+      name: "Максмолл - Shoe Gallery",
+      location: "БГД, 16 хороо, Максмолл худалдааны төв, 2 давхарт Shoe Gallery",
       googlemap: "",
       maps: "",
     },
     {
-      name: "Максмолл Sasha Fabiani салбар",
-      location: "БГД, 16 хороо, Максмолл төв, 2 давхарт Sasha Fabiani",
+      name: "Максмолл - Sasha Fabiani",
+      location: "БГД, 16 хороо, Максмолл худалдааны төв, 2 давхарт Sasha Fabiani",
       googlemap: "",
       maps: "",
     },
-    {
-      name: "Максмолл Shoe Gallery салбар",
-      location: "БГД, 16 хороо, Максмолл төв, 2 давхарт Shoe Gallery",
-      googlemap: "",
-      maps: "",
-    },
+
   ];
 
   return (
@@ -103,22 +105,29 @@ const StoreAddress = () => {
                 }}
                 borderColor="gray.300"
               >
-                <HStack height={90} justifyContent="space-between">
-                  <VStack justifyContent="center" width="100%">
+                <HStack height={90} justifyContent="center">
+                  <VStack alignItems="center" justifyContent="center" width="100%">
                     <Text
-                      textAlign="center"
+                      alignSelf="auto"
+                      width={"90%"}
+                      minW={"90%"}
+                      flexWrap="wrap"
                       fontSize={16}
                       color="coolGray.800"
                       bold
+
                     >
                       {item.name}
                     </Text>
                     <Text
+                      alignSelf="auto"
+                      width={"90%"}
+                      minW={"90%"}
                       semibold
-                      alignSelf="center"
-                      justifyContent="center"
-                      width="90%"
-                      textAlign="center"
+                      flexWrap="wrap"
+                      justifyContent="space-evenly"
+
+
                       fontSize={14}
                       color="coolGray.600"
                       _dark={{

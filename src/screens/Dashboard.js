@@ -2,9 +2,9 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { Alert, RefreshControl, ScrollView, Platform } from "react-native";
+import { Alert, RefreshControl, ScrollView, Platform, Image, StatusBar } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
@@ -94,7 +94,7 @@ export default function Dashboard({ navigation }, props) {
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
       Alert.alert(
         "Та шилжүүлгийн мэдээллээ зөв оруулна уу",
-        `Утасны дугаар зөвхөн 8 орноос бүрдэх ёстой. Үнийн дүн зөвхөн тоо агуулна.`,
+        `Салбарыг заавал сонгоно, үнийн дүнд зөвхөн тоо агуулна.`,
         [
           {
             text: "OK",
@@ -274,6 +274,7 @@ export default function Dashboard({ navigation }, props) {
 
   return (
     <NativeBaseProvider>
+      <StatusBar barStyle="dark-content" backgroundColor="#CC5801" />
       <ScrollView
         VirtualizedList-backed
         nestedScrollEnabled={true}
@@ -316,10 +317,10 @@ export default function Dashboard({ navigation }, props) {
                   >
                     <Button
                       colorScheme="orange"
-                      shadow="5"
+
                       variant="subtle"
-                      bg="#CC5801"
-                      borderRadius={10}
+                      bg="white"
+
                       height={"90%"}
                       marginRight={1}
                       flex={1}
@@ -328,11 +329,9 @@ export default function Dashboard({ navigation }, props) {
                         setShowModal(true);
                       }}
                     >
-                      <Text bold textAlign="center" fontSize="lg" color="white">
-                        Худалдан
-                      </Text>
-                      <Text bold textAlign="center" fontSize="lg" color="white">
-                        авалт
+                      <Box alignItems="center"><Feather name="shopping-bag" size={48} color="#CC5801" /></Box>
+                      <Text bold textAlign="center" fontSize="xs" color="#CC5801">
+                        Тооцоо хийх
                       </Text>
                     </Button>
                     {showModal ? (
@@ -346,16 +345,17 @@ export default function Dashboard({ navigation }, props) {
                           <Modal.Content width={wp("80%")} height={hp("50%")}>
                             <Modal.CloseButton />
                             <Modal.Header>
+
                               <Text
                                 bold
                                 color="#242B2E"
                                 fontSize={20}
                                 textAlign="center"
                               >
-                                Худалдан авалт
+                                Тооцоо хийх
                               </Text>
                             </Modal.Header>
-                            <Modal.Body>
+                            <Modal.Body justifyItems="center">
                               <FormControl>
                                 <FormControl.Label>
                                   <Text
@@ -366,15 +366,15 @@ export default function Dashboard({ navigation }, props) {
                                     Салбар
                                   </Text>
                                 </FormControl.Label>
-
                                 <View>
 
-                                  <Box>
+                                  <Box >
                                     <Select
+                                      height={50}
                                       width={"100%"}
                                       placeholder="Салбар сонгоно уу"
                                       selectedValue={receiverPhone.value}
-
+                                      fontSize={20}
                                       onValueChange={(itemValue) => setReceiverPhone({
                                         value: itemValue,
                                         error: "",
@@ -409,6 +409,7 @@ export default function Dashboard({ navigation }, props) {
 
                               <FormControl.Label>
                                 <Text
+
                                   fontSize={20}
                                   fontWeight="semibold"
                                   color="gray.700"
@@ -418,6 +419,7 @@ export default function Dashboard({ navigation }, props) {
                               </FormControl.Label>
                               <Box>
                                 <Input
+                                  height={50}
                                   fontSize={20}
                                   value={String(receiverAmount.value)}
                                   returnKeyType="next"
@@ -478,13 +480,42 @@ export default function Dashboard({ navigation }, props) {
                     )}
 
                     <Button
-                      shadow="5"
-                      variant="subtle"
-                      borderWidth={3}
+                      colorScheme="orange"
                       bg="white"
-                      colorScheme="brown"
-                      borderColor="#CC5801"
-                      borderRadius={10}
+                      variant="subtle"
+
+
+                      marginLeft={1}
+                      height={"90%"}
+                      flex={1}
+
+                      success
+                      onPress={() => {
+                        warnToast.show({
+                          backgroundColor: "red.400",
+                          px: "2",
+                          py: "1",
+                          rounded: "sm",
+                          height: "50",
+                          width: "250",
+                          textAlign: "center",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          title: "Тун удахгүй",
+                          placement: "top",
+                        });
+                      }}
+                    ><Box alignItems="center"><MaterialIcons name="card-giftcard" size={48} color="#CC5801" /></Box>
+                      <Text bold fontSize="xs" color="#CC5801">
+                        Бэлгийн карт
+                      </Text>
+                    </Button>
+                    <Button
+                      variant="subtle"
+                      colorScheme="orange"
+                      bg="white"
+
+
                       marginLeft={1}
                       height={"90%"}
                       flex={1}
@@ -505,9 +536,10 @@ export default function Dashboard({ navigation }, props) {
                           placement: "top",
                         });
                       }}
-                    >
-                      <Text bold fontSize="lg" color="#CC5801">
-                        Бэлгийн карт
+                    ><Box alignItems="center">
+                        <MaterialIcons name="loyalty" size={48} color="#CC5801" /></Box>
+                      <Text bg="red" bold fontSize="xs" color="#CC5801">
+                        Coupon оруулах
                       </Text>
                     </Button>
                   </View>
@@ -515,7 +547,6 @@ export default function Dashboard({ navigation }, props) {
                 <View
                   style={{
                     width: "100%",
-
                     position: "absolute",
                     marginTop: hp("12%"),
                   }}
@@ -569,6 +600,7 @@ export default function Dashboard({ navigation }, props) {
           </View>
         </SafeAreaView>
       </ScrollView>
+
     </NativeBaseProvider>
   );
 }

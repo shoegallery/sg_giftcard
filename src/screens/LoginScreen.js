@@ -8,6 +8,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  StatusBar
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -423,6 +424,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <NativeBaseProvider>
+      <StatusBar barStyle="dark-content" backgroundColor="#1B98F5" />
       <ToastProvider>
         <Center>
           <Modal
@@ -432,9 +434,9 @@ export default function LoginScreen({ navigation }) {
               bg: "coolGray.800",
             }}
           >
-            <Modal.Content maxWidth="90%" height={"300"} maxH="300">
+            <Modal.Content maxWidth="90%" height="300" maxH="300">
               <Modal.Header>Шинэ хувилбар</Modal.Header>
-              <Modal.Body>
+              <Modal.Body width="100%" maxWidth="100%" size="xs" height="200" maxH="200">
                 Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү олон,
                 Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа
                 шинэчилж ашиглана уу.

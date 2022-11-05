@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { StatusBar } from 'expo-status-bar';
 import {
   LoginScreen,
   RegisterScreen,
@@ -11,7 +11,7 @@ import {
 } from "./src/screens";
 import { Text, TextInput, LogBox } from "react-native";
 import { SSRProvider } from "@react-aria/ssr";
-import { StatusBar } from 'expo-status-bar';
+
 import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider, ToastProvider } from "native-base";
@@ -29,18 +29,24 @@ TextInput.defaultProps.allowFontScaling = false;
 export default function App() {
   return (
     <SSRProvider>
+
       <NativeBaseProvider>
+
         <ToastProvider>
           <SafeAreaProvider>
+
             <StateProvider>
               <Provider>
+
                 <NavigationContainer>
+
                   <Stack.Navigator
                     initialRouteName="LoginScreen"
                     screenOptions={{
                       headerShown: false,
                     }}
                   >
+
                     <Stack.Screen name="LoginScreen" component={LoginScreen} />
                     <Stack.Screen
                       name="RegisterScreen"
@@ -51,13 +57,19 @@ export default function App() {
                       name="ForgetPasswordScreen"
                       component={ForgetPasswordScreen}
                     />
+
                   </Stack.Navigator>
+
                 </NavigationContainer>
+
               </Provider>
             </StateProvider>
+
           </SafeAreaProvider>
         </ToastProvider>
+
       </NativeBaseProvider>
-    </SSRProvider>
+
+    </SSRProvider >
   );
 }

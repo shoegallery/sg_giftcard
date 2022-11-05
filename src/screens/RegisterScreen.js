@@ -3,7 +3,7 @@ import axios from "axios";
 import BackButton from "../components/BackButton";
 
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, StatusBar } from "react-native";
 import Background from "../components/Background";
 
 import { theme } from "../core/theme";
@@ -191,6 +191,7 @@ export default function RegisterScreen({ navigation }) {
   }, []);
   return (
     <Background>
+      <StatusBar barStyle="dark-content" />
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
       <SafeAreaView style={{ width: wp("80%"), paddingTop: hp("1%"), height: hp("75%") }}>

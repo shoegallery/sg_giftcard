@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, Platform } from "react-native";
 import axios from "axios";
 import Carousel from "react-native-snap-carousel-v4";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Image } from "native-base";
+import { Image, Box } from "native-base";
 const Product = () => {
   const getData = () => {
     const safebox = [];
@@ -66,7 +66,7 @@ const Product = () => {
 
   const renderItem = useCallback(
     ({ item, index }) => (
-      <View
+      Platform.OS === "ios" ? (<View
         style={{
           alignContent: "center",
           alignContent: "center",
@@ -76,8 +76,8 @@ const Product = () => {
           width: hp("30%"),
           alignItems: "center",
 
-          marginLeft: wp("22,5%"),
-          marginRight: wp("22,5%"),
+          marginLeft: wp("15,5%"),
+          marginRight: wp("29,5%"),
         }}
       >
         <Image
@@ -87,7 +87,29 @@ const Product = () => {
             uri: item.headImage,
           }}
         />
-      </View>
+      </View>) : (<View
+        style={{
+          alignContent: "center",
+          alignContent: "center",
+          backgroundColor: "floralwhite",
+          borderRadius: 5,
+          height: hp("30%"),
+          width: hp("30%"),
+          alignItems: "center",
+
+          marginLeft: wp("18,5%"),
+          marginRight: wp("24,5%"),
+        }}
+      >
+        <Image
+          size="full"
+          alt=" "
+          source={{
+            uri: item.headImage,
+          }}
+        />
+      </View>)
+
     ),
     []
   );
@@ -112,6 +134,7 @@ const Product = () => {
           justifyContent: "center",
         }}
       >
+
         <Carousel
           layout="stack"
           ref={ref}
@@ -123,7 +146,8 @@ const Product = () => {
           onSnapToItem={(index) => setActiveIndex(index)}
         />
       </View>
-    </SafeAreaView>
+
+    </SafeAreaView >
   );
 };
 
