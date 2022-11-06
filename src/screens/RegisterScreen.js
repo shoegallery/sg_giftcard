@@ -49,7 +49,7 @@ export default function RegisterScreen({ navigation }) {
         });
       }
     });
-  }
+  };
   const onSignUpPressed = () => {
     InternetCheck();
     const nameError = nameValidator(name.value);
@@ -71,7 +71,7 @@ export default function RegisterScreen({ navigation }) {
         title: phoneError,
         placement: "top",
       });
-      return
+      return;
     }
     if (passwordError) {
       warnToastPassword.show({
@@ -87,7 +87,7 @@ export default function RegisterScreen({ navigation }) {
         title: passwordError,
         placement: "top",
       });
-      return
+      return;
     }
     if (nameError) {
       warnToast.show({
@@ -103,7 +103,7 @@ export default function RegisterScreen({ navigation }) {
         title: nameError,
         placement: "top",
       });
-      return
+      return;
     }
     if (passwordConfirmError) {
       warnToastPassword.show({
@@ -119,7 +119,7 @@ export default function RegisterScreen({ navigation }) {
         title: passwordConfirmError,
         placement: "top",
       });
-      return
+      return;
     }
 
     if (password.value !== passwordConfirm.value) {
@@ -136,7 +136,7 @@ export default function RegisterScreen({ navigation }) {
         title: "Баталгаажуулах нууц үг ижил байх ёстой",
         placement: "top",
       });
-      return
+      return;
     }
 
     var request = JSON.stringify({
@@ -194,7 +194,9 @@ export default function RegisterScreen({ navigation }) {
       <StatusBar barStyle="dark-content" />
       <BackButton goBack={navigation.goBack} />
       <Header>Бүртгэл үүсгэх</Header>
-      <SafeAreaView style={{ width: wp("80%"), paddingTop: hp("1%"), height: hp("75%") }}>
+      <SafeAreaView
+        style={{ width: wp("80%"), paddingTop: hp("1%"), height: hp("75%") }}
+      >
         <Input
           returnKeyType="next"
           w={{

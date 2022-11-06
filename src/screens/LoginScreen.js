@@ -8,7 +8,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -47,7 +47,6 @@ import {
   Center,
   Modal,
   Box,
-  Checkbox,
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
@@ -71,8 +70,7 @@ export default function LoginScreen({ navigation }) {
             setShowModal(false);
             setVersionUpdate(false);
           }
-        }
-        else if (Platform.OS === 'ios') {
+        } else if (Platform.OS === "ios") {
           if (appJson.expo.version !== response.data.ios) {
             setShowModal(true);
             setVersionUpdate(true);
@@ -81,7 +79,6 @@ export default function LoginScreen({ navigation }) {
             setVersionUpdate(false);
           }
         }
-
       })
       .catch(function (error) { });
   };
@@ -294,15 +291,11 @@ export default function LoginScreen({ navigation }) {
             });
         } else {
           setShowLoginTokenModal(true);
-
         }
-
       }
     } else {
-
       reactToUpdates();
     }
-
   };
   const onLoginAuthPressed = () => {
     reactToUpdates();
@@ -436,7 +429,13 @@ export default function LoginScreen({ navigation }) {
           >
             <Modal.Content maxWidth="90%" height="300" maxH="300">
               <Modal.Header>Шинэ хувилбар</Modal.Header>
-              <Modal.Body width="100%" maxWidth="100%" size="xs" height="200" maxH="200">
+              <Modal.Body
+                width="100%"
+                maxWidth="100%"
+                size="xs"
+                height="200"
+                maxH="200"
+              >
                 Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү олон,
                 Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа
                 шинэчилж ашиглана уу.

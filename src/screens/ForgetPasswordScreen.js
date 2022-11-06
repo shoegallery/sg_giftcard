@@ -22,7 +22,8 @@ import {
   FormControl,
   Input,
   Icon,
-  useToast, StatusBar
+  useToast,
+  StatusBar,
 } from "native-base";
 import NetInfo from "@react-native-community/netinfo";
 

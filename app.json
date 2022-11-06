@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.shoegallery.sgwalletapp",
-      "buildNumber": "1.2.1"
+      "buildNumber": "1.2.4"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +31,7 @@
         "backgroundColor": "#FFF"
       },
       "package": "com.shoegallery.sg_wallet_app",
-      "versionCode": 23,
+      "versionCode": 24,
       "icon": "./assets/icon.png"
     },
     "web": {

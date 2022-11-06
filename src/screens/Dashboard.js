@@ -2,12 +2,12 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useState, useEffect, useContext } from "react";
-import { Alert, RefreshControl, ScrollView, Platform, Image, StatusBar } from "react-native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import { MaterialIcons, Feather } from '@expo/vector-icons';
+import { Alert, RefreshControl, ScrollView, StatusBar } from "react-native";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
+
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 import Product from "../components/Product";
 import {
@@ -22,10 +22,8 @@ import {
   Heading,
   View,
   useToast,
-  KeyboardAvoidingView,
   Center,
-  HStack,
-  Select
+  Select,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -44,14 +42,15 @@ export default function Dashboard({ navigation }, props) {
     useContext(StateContextHistory);
 
   const [showModal, setShowModal] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
   let [language, setLanguage] = useState("0");
-
 
   const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
   const [receiverAmount, setReceiverAmount] = useState({
     value: "",
     error: "",
   });
+  const [receiverCoupon, setReceiverCoupon] = useState("");
 
   const [refreshing, setRefreshing] = useState(false);
   const wait = (timeout) => {
@@ -111,7 +110,6 @@ export default function Dashboard({ navigation }, props) {
       summary: `Худалдан авалтын гүйлгээ`,
       id: userData.wallets._id,
       walletSuperId: userData.wallets.walletSuperId,
-
     });
 
     var config = {
@@ -187,7 +185,105 @@ export default function Dashboard({ navigation }, props) {
         });
       });
   };
+  const getCoupon = () => {
+    InternetCheck();
+    if (receiverCoupon.length !== 5) {
+      setReceiverCoupon("");
+      Alert.alert("", `Таны оруулсан купон кодын тэмдэгтийн урт буруу байна`, [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
+    var request = JSON.stringify({
+      coupon_code: receiverCoupon,
+      walletSuperId: userData.wallets.walletSuperId,
+    });
 
+    var config = {
+      method: "POST",
+      url: `${baseUrl}/transactions/use_coupon`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: request,
+    };
+    axios(config)
+      .then(function (response) {
+        if (response.data.success === true) {
+          setShowCouponModal(false);
+          setReceiverCoupon("");
+          userTransactionHistory();
+          dataRefresher();
+          successToast.show({
+            backgroundColor: "emerald.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Купон код идэвхжсэн",
+            placement: "top",
+          });
+        } else {
+          setShowCouponModal(false);
+          setReceiverCoupon("");
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Дахин оролдоно уу",
+            placement: "top",
+          });
+        }
+      })
+      .catch(function (error) {
+        const err = JSON.parse(JSON.stringify(error));
+        if (err.status === 405) {
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Ашигласан купон код",
+            placement: "top",
+          });
+          setShowCouponModal(false);
+          setReceiverCoupon("");
+        } else if (err.status === 403) {
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Идэвхгүй купон код",
+            placement: "top",
+          });
+          setShowCouponModal(false);
+          setReceiverCoupon("");
+        }
+      });
+  };
   const dataRefresher = () => {
     InternetCheck();
     try {
@@ -248,7 +344,6 @@ export default function Dashboard({ navigation }, props) {
 
       data: datas,
     };
-
     axios(config)
       .then((response) => {
         setUserTransactionData(response.data.data);
@@ -258,13 +353,13 @@ export default function Dashboard({ navigation }, props) {
         }
       });
   };
-
   useEffect(() => {
+    setShowCouponModal(false);
     setShowModal(false);
     InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
-
+    setReceiverCoupon("");
     setReceiverPhone({ value: "", error: "" });
     setReceiverAmount({
       value: "",
@@ -317,11 +412,10 @@ export default function Dashboard({ navigation }, props) {
                   >
                     <Button
                       colorScheme="orange"
-
                       variant="subtle"
                       bg="white"
-
-                      height={"90%"}
+                      borderColor="#CC5801"
+                      height={"100%"}
                       marginRight={1}
                       flex={1}
                       success
@@ -329,23 +423,31 @@ export default function Dashboard({ navigation }, props) {
                         setShowModal(true);
                       }}
                     >
-                      <Box alignItems="center"><Feather name="shopping-bag" size={48} color="#CC5801" /></Box>
-                      <Text bold textAlign="center" fontSize="xs" color="#CC5801">
+                      <Box alignItems="center">
+                        <Feather
+                          name="shopping-bag"
+                          size={36}
+                          color="#CC5801"
+                        />
+                      </Box>
+                      <Text
+                        bold
+                        textAlign="center"
+                        fontSize="xs"
+                        color="#CC5801"
+                      >
                         Тооцоо хийх
                       </Text>
                     </Button>
                     {showModal ? (
                       <Center>
-
                         <Modal
                           isOpen={showModal}
                           onClose={() => setShowModal(false)}
                         >
-
                           <Modal.Content width={wp("80%")} height={hp("50%")}>
                             <Modal.CloseButton />
                             <Modal.Header>
-
                               <Text
                                 bold
                                 color="#242B2E"
@@ -367,49 +469,63 @@ export default function Dashboard({ navigation }, props) {
                                   </Text>
                                 </FormControl.Label>
                                 <View>
-
-                                  <Box >
+                                  <Box>
                                     <Select
                                       height={50}
                                       width={"100%"}
                                       placeholder="Салбар сонгоно уу"
                                       selectedValue={receiverPhone.value}
                                       fontSize={20}
-                                      onValueChange={(itemValue) => setReceiverPhone({
-                                        value: itemValue,
-                                        error: "",
-                                      })}
-                                    >
-                                      <Select.Item label="Гранд плаза | Shoe Gallery" value="10000001" />
-                                      <Select.Item label="УБИД | BASCONI" value="10000002" />
-                                      <Select.Item label="УБИД | Sasha Fabiani" value="10000003" />
-                                      <Select.Item label="УБИД | Bugatti" value="10000004" />
-                                      <Select.Item label="Максмоол | BASCONI" value="10000005" />
-                                      <Select.Item label="Максмоол | Sasha Fabiani" value="10000006" />
-                                      <Select.Item label="Максмоол | Shoe Gallery" value="10000007" />
-                                      <Select.Item label="Хүннү-Моол | Shoe Gallery" value="10000008" />
-                                      <Select.Item label="Имарт Хан-уул | Shoe Gallery" value="10000009" />
-                                    </Select>
-                                  </Box>
-                                  {/* <Box>
-                                     <Input
-                                      fontSize={20}
-                                      returnKeyType="next"
-                                      onChangeText={(receiverAmountPhone) =>
+                                      onValueChange={(itemValue) =>
                                         setReceiverPhone({
-                                          value: receiverAmountPhone,
+                                          value: itemValue,
                                           error: "",
                                         })
                                       }
-                                      keyboardType="number-pad"
-                                    /> 
-                                  </Box> */}
+                                    >
+                                      <Select.Item
+                                        label="Гранд плаза | Shoe Gallery"
+                                        value="10000001"
+                                      />
+                                      <Select.Item
+                                        label="УБИД | BASCONI"
+                                        value="10000002"
+                                      />
+                                      <Select.Item
+                                        label="УБИД | Sasha Fabiani"
+                                        value="10000003"
+                                      />
+                                      <Select.Item
+                                        label="УБИД | Bugatti"
+                                        value="10000004"
+                                      />
+                                      <Select.Item
+                                        label="Максмоол | BASCONI"
+                                        value="10000005"
+                                      />
+                                      <Select.Item
+                                        label="Максмоол | Sasha Fabiani"
+                                        value="10000006"
+                                      />
+                                      <Select.Item
+                                        label="Максмоол | Shoe Gallery"
+                                        value="10000007"
+                                      />
+                                      <Select.Item
+                                        label="Хүннү-Моол | Shoe Gallery"
+                                        value="10000008"
+                                      />
+                                      <Select.Item
+                                        label="Имарт Хан-уул | Shoe Gallery"
+                                        value="10000009"
+                                      />
+                                    </Select>
+                                  </Box>
                                 </View>
                               </FormControl>
 
                               <FormControl.Label>
                                 <Text
-
                                   fontSize={20}
                                   fontWeight="semibold"
                                   color="gray.700"
@@ -432,9 +548,6 @@ export default function Dashboard({ navigation }, props) {
                                   keyboardType="number-pad"
                                 />
                               </Box>
-
-
-
                             </Modal.Body>
 
                             <Modal.Footer>
@@ -459,7 +572,6 @@ export default function Dashboard({ navigation }, props) {
                                   </Text>
                                 </Button>
                                 <Button
-
                                   onPress={() => {
                                     setShowModal(false);
                                     checkOut();
@@ -472,7 +584,6 @@ export default function Dashboard({ navigation }, props) {
                               </Button.Group>
                             </Modal.Footer>
                           </Modal.Content>
-
                         </Modal>
                       </Center>
                     ) : (
@@ -483,12 +594,9 @@ export default function Dashboard({ navigation }, props) {
                       colorScheme="orange"
                       bg="white"
                       variant="subtle"
-
-
                       marginLeft={1}
                       height={"90%"}
                       flex={1}
-
                       success
                       onPress={() => {
                         warnToast.show({
@@ -505,7 +613,14 @@ export default function Dashboard({ navigation }, props) {
                           placement: "top",
                         });
                       }}
-                    ><Box alignItems="center"><MaterialIcons name="card-giftcard" size={48} color="#CC5801" /></Box>
+                    >
+                      <Box alignItems="center">
+                        <MaterialIcons
+                          name="card-giftcard"
+                          size={36}
+                          color="#CC5801"
+                        />
+                      </Box>
                       <Text bold fontSize="xs" color="#CC5801">
                         Бэлгийн карт
                       </Text>
@@ -514,34 +629,98 @@ export default function Dashboard({ navigation }, props) {
                       variant="subtle"
                       colorScheme="orange"
                       bg="white"
-
-
                       marginLeft={1}
                       height={"90%"}
                       flex={1}
                       bordered
                       success
                       onPress={() => {
-                        warnToast.show({
-                          backgroundColor: "red.400",
-                          px: "2",
-                          py: "1",
-                          rounded: "sm",
-                          height: "50",
-                          width: "250",
-                          textAlign: "center",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          title: "Тун удахгүй",
-                          placement: "top",
-                        });
+                        setShowCouponModal(true);
                       }}
-                    ><Box alignItems="center">
-                        <MaterialIcons name="loyalty" size={48} color="#CC5801" /></Box>
+                    >
+                      <Box alignItems="center">
+                        <MaterialIcons
+                          name="loyalty"
+                          size={36}
+                          color="#CC5801"
+                        />
+                      </Box>
                       <Text bg="red" bold fontSize="xs" color="#CC5801">
                         Coupon оруулах
                       </Text>
                     </Button>
+                    {showCouponModal ? (
+                      <Center>
+                        <Modal
+                          isOpen={showCouponModal}
+                          onClose={() => setShowCouponModal(false)}
+                        >
+                          <Modal.Content width={wp("80%")} height={hp("50%")}>
+                            <Modal.CloseButton />
+
+                            <Modal.Body justifyItems="center">
+                              <FormControl>
+                                <FormControl.Label>
+                                  <Text
+                                    paddingTop={30}
+                                    fontSize={20}
+                                    fontWeight="semibold"
+                                    color="gray.700"
+                                    textAlign="center"
+                                    alignItems="center"
+                                  >
+                                    Та гар утсандаа хүлээн авсан купон кодоо
+                                    оруулна уу
+                                  </Text>
+                                </FormControl.Label>
+                              </FormControl>
+
+                              <Box paddingTop={30}>
+                                <Input
+                                  placeholder="Энд дарж оруулна уу"
+                                  height={50}
+                                  fontSize={20}
+                                  value={String(receiverCoupon)}
+                                  returnKeyType="next"
+                                  onChangeText={(receiverCouponCode) =>
+                                    setReceiverCoupon(receiverCouponCode)
+                                  }
+                                  keyboardType="default"
+                                />
+                                <Text
+                                  width="100%"
+                                  fontSize={12}
+                                  fontWeight="semibold"
+                                  color="gray.700"
+                                  flexWrap="wrap"
+                                  alignItems="flex-start"
+                                >
+                                  Санамж: Купон код нь том жижиг үсгийн ялгаатай
+                                  5 ширхэг тэмдэгт оруулахыг анхаарна уу
+                                </Text>
+                              </Box>
+                            </Modal.Body>
+
+                            <Modal.Footer>
+                              <Button.Group space={5}>
+                                <Button
+                                  onPress={() => {
+                                    setShowModal(false);
+                                    getCoupon();
+                                  }}
+                                >
+                                  <Text bold color="white">
+                                    Кодыг идэвхжүүлэх
+                                  </Text>
+                                </Button>
+                              </Button.Group>
+                            </Modal.Footer>
+                          </Modal.Content>
+                        </Modal>
+                      </Center>
+                    ) : (
+                      <View></View>
+                    )}
                   </View>
                 </VStack>
                 <View
@@ -600,7 +779,6 @@ export default function Dashboard({ navigation }, props) {
           </View>
         </SafeAreaView>
       </ScrollView>
-
     </NativeBaseProvider>
   );
 }
