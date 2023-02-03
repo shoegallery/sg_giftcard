@@ -4,35 +4,23 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
   Platform,
   StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import axios from "axios";
-import Background from "../components/Background";
-import Logo from "../components/Logo";
 
 import * as Linking from "expo-linking";
 
 import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
-import { phoneValidator } from "../helpers/phoneValidator";
-import { passwordValidator } from "../helpers/passwordValidator";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StateContext } from "../Context/StateContext";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+
+import { Ionicons } from "@expo/vector-icons";
 
 import NetInfo from "@react-native-community/netinfo";
 import {
@@ -44,9 +32,11 @@ import {
   Center,
   Box,
   HStack,
+  Modal,
+  Button,
 } from "native-base";
 
-export default function RegisterScreen({ navigation }) {
+export default function MainScreen({ navigation }) {
   const reactToUpdates = () => {
     var dataVersion = JSON.stringify({});
     var configVersion = {
@@ -59,6 +49,7 @@ export default function RegisterScreen({ navigation }) {
     };
     axios(configVersion)
       .then(function (response) {
+        console.log(response.data.ios + " ------" + appJson.expo.version);
         if (Platform.OS === "android") {
           if (appJson.expo.version !== response.data.android) {
             setShowModal(true);
@@ -80,22 +71,17 @@ export default function RegisterScreen({ navigation }) {
       .catch(function (error) { });
   };
 
-  const warnToastPassword = useToast();
   const warnToast = useToast();
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
-  const [password, setPassword] = useState({ value: "" });
-  const [loginToken, setLoginToken] = useState({ value: "" });
+
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
-  const [showLoginTokenModal, setShowLoginTokenModal] = useState(false);
+
   const [versionUpdate, setVersionUpdate] = useState(false);
-  const [limitter, setLimitter] = useState(false);
-  const [limitterUUID, setLimitterUUID] = useState(true);
+
   const [userUUID, setUserUUID] = useState(undefined);
-  const [passwordSave, SetPasswordSave] = useState(false);
-  const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
-  const [passwordSaveLimitter, SetPasswordLimitter] = useState(false);
+
   const [seeLockPassword, setSeeLockPassword] = useState(false);
 
   const InternetCheck = () => {
@@ -138,14 +124,11 @@ export default function RegisterScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          if (result !== null) {
-            setPhone({ value: result, error: "" });
-            setSeeLockPassword(true);
-            SetPasswordSave(true);
-            SetPasswordSaveSwitch(true);
+          console.log(result);
+          if (result !== phone.value) {
+            setPhone({ value: phone.value, error: "" });
           } else {
-            setSeeLockPassword(false);
-            SetPasswordSave(false);
+            setPhone({ value: result, error: "" });
           }
         })
         .catch((err) => {
@@ -154,135 +137,10 @@ export default function RegisterScreen({ navigation }) {
     });
   };
 
-  const onLoginPressed = () => {
-    reactToUpdates();
-    InternetCheck();
-    const phoneError = phoneValidator(phone.value);
-    const passwordError = passwordValidator(password.value);
-
-    if (versionUpdate === false) {
-      if (phoneError) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: phoneError,
-          placement: "top",
-        });
-        setPhone({ ...phone });
-        return;
-      }
-      if (passwordError) {
-        warnToastPassword.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: passwordError,
-          placement: "top",
-        });
-        setPassword({ ...password });
-        return;
-      }
-
-      if (phone.value !== "" && password.value !== "") {
-        var request = JSON.stringify({
-          phone: parseInt(phone.value),
-          password: password.value,
-          uuid: userUUID,
-        });
-
-        var config = {
-          method: "POST",
-          url: `${baseUrl}/wallets/login`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          maxRedirects: 0,
-          data: request,
-        };
-
-        if (limitter === false) {
-          axios(config)
-            .then(function (response) {
-              if (response.data.wallets.LoginLock === false) {
-                if (passwordSave === true) {
-                  AsyncStorage.setItem("user_phone", phone.value)
-                    .then(() => {
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("phone error"));
-                  AsyncStorage.setItem("user_password", password.value)
-                    .then(() => {
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("password error"));
-                }
-                setUserData(response.data);
-
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "300",
-                  fontSize: 20,
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Амжилттай нэвтэрлээ",
-                  placement: "top",
-                });
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Dashboard" }],
-                });
-              } else {
-                setLimitter(true);
-                setShowLoginTokenModal(true);
-              }
-            })
-            .catch(function (error) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "300",
-                fontSize: 18,
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Утасны дугаар эсвэл нууц үг буруу",
-                placement: "top",
-              });
-            });
-        } else {
-          setShowLoginTokenModal(true);
-        }
-      }
-    } else {
-      reactToUpdates();
-    }
-  };
-
   const loginPressed = () => {
     reactToUpdates();
     InternetCheck();
-
+    console.log("first");
     if (phone.value !== "" && userUUID !== undefined) {
       var requestToken = JSON.stringify({
         phone: parseInt(phone.value),
@@ -298,29 +156,35 @@ export default function RegisterScreen({ navigation }) {
         maxRedirects: 0,
         data: requestToken,
       };
+
       axios(config)
         .then(function (response) {
-          setUserData(response.data);
-          warnToast.show({
-            backgroundColor: "emerald.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "300",
-            fontSize: 20,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Амжилттай нэвтэрлээ",
-            placement: "top",
-          });
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Dashboard" }],
-          });
+          if (showModal === false) {
+            setUserData(response.data);
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "300",
+              fontSize: 20,
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Амжилттай нэвтэрлээ",
+              placement: "top",
+            });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Dashboard" }],
+            });
+          }
         })
         .catch(function (error) {
+          AsyncStorage.setItem("user_phone", phone.value)
+            .then(() => { })
+            .catch(() => console.log("password"));
           const err = JSON.parse(JSON.stringify(error));
           if (err.status === 492) {
             warnToast.show({
@@ -350,73 +214,97 @@ export default function RegisterScreen({ navigation }) {
               title: "Таны хаяг түр блоклогдлоо",
               placement: "top",
             });
-          } else if (err.status === 482) {
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Мессеж илгээсэн.",
-              placement: "top",
-            });
-          } else if (err.status === 481) {
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Мессеж илгээсэн.",
-              placement: "top",
-            });
+          } else {
+            if (err.status === 482) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 481) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 480) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 499) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            }
+            navigation.navigate("LoginScreen");
           }
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "LoginScreen" }],
-          });
-
         });
     }
   };
 
   useEffect(() => {
-    SetPasswordSave(false);
-    SetPasswordSaveSwitch(false);
-    SetPasswordLimitter(false);
-    setSeeLockPassword(false);
     setUserUUID(undefined);
-    setLimitter(false);
-    setShowLoginTokenModal(false);
+
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "86218721" });
-    setPassword({ value: "" });
-    setLoginToken({ value: "" });
+    setPhone({ value: "" });
   }, []);
 
   return (
     <NativeBaseProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#1B98F5" />
+      <StatusBar barStyle="dark-content" backgroundColor="#424242" />
       <ToastProvider>
-        <View height="100%" backgroundColor="#40739e">
-          <Box height={"50%"}>
-            <Center marginTop={100}>
-              <Text color="white" fontFamily="bold" fontSize="3xl">
-                Баталгаажуулах код
+        <View height="100%" backgroundColor="#424242">
+          <Box height={"50%"} backgroundColor="red.400" justifyContent="center">
+            <Center>
+              <Text
+                maxWidth={"90%"}
+                color="white"
+                fontFamily="bold"
+                fontSize="3xl"
+              >
+                Нэвтрэх
               </Text>
-              <Text marginTop={1} color="white" fontSize="sm">
-                Та өөрийн гар утасны sda
+              <Text maxWidth={"90%"} marginTop={1} color="white" fontSize="sm">
+                Та өөрийн гар утасны дугаарыг оруулна уу
               </Text>
               <HStack
                 marginTop={5}
@@ -429,7 +317,7 @@ export default function RegisterScreen({ navigation }) {
                   marginRight={1 / 2}
                   width="30%"
                   justifyContent="center"
-                  backgroundColor="#353b48"
+                  backgroundColor="#1b1b1b"
                   borderRadius="sm"
                 >
                   <Center>
@@ -446,7 +334,7 @@ export default function RegisterScreen({ navigation }) {
                   marginLeft={1 / 2}
                   width="70%"
                   justifyContent="center"
-                  backgroundColor="#dcdde1"
+                  backgroundColor="#c2c2c2"
                 >
                   <Center>
                     <VStack>
@@ -474,6 +362,7 @@ export default function RegisterScreen({ navigation }) {
               }}
             >
               <Box
+                paddingTop={2}
                 borderWidth={0}
                 borderRadius="2xl"
                 borderColor={"white"}
@@ -499,12 +388,9 @@ export default function RegisterScreen({ navigation }) {
             </TouchableOpacity>
           </Box>
           <Center
-            position="absolute"
-            backgroundColor="red"
-            height="100%"
+            height="50%"
             justifyContent="flex-end"
             alignSelf="center"
-            flex-end
             width="100%"
           >
             <Box>
@@ -515,9 +401,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -527,7 +413,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               1
@@ -540,9 +430,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -552,7 +442,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               2
@@ -565,9 +459,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -577,7 +471,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               3
@@ -594,9 +492,10 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+                      minH={"16"}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -606,7 +505,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               4
@@ -619,9 +522,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -631,7 +534,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               5
@@ -644,9 +551,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -656,7 +563,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               6
@@ -673,9 +584,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -685,7 +596,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               7
@@ -698,9 +613,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -710,7 +625,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               8
@@ -723,9 +642,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -736,7 +655,11 @@ export default function RegisterScreen({ navigation }) {
                         }}
                       >
                         <VStack>
-                          <Center>
+                          <Center
+                            justifyContent="center"
+                            height="100%"
+                            width="100%"
+                          >
                             <Text fontSize="3xl" fontFamily="regular">
                               9
                             </Text>
@@ -752,13 +675,17 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity onPress={() => { }}>
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular"></Text>
                           </Center>
@@ -769,9 +696,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -781,7 +708,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Text fontSize="3xl" fontFamily="regular">
                               0
@@ -794,9 +725,9 @@ export default function RegisterScreen({ navigation }) {
                       borderRadius={0}
                       justifyContent="center"
                       borderColor="#353b48"
-                      borderWidth={1 / 2}
+                      borderWidth={1 / 3}
                       width="1/3"
-                      height={"24"}
+                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
@@ -814,7 +745,11 @@ export default function RegisterScreen({ navigation }) {
                           }
                         }}
                       >
-                        <VStack>
+                        <VStack
+                          justifyContent="center"
+                          height="100%"
+                          width="100%"
+                        >
                           <Center>
                             <Ionicons
                               name="caret-back"
@@ -831,50 +766,50 @@ export default function RegisterScreen({ navigation }) {
             </Box>
           </Center>
 
-          {/* <Center>
-          <Modal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            _backdrop={{
-              bg: "coolGray.800",
-            }}
-          >
-            <Modal.Content maxWidth="90%" height="300" maxH="300">
-              <Modal.Header>Шинэ хувилбар</Modal.Header>
-              <Modal.Body
-                width="100%"
-                maxWidth="100%"
-                size="xs"
-                height="200"
-                maxH="200"
-              >
-                Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү олон,
-                Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа
-                шинэчилж ашиглана уу.
-              </Modal.Body>
-              <Modal.Footer>
-                <Button.Group space={2}>
-                  <Button
-                    onPress={() => {
-                      if (Platform.OS === "android") {
-                        Linking.openURL(
-                          "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
-                        );
-                      } else if (Platform.OS === "ios") {
-                        Linking.openURL(
-                          "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
-                        );
-                      }
-                    }}
-                  >
-                    Апп шинэчлэх
-                  </Button>
-                </Button.Group>
-              </Modal.Footer>
-            </Modal.Content>
-          </Modal>
-        </Center>
-
+          <Center>
+            <Modal
+              isOpen={showModal}
+              onClose={() => setShowModal(false)}
+              _backdrop={{
+                bg: "coolGray.800",
+              }}
+            >
+              <Modal.Content maxWidth="90%" height="300" maxH="300">
+                <Modal.Header>Шинэ хувилбар</Modal.Header>
+                <Modal.Body
+                  width="100%"
+                  maxWidth="100%"
+                  size="xs"
+                  height="200"
+                  maxH="200"
+                >
+                  Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү
+                  олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та
+                  заавал аппаа шинэчилж ашиглана уу.
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button
+                      onPress={() => {
+                        if (Platform.OS === "android") {
+                          Linking.openURL(
+                            "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
+                          );
+                        } else if (Platform.OS === "ios") {
+                          Linking.openURL(
+                            "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
+                          );
+                        }
+                      }}
+                    >
+                      Апп шинэчлэх
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
+          </Center>
+          {/* 
         <Center>
           <Modal
             isOpen={showLoginTokenModal}

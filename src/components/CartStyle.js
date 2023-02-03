@@ -19,8 +19,8 @@ import {
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import moment from "moment";
+
 const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
@@ -119,16 +119,18 @@ const TransActionsList = () => {
 export default function CartStyle() {
   const [modalVisible, setModalVisible] = useState(false);
   const [userData, setUserData] = useContext(StateContext);
-
+  console.log(userData)
   var imageSource;
-  if (userData.wallets.walletType === "member") {
-    imageSource = require("../assets/cardTypes/member.png");
-  } else if (userData.wallets.walletType === "rosegold") {
-    imageSource = require("../assets/cardTypes/rosegold.png");
-  } else if (userData.wallets.walletType === "golden") {
-    imageSource = require("../assets/cardTypes/golden.png");
-  } else if (userData.wallets.walletType === "platnium") {
-    imageSource = require("../assets/cardTypes/platnium.png");
+  if (userData !== undefined) {
+    if (userData.wallets.walletType === "member") {
+      imageSource = require("../assets/cardTypes/member.png");
+    } else if (userData.wallets.walletType === "rosegold") {
+      imageSource = require("../assets/cardTypes/rosegold.png");
+    } else if (userData.wallets.walletType === "golden") {
+      imageSource = require("../assets/cardTypes/golden.png");
+    } else if (userData.wallets.walletType === "platnium") {
+      imageSource = require("../assets/cardTypes/platnium.png");
+    }
   }
   return (
     <View>
@@ -154,10 +156,11 @@ export default function CartStyle() {
           displayType={"text"}
           thousandSeparator={true}
           renderText={(formattedValue) => (
-            <View>
-              <Text color="white" bold fontSize="md">
-                Хэтэвчинд
+            <View backgroundColor={"transparent"}>
+              <Text color="white" fontSize="md">
+                Хэтэвчний үлдэгдэл
               </Text>
+
               <Text bold color="white" fontSize="2xl">
                 {formattedValue}₮
               </Text>
@@ -166,7 +169,7 @@ export default function CartStyle() {
                 onPress={() => {
                   setModalVisible(true);
                 }}
-                bold
+
                 color="white"
                 fontSize="md"
               >

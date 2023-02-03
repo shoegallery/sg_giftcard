@@ -4,49 +4,33 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
   Platform,
   StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import axios from "axios";
-import Background from "../components/Background";
-import Logo from "../components/Logo";
-
-import * as Linking from "expo-linking";
 
 import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
-import { phoneValidator } from "../helpers/phoneValidator";
-import { passwordValidator } from "../helpers/passwordValidator";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { StateContext } from "../Context/StateContext";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { MaterialIcons } from "@expo/vector-icons";
+
+import { Ionicons } from "@expo/vector-icons";
 
 import NetInfo from "@react-native-community/netinfo";
 import {
-  Button,
   VStack,
   Text,
   NativeBaseProvider,
   useToast,
-  Input,
   ToastProvider,
-  Icon,
   Center,
-  Modal,
   Box,
+  HStack,
 } from "native-base";
 
 export default function LoginScreen({ navigation }) {
@@ -83,7 +67,6 @@ export default function LoginScreen({ navigation }) {
       .catch(function (error) { });
   };
 
-  const warnToastPassword = useToast();
   const warnToast = useToast();
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
@@ -91,14 +74,13 @@ export default function LoginScreen({ navigation }) {
   const [loginToken, setLoginToken] = useState({ value: "" });
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
-  const [showLoginTokenModal, setShowLoginTokenModal] = useState(false);
+
   const [versionUpdate, setVersionUpdate] = useState(false);
   const [limitter, setLimitter] = useState(false);
-  const [limitterUUID, setLimitterUUID] = useState(true);
+
   const [userUUID, setUserUUID] = useState(undefined);
   const [passwordSave, SetPasswordSave] = useState(false);
   const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
-  const [passwordSaveLimitter, SetPasswordLimitter] = useState(false);
   const [seeLockPassword, setSeeLockPassword] = useState(false);
 
   const InternetCheck = () => {
@@ -118,7 +100,6 @@ export default function LoginScreen({ navigation }) {
           placement: "top",
         });
       }
-
       AsyncStorage.getItem("user_uuid")
         .then((result) => {
           if (result === null) {
@@ -141,6 +122,7 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
+          console.log(result)
           if (result !== null) {
             setPhone({ value: result, error: "" });
             setSeeLockPassword(true);
@@ -154,174 +136,35 @@ export default function LoginScreen({ navigation }) {
         .catch((err) => {
           console.log("user_phone baihgui");
         });
-
-      AsyncStorage.getItem("user_password")
-        .then((result) => {
-          if (result !== null) {
-            setPassword({ value: result, error: "" });
-            setSeeLockPassword(true);
-            SetPasswordSave(true);
-            SetPasswordSaveSwitch(true);
-          } else {
-            setSeeLockPassword(false);
-            SetPasswordSave(false);
-          }
-        })
-        .catch((err) => {
-          console.log("user_password baihgui");
-        });
     });
   };
 
-  const onLoginPressed = () => {
-    reactToUpdates();
-    InternetCheck();
-    const phoneError = phoneValidator(phone.value);
-    const passwordError = passwordValidator(password.value);
 
-    if (versionUpdate === false) {
-      if (phoneError) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: phoneError,
-          placement: "top",
-        });
-        setPhone({ ...phone });
-        return;
-      }
-      if (passwordError) {
-        warnToastPassword.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: passwordError,
-          placement: "top",
-        });
-        setPassword({ ...password });
-        return;
-      }
 
-      if (phone.value !== "" && password.value !== "") {
-        var request = JSON.stringify({
-          phone: parseInt(phone.value),
-          password: password.value,
-          uuid: userUUID,
-        });
-
-        var config = {
-          method: "POST",
-          url: `${baseUrl}/wallets/login`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          maxRedirects: 0,
-          data: request,
-        };
-
-        if (limitter === false) {
-          axios(config)
-            .then(function (response) {
-              if (response.data.wallets.LoginLock === false) {
-                if (passwordSave === true) {
-                  AsyncStorage.setItem("user_phone", phone.value)
-                    .then(() => {
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("phone error"));
-                  AsyncStorage.setItem("user_password", password.value)
-                    .then(() => {
-                      SetPasswordSave(true);
-                    })
-                    .catch(() => console.log("password error"));
-                }
-                setUserData(response.data);
-
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "300",
-                  fontSize: 20,
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Амжилттай нэвтэрлээ",
-                  placement: "top",
-                });
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Dashboard" }],
-                });
-              } else {
-                setLimitter(true);
-                setShowLoginTokenModal(true);
-              }
-            })
-            .catch(function (error) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "300",
-                fontSize: 18,
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Утасны дугаар эсвэл нууц үг буруу",
-                placement: "top",
-              });
-            });
-        } else {
-          setShowLoginTokenModal(true);
-        }
-      }
-    } else {
-      reactToUpdates();
-    }
-  };
-  const onLoginAuthPressed = () => {
+  const loginPressedAuth = () => {
     reactToUpdates();
     InternetCheck();
 
-    if (loginToken.value !== "") {
+    if (password.value !== "" && userUUID !== undefined) {
       var requestToken = JSON.stringify({
         phone: parseInt(phone.value),
         password: password.value,
-        loginToken: loginToken.value,
       });
-
+      console.log(requestToken);
       var config = {
         method: "POST",
-        url: `${baseUrl}/wallets/loginauth`,
+        url: `${baseUrl}/wallets/login`,
         headers: {
           "Content-Type": "application/json",
         },
-        maxRedirects: 0,
+
         data: requestToken,
       };
       axios(config)
         .then(function (response) {
-          if (response.data.wallets.LoginLock === false) {
-            setShowLoginTokenModal(false);
-            setLimitter(false);
+
+
+          if (response.status === 200) {
             setUserData(response.data);
             warnToast.show({
               backgroundColor: "emerald.400",
@@ -342,84 +185,568 @@ export default function LoginScreen({ navigation }) {
               routes: [{ name: "Dashboard" }],
             });
           }
+
         })
         .catch(function (error) {
-          warnToast.show({
-            backgroundColor: "red.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "300",
-            fontSize: 18,
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Баталгаажуулах код буруу",
-            placement: "top",
-          });
+          const err = JSON.parse(JSON.stringify(error));
+          console.log(err);
+          if (err.status === 492) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Таны хаяг түр блоклогдсон байна.",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
+          } else if (err.status === 491) {
+
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Таны хаяг түр блоклогдлоо",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
+          } else if (err.status === 482) {
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Мессеж илгээсэн.",
+              placement: "top",
+            });
+          } else if (err.status === 481) {
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Мессеж илгээсэн.",
+              placement: "top",
+            });
+
+          }
+          else if (err.status === 485) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Баталгаажуулах код буруу",
+              placement: "top",
+            });
+          }
+          else if (err.status === 486) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Та үйлдэл хийх эрхгүй байна",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
+          }
+          else if (err.status === 487) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Та үйлдэл хийх эрхгүй байна",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
+          }
         });
-    } else {
-      warnToast.show({
-        backgroundColor: "red.400",
-        px: "2",
-        py: "1",
-        rounded: "sm",
-        height: "50",
-        width: "300",
-        fontSize: 18,
-        textAlign: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        title: "Баталгаажуулах кодыг оруулна уу",
-        placement: "top",
-      });
     }
   };
-  if (
-    passwordSave === false &&
-    passwordSaveSwitch === true &&
-    passwordSaveLimitter === false
-  ) {
-    AsyncStorage.removeItem("user_phone")
-      .then(() => {
-        setPhone({ value: "" });
-        setSeeLockPassword(false);
-        SetPasswordSave(false);
-      })
-      .catch(() => console.log("phone error"));
-    AsyncStorage.removeItem("user_password")
-      .then(() => {
-        SetPasswordSave(false);
-        setPassword({ value: "" });
-        setSeeLockPassword(false);
-      })
-      .catch(() => console.log("password error"));
-    SetPasswordLimitter(true);
-  }
-
   useEffect(() => {
-    SetPasswordSave(false);
-    SetPasswordSaveSwitch(false);
-    SetPasswordLimitter(false);
-    setSeeLockPassword(false);
-    setUserUUID(undefined);
     setLimitter(false);
-    setShowLoginTokenModal(false);
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "" });
+    setPhone({ value: "86218721" });
     setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
 
   return (
     <NativeBaseProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#1B98F5" />
+      <StatusBar barStyle="dark-content" backgroundColor="#424242" />
       <ToastProvider>
-        <Center>
+        <View height="100%" backgroundColor="#424242">
+          <Box height={"50%"} justifyContent="center">
+            <Center>
+              <Text
+                maxWidth={"90%"}
+                textAlign="center"
+                color="white"
+                fontFamily="bold"
+                fontSize="3xl"
+              >
+                Баталгаажуулах код
+              </Text>
+              <Text
+                maxWidth={"90%"}
+                textAlign="center"
+                marginTop={1}
+                color="white"
+                fontSize="sm"
+              >
+                Таны гар утсанд мессежээр ирсэн 6 оронтой тоог оруулна уу
+              </Text>
+              <HStack
+                marginTop={5}
+                height="16"
+                width="xs"
+                justifyContent="center"
+              >
+                <Box
+                  borderRadius="sm"
+                  margin={1}
+                  marginLeft={1 / 2}
+                  width="70%"
+                  justifyContent="center"
+                  backgroundColor="#c2c2c2"
+                >
+                  <Center>
+                    <VStack>
+                      <Text fontSize="3xl" fontFamily="bold" color="#353b48">
+                        {password.value[0] !== undefined
+                          ? password.value[0]
+                          : "-"}
+                        {password.value[1] !== undefined
+                          ? password.value[1]
+                          : "-"}
+                        {password.value[2] !== undefined
+                          ? password.value[2]
+                          : "-"}{" "}
+                        {password.value[3] !== undefined
+                          ? password.value[3]
+                          : "-"}
+                        {password.value[4] !== undefined
+                          ? password.value[4]
+                          : "-"}
+                        {password.value[5] !== undefined
+                          ? password.value[5]
+                          : "-"}
+                      </Text>
+                    </VStack>
+                  </Center>
+                </Box>
+              </HStack>
+            </Center>
+            <TouchableOpacity
+              onPress={() => {
+
+                loginPressedAuth();
+              }}
+            >
+              <Box
+                paddingTop={2}
+                borderWidth={0}
+                borderRadius="2xl"
+                borderColor={"white"}
+                width={"xs"}
+                alignSelf="center"
+                justifyContent="center"
+                marginTop={5}
+                style={{
+                  display: password.value.length === 6 ? "flex" : "none",
+                }}
+              >
+                <Center>
+                  <HStack>
+                    <Ionicons
+                      name="checkmark-circle-outline"
+                      size={36}
+                      color="white"
+                    />
+                    <Text fontFamily="bold" color="white" fontSize="2xl">
+                      Үргэлжлүүлэх
+                    </Text>
+                  </HStack>
+                </Center>
+              </Box>
+            </TouchableOpacity>
+          </Box>
+          <Center
+
+            height="50%"
+
+
+            justifyContent="flex-end"
+            alignSelf="center"
+
+            width="100%"
+          >
+            <Box>
+              <Box>
+                <VStack>
+                  <HStack>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "1" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              1
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "2" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              2
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "3" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              3
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                  </HStack>
+                </VStack>
+                <VStack>
+                  <HStack>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "4" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              4
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "5" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              5
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "6" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              6
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                  </HStack>
+                </VStack>
+                <VStack>
+                  <HStack>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "7" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              7
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "8" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              8
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "9" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              9
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                  </HStack>
+                </VStack>
+                <VStack>
+                  <HStack>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity onPress={() => { }}>
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular"></Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "0" });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Text fontSize="3xl" fontFamily="regular">
+                              0
+                            </Text>
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                    <Box
+                      borderRadius={0}
+                      justifyContent="center"
+                      borderColor="#353b48"
+                      borderWidth={1 / 3}
+                      width="1/3"
+                      height={"20"}
+                      backgroundColor="#ececec"
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (
+                            password.value.length < 7 &&
+                            password.value.length > 0
+                          ) {
+                            setPassword({
+                              value: password.value.substr(
+                                0,
+                                password.value.length - 1
+                              ),
+                            });
+                          }
+                        }}
+                      >
+                        <VStack justifyContent="center" height="100%" width="100%">
+                          <Center>
+                            <Ionicons
+                              name="caret-back"
+                              size={30}
+                              color="black"
+                            />
+                          </Center>
+                        </VStack>
+                      </TouchableOpacity>
+                    </Box>
+                  </HStack>
+                </VStack>
+              </Box>
+            </Box>
+          </Center>
+
+          {/* <Center>
           <Modal
             isOpen={showModal}
             onClose={() => setShowModal(false)}
@@ -666,7 +993,6 @@ export default function LoginScreen({ navigation }) {
                   </Text>
                 </Button>
               </View>
-
               <Button
                 colorScheme="blue"
                 shadow="5"
@@ -697,7 +1023,8 @@ export default function LoginScreen({ navigation }) {
               </Text>
             </View>
           </Background>
-        </VStack>
+        </VStack> */}
+        </View>
       </ToastProvider>
     </NativeBaseProvider>
   );

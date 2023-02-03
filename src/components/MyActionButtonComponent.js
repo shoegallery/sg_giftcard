@@ -325,10 +325,12 @@ const MyActionButtonComponent = (props) => {
                 name="exit-to-app"
                 color="#CC5801"
                 onPress={() => {
+
                   props.navigation.reset({
                     index: 0,
-                    routes: [{ name: "LoginScreen" }],
+                    routes: [{ name: "MainScreen" }],
                   });
+
                 }}
                 _dark={{
                   color: "white",
