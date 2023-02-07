@@ -38,7 +38,7 @@ import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileScreen from "./ProfileScreen";
-import TermScreen from "./TermScreen";
+import TestScreen from "./TestScreen";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const Tab = createBottomTabNavigator();
@@ -65,7 +65,7 @@ export default function Dashboard({ navigation }) {
 
 
     >
-      <Tab.Screen name="Дэлгүүр" component={TermScreen} options={{
+      <Tab.Screen name="Дэлгүүр" component={TestScreen} options={{
         tabBarIcon: ({ focused, tintColor }) => (
           <Image
             tintColor={tintColor}
@@ -453,12 +453,20 @@ function WalletScreen({ navigation }, props) {
   }, []);
 
   return (
-    <SafeAreaView style={{ height: hp("100%") }}>
+    <SafeAreaView style={{ height: hp("100%"), flex: 1 }}>
       <ScrollView
+        style={{ alignSelf: 'center', }}
+        contentContainerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
         VirtualizedList-backed
-        nestedScrollEnabled={false}
+        nestedScrollEnabled={true}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+
+
+
+          <RefreshControl tintColor={"black"} refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
 
@@ -809,7 +817,7 @@ function WalletScreen({ navigation }, props) {
 
             </View>
           </View>
-          <Text>sda</Text>
+
         </Box>
 
       </ScrollView>

@@ -69,7 +69,6 @@ export default function TermScreen({ navigation }, props) {
     <SafeAreaView>
       <View style={styles.container}>
         <Animatable.View
-          animation="flipOutX"
           duration={2000}
           style={{
             flex: 5,

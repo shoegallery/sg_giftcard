@@ -8,16 +8,18 @@ import {
   StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import uuid from "react-native-uuid";
 
 import axios from "axios";
 
-import * as Linking from "expo-linking";
-
 import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
+
 import { StateContext } from "../Context/StateContext";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -32,11 +34,9 @@ import {
   Center,
   Box,
   HStack,
-  Modal,
-  Button,
 } from "native-base";
 
-export default function MainScreen({ navigation }) {
+export default function LoginAuthScreen({ navigation }) {
   const reactToUpdates = () => {
     var dataVersion = JSON.stringify({});
     var configVersion = {
@@ -49,7 +49,6 @@ export default function MainScreen({ navigation }) {
     };
     axios(configVersion)
       .then(function (response) {
-        console.log(response.data.ios + " ------" + appJson.expo.version);
         if (Platform.OS === "android") {
           if (appJson.expo.version !== response.data.android) {
             setShowModal(true);
@@ -74,14 +73,17 @@ export default function MainScreen({ navigation }) {
   const warnToast = useToast();
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
-
+  const [password, setPassword] = useState({ value: "" });
+  const [loginToken, setLoginToken] = useState({ value: "" });
   const [userData, setUserData] = useContext(StateContext);
   const [showModal, setShowModal] = useState(false);
 
   const [versionUpdate, setVersionUpdate] = useState(false);
+  const [limitter, setLimitter] = useState(false);
 
   const [userUUID, setUserUUID] = useState(undefined);
-
+  const [passwordSave, SetPasswordSave] = useState(false);
+  const [passwordSaveSwitch, SetPasswordSaveSwitch] = useState(false);
   const [seeLockPassword, setSeeLockPassword] = useState(false);
 
   const InternetCheck = () => {
@@ -101,7 +103,6 @@ export default function MainScreen({ navigation }) {
           placement: "top",
         });
       }
-
       AsyncStorage.getItem("user_uuid")
         .then((result) => {
           if (result === null) {
@@ -124,11 +125,15 @@ export default function MainScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          console.log(result);
-          if (result !== phone.value) {
-            setPhone({ value: phone.value, error: "" });
-          } else {
+          console.log(result)
+          if (result !== null) {
             setPhone({ value: result, error: "" });
+            setSeeLockPassword(true);
+            SetPasswordSave(true);
+            SetPasswordSaveSwitch(true);
+          } else {
+            setSeeLockPassword(false);
+            SetPasswordSave(false);
           }
         })
         .catch((err) => {
@@ -137,29 +142,32 @@ export default function MainScreen({ navigation }) {
     });
   };
 
-  const loginPressed = () => {
+
+
+  const loginPressedAuth = () => {
     reactToUpdates();
     InternetCheck();
-    console.log("first");
-    if (phone.value !== "" && userUUID !== undefined) {
+
+    if (password.value !== "" && userUUID !== undefined) {
       var requestToken = JSON.stringify({
         phone: parseInt(phone.value),
-        uuid: userUUID,
+        password: password.value,
       });
-
+      console.log(requestToken);
       var config = {
         method: "POST",
-        url: `${baseUrl}/wallets/create`,
+        url: `${baseUrl}/wallets/login`,
         headers: {
           "Content-Type": "application/json",
         },
-        maxRedirects: 0,
+
         data: requestToken,
       };
-
       axios(config)
         .then(function (response) {
-          if (showModal === false) {
+
+
+          if (response.status === 200) {
             setUserData(response.data);
             warnToast.show({
               backgroundColor: "emerald.400",
@@ -180,12 +188,11 @@ export default function MainScreen({ navigation }) {
               routes: [{ name: "Dashboard" }],
             });
           }
+
         })
         .catch(function (error) {
-          AsyncStorage.setItem("user_phone", phone.value)
-            .then(() => { })
-            .catch(() => console.log("password"));
           const err = JSON.parse(JSON.stringify(error));
+          console.log(err);
           if (err.status === 492) {
             warnToast.show({
               backgroundColor: "red.400",
@@ -200,7 +207,9 @@ export default function MainScreen({ navigation }) {
               title: "Таны хаяг түр блоклогдсон байна.",
               placement: "top",
             });
+            navigation.navigate("MainScreen");
           } else if (err.status === 491) {
+
             warnToast.show({
               backgroundColor: "red.400",
               px: "2",
@@ -214,97 +223,122 @@ export default function MainScreen({ navigation }) {
               title: "Таны хаяг түр блоклогдлоо",
               placement: "top",
             });
-          } else {
-            if (err.status === 482) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 481) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 480) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 499) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            }
-            navigation.navigate("LoginScreen");
+            navigation.navigate("MainScreen");
+          } else if (err.status === 482) {
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Мессеж илгээсэн.",
+              placement: "top",
+            });
+          } else if (err.status === 481) {
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Мессеж илгээсэн.",
+              placement: "top",
+            });
+
+          }
+          else if (err.status === 485) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Баталгаажуулах код буруу",
+              placement: "top",
+            });
+          }
+          else if (err.status === 486) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Та үйлдэл хийх эрхгүй байна",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
+          }
+          else if (err.status === 487) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Та үйлдэл хийх эрхгүй байна",
+              placement: "top",
+            });
+            navigation.navigate("MainScreen");
           }
         });
     }
   };
-
   useEffect(() => {
-    setUserUUID(undefined);
-
+    setLimitter(false);
     setShowModal(false);
     reactToUpdates();
     setShow(false);
     InternetCheck();
-    setPhone({ value: "" });
+    setPhone({ value: "86218721" });
+    setPassword({ value: "" });
+    setLoginToken({ value: "" });
   }, []);
-
+  console.log(password.value + " ---- " + password.value.length)
   return (
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#424242" />
       <ToastProvider>
-        <View height="100%" backgroundColor="#424242">
-          <Box height={"50%"} backgroundColor="red.400" justifyContent="center">
+        <View backgroundColor="#424242">
+          <View style={{ height: hp("60%"), justifyContent: "center" }}>
             <Center>
               <Text
                 maxWidth={"90%"}
+                textAlign="center"
                 color="white"
                 fontFamily="bold"
                 fontSize="3xl"
               >
-                Нэвтрэх
+                Баталгаажуулах код
               </Text>
-              <Text maxWidth={"90%"} marginTop={1} color="white" fontSize="sm">
-                Та өөрийн гар утасны дугаарыг оруулна уу
+              <Text
+                maxWidth={"90%"}
+                textAlign="center"
+                marginTop={1}
+                color="white"
+                fontSize="sm"
+              >
+                Таны гар утсанд мессежээр ирсэн 6 оронтой тоог оруулна уу
               </Text>
               <HStack
                 marginTop={5}
@@ -312,22 +346,6 @@ export default function MainScreen({ navigation }) {
                 width="xs"
                 justifyContent="center"
               >
-                <Box
-                  margin={1}
-                  marginRight={1 / 2}
-                  width="30%"
-                  justifyContent="center"
-                  backgroundColor="#1b1b1b"
-                  borderRadius="sm"
-                >
-                  <Center>
-                    <VStack>
-                      <Text fontSize="3xl" fontFamily="bold" color="white">
-                        +976
-                      </Text>
-                    </VStack>
-                  </Center>
-                </Box>
                 <Box
                   borderRadius="sm"
                   margin={1}
@@ -339,16 +357,24 @@ export default function MainScreen({ navigation }) {
                   <Center>
                     <VStack>
                       <Text fontSize="3xl" fontFamily="bold" color="#353b48">
-                        {phone.value[0] !== undefined ? phone.value[0] : "-"}
-                        {phone.value[1] !== undefined ? phone.value[1] : "-"}
-                        {phone.value[2] !== undefined ? phone.value[2] : "-"}
-                        {phone.value[3] !== undefined
-                          ? phone.value[3]
+                        {password.value[0] !== undefined
+                          ? password.value[0]
+                          : "-"}
+                        {password.value[1] !== undefined
+                          ? password.value[1]
+                          : "-"}
+                        {password.value[2] !== undefined
+                          ? password.value[2]
                           : "-"}{" "}
-                        {phone.value[4] !== undefined ? phone.value[4] : "-"}
-                        {phone.value[5] !== undefined ? phone.value[5] : "-"}
-                        {phone.value[6] !== undefined ? phone.value[6] : "-"}
-                        {phone.value[7] !== undefined ? phone.value[7] : "-"}
+                        {password.value[3] !== undefined
+                          ? password.value[3]
+                          : "-"}
+                        {password.value[4] !== undefined
+                          ? password.value[4]
+                          : "-"}
+                        {password.value[5] !== undefined
+                          ? password.value[5]
+                          : "-"}
                       </Text>
                     </VStack>
                   </Center>
@@ -357,8 +383,8 @@ export default function MainScreen({ navigation }) {
             </Center>
             <TouchableOpacity
               onPress={() => {
-                setShowModal(false);
-                loginPressed();
+
+                loginPressedAuth();
               }}
             >
               <Box
@@ -370,7 +396,9 @@ export default function MainScreen({ navigation }) {
                 alignSelf="center"
                 justifyContent="center"
                 marginTop={5}
-                style={{ display: phone.value.length === 8 ? "flex" : "none" }}
+                style={{
+                  display: password.value.length === 6 ? "flex" : "none",
+                }}
               >
                 <Center>
                   <HStack>
@@ -386,16 +414,14 @@ export default function MainScreen({ navigation }) {
                 </Center>
               </Box>
             </TouchableOpacity>
-          </Box>
-          <Center
-            height="50%"
-            justifyContent="flex-end"
-            alignSelf="center"
-            width="100%"
-          >
-            <Box>
-              <Box>
-                <VStack>
+          </View>
+          <View style={{ height: hp("40%"), backgroundColor: "red", justifyContent: "flex-end" }}>
+            <Center
+              alignSelf="center"
+              width="100%"
+            >
+              <VStack>
+                <View style={{ height: hp("10%") }}>
                   <HStack>
                     <Box
                       borderRadius={0}
@@ -403,13 +429,12 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "1" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "1" });
                           }
                         }}
                       >
@@ -432,13 +457,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "2" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "2" });
                           }
                         }}
                       >
@@ -461,13 +486,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "3" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "3" });
                           }
                         }}
                       >
@@ -485,8 +510,8 @@ export default function MainScreen({ navigation }) {
                       </TouchableOpacity>
                     </Box>
                   </HStack>
-                </VStack>
-                <VStack>
+                </View>
+                <View style={{ height: hp("10%") }}>
                   <HStack>
                     <Box
                       borderRadius={0}
@@ -494,14 +519,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
                       minH={"16"}
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "4" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "4" });
                           }
                         }}
                       >
@@ -524,13 +548,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "5" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "5" });
                           }
                         }}
                       >
@@ -553,13 +577,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "6" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "6" });
                           }
                         }}
                       >
@@ -577,8 +601,8 @@ export default function MainScreen({ navigation }) {
                       </TouchableOpacity>
                     </Box>
                   </HStack>
-                </VStack>
-                <VStack>
+                </View>
+                <View style={{ height: hp("10%") }}>
                   <HStack>
                     <Box
                       borderRadius={0}
@@ -586,13 +610,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "7" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "7" });
                           }
                         }}
                       >
@@ -615,13 +639,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "8" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "8" });
                           }
                         }}
                       >
@@ -644,13 +668,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "9" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "9" });
                           }
                         }}
                       >
@@ -668,8 +692,8 @@ export default function MainScreen({ navigation }) {
                       </TouchableOpacity>
                     </Box>
                   </HStack>
-                </VStack>
-                <VStack>
+                </View>
+                <View style={{ height: hp("10%") }}>
                   <HStack>
                     <Box
                       borderRadius={0}
@@ -677,7 +701,7 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity onPress={() => { }}>
@@ -698,13 +722,13 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          if (phone.value.length < 8) {
-                            setPhone({ value: phone.value + "0" });
+                          if (password.value.length < 6) {
+                            setPassword({ value: password.value + "0" });
                           }
                         }}
                       >
@@ -727,19 +751,19 @@ export default function MainScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-                      height={{ base: 20, sm: 16, md: 24, lg: 40 }}
+
                       backgroundColor="#ececec"
                     >
                       <TouchableOpacity
                         onPress={() => {
                           if (
-                            phone.value.length < 9 &&
-                            phone.value.length > 0
+                            password.value.length < 7 &&
+                            password.value.length > 0
                           ) {
-                            setPhone({
-                              value: phone.value.substr(
+                            setPassword({
+                              value: password.value.substr(
                                 0,
-                                phone.value.length - 1
+                                password.value.length - 1
                               ),
                             });
                           }
@@ -761,55 +785,56 @@ export default function MainScreen({ navigation }) {
                       </TouchableOpacity>
                     </Box>
                   </HStack>
-                </VStack>
-              </Box>
-            </Box>
-          </Center>
+                </View></VStack>
 
-          <Center>
-            <Modal
-              isOpen={showModal}
-              onClose={() => setShowModal(false)}
-              _backdrop={{
-                bg: "coolGray.800",
-              }}
-            >
-              <Modal.Content maxWidth="90%" height="300" maxH="300">
-                <Modal.Header>Шинэ хувилбар</Modal.Header>
-                <Modal.Body
-                  width="100%"
-                  maxWidth="100%"
-                  size="xs"
-                  height="200"
-                  maxH="200"
-                >
-                  Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү
-                  олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та
-                  заавал аппаа шинэчилж ашиглана уу.
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button.Group space={2}>
-                    <Button
-                      onPress={() => {
-                        if (Platform.OS === "android") {
-                          Linking.openURL(
-                            "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
-                          );
-                        } else if (Platform.OS === "ios") {
-                          Linking.openURL(
-                            "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
-                          );
-                        }
-                      }}
-                    >
-                      Апп шинэчлэх
-                    </Button>
-                  </Button.Group>
-                </Modal.Footer>
-              </Modal.Content>
-            </Modal>
-          </Center>
-          {/* 
+
+            </Center>
+          </View>
+
+          {/* <Center>
+          <Modal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            _backdrop={{
+              bg: "coolGray.800",
+            }}
+          >
+            <Modal.Content maxWidth="90%" height="300" maxH="300">
+              <Modal.Header>Шинэ хувилбар</Modal.Header>
+              <Modal.Body
+                width="100%"
+                maxWidth="100%"
+                size="xs"
+                height="200"
+                maxH="200"
+              >
+                Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү олон,
+                Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та заавал аппаа
+                шинэчилж ашиглана уу.
+              </Modal.Body>
+              <Modal.Footer>
+                <Button.Group space={2}>
+                  <Button
+                    onPress={() => {
+                      if (Platform.OS === "android") {
+                        Linking.openURL(
+                          "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
+                        );
+                      } else if (Platform.OS === "ios") {
+                        Linking.openURL(
+                          "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856"
+                        );
+                      }
+                    }}
+                  >
+                    Апп шинэчлэх
+                  </Button>
+                </Button.Group>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+        </Center>
+
         <Center>
           <Modal
             isOpen={showLoginTokenModal}

@@ -53,7 +53,8 @@ export default function ProfileScreen({ navigation }, props) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic">
+        showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic"
+      >
         <Box height={"100%"} backgroundColor={"#212121"} >
           <Center>
             <Image

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "985638589574",
+    "project_id": "android-push-nof",
+    "storage_bucket": "android-push-nof.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985638589574:android:eff5c031f1c972c1a8ad07",
+        "android_client_info": {
+          "package_name": "com.shoegallery.sg_wallet_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985638589574-t5ftk204ufd57oqjotuufoul8ufnatgf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AAAA5XyjVIY:APA91bGslkn3X9cj_f_1U9o5zDpT5vMJN84vSbTi1Vs04UYZfi0wQEEtOHTULOxPWMzrxh2vZo08e2T3gzz2VFE3w-IoZcmDZInW5twsr7HC9is_5o3JZU_jOqMVhIq1Bsyto29H6hvX"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985638589574-t5ftk204ufd57oqjotuufoul8ufnatgf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
