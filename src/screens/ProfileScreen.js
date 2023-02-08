@@ -52,10 +52,11 @@ export default function ProfileScreen({ navigation }, props) {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
       <ScrollView showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false} contentInsetAdjustmentBehavior="automatic"
       >
-        <Box height={"100%"} backgroundColor={"#212121"} >
+        <Box height={"100%"} backgroundColor={"#ececec"} >
           <Center>
             <Image
               marginTop={30}
@@ -71,7 +72,7 @@ export default function ProfileScreen({ navigation }, props) {
             />
           </Center>
           <Center paddingTop={"3"}>
-            <Text color="#fafafa" fontSize={"xl"} bold>
+            <Text color="#325b77" fontSize={"xl"} bold>
               Овог НЭРБАЙНА
             </Text>
           </Center>

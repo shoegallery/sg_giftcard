@@ -1,11 +1,10 @@
 import { baseUrl } from "../baseUrl";
 import React, { useState, useEffect, useContext } from "react";
 import {
-  TouchableOpacity,
   StyleSheet,
   View,
   Platform,
-  StatusBar,
+  StatusBar, TouchableOpacity
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -35,6 +34,7 @@ import {
   Box,
   HStack,
 } from "native-base";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginAuthScreen({ navigation }) {
   const reactToUpdates = () => {
@@ -317,15 +317,15 @@ export default function LoginAuthScreen({ navigation }) {
   console.log(password.value + " ---- " + password.value.length)
   return (
     <NativeBaseProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#424242" />
+      <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
       <ToastProvider>
         <View backgroundColor="#424242">
-          <View style={{ height: hp("60%"), justifyContent: "center" }}>
+          <View style={{ height: hp("60%"), justifyContent: "center", backgroundColor: "#ececec" }}>
             <Center>
               <Text
                 maxWidth={"90%"}
                 textAlign="center"
-                color="white"
+                color="#5499c7"
                 fontFamily="bold"
                 fontSize="3xl"
               >
@@ -335,7 +335,7 @@ export default function LoginAuthScreen({ navigation }) {
                 maxWidth={"90%"}
                 textAlign="center"
                 marginTop={1}
-                color="white"
+                color="#424242"
                 fontSize="sm"
               >
                 Таны гар утсанд мессежээр ирсэн 6 оронтой тоог оруулна уу
@@ -352,11 +352,12 @@ export default function LoginAuthScreen({ navigation }) {
                   marginLeft={1 / 2}
                   width="70%"
                   justifyContent="center"
-                  backgroundColor="#c2c2c2"
+                  backgroundColor="#ececec"
+                  shadow={"8"}
                 >
                   <Center>
                     <VStack>
-                      <Text fontSize="3xl" fontFamily="bold" color="#353b48">
+                      <Text fontSize="3xl" fontFamily="bold" color="#325b77">
                         {password.value[0] !== undefined
                           ? password.value[0]
                           : "-"}
@@ -401,16 +402,27 @@ export default function LoginAuthScreen({ navigation }) {
                 }}
               >
                 <Center>
-                  <HStack>
-                    <Ionicons
-                      name="checkmark-circle-outline"
-                      size={36}
-                      color="white"
-                    />
-                    <Text fontFamily="bold" color="white" fontSize="2xl">
-                      Үргэлжлүүлэх
-                    </Text>
-                  </HStack>
+                  <TouchableHighlight
+                    underlayColor="#bad6e8"
+                    style={{
+                      borderRadius: 30,
+                      height: hp("7%"),
+                      width: wp("70%"),
+                      backgroundColor: "#5499c7",
+                    }}
+                  >
+                    <Box height={"100%"} justifyContent={"center"}>
+                      <Text
+                        alignItems={"center"}
+                        textAlign={"center"}
+                        fontFamily="bold"
+                        color="white"
+                        fontSize="2xl"
+                      >
+                        Болсон
+                      </Text>
+                    </Box>
+                  </TouchableHighlight>
                 </Center>
               </Box>
             </TouchableOpacity>
@@ -431,7 +443,8 @@ export default function LoginAuthScreen({ navigation }) {
                       width="1/3"
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "1" });
@@ -444,12 +457,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               1
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -460,7 +477,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "2" });
@@ -473,12 +491,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               2
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -489,7 +511,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "3" });
@@ -502,12 +525,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               3
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                   </HStack>
                 </View>
@@ -522,7 +549,8 @@ export default function LoginAuthScreen({ navigation }) {
                       minH={"16"}
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "4" });
@@ -535,12 +563,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               4
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -551,7 +583,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "5" });
@@ -564,12 +597,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               5
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -580,7 +617,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "6" });
@@ -593,12 +631,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               6
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                   </HStack>
                 </View>
@@ -613,7 +655,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "7" });
@@ -626,12 +669,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               7
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -642,7 +689,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "8" });
@@ -655,12 +703,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               8
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -671,7 +723,8 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "9" });
@@ -684,12 +737,16 @@ export default function LoginAuthScreen({ navigation }) {
                             height="100%"
                             width="100%"
                           >
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               9
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                   </HStack>
                 </View>
@@ -704,17 +761,21 @@ export default function LoginAuthScreen({ navigation }) {
 
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity onPress={() => { }}>
+                      <TouchableHighlight underlayColor="#f8f8f8" onPress={() => { }}>
                         <VStack
                           justifyContent="center"
                           height="100%"
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular"></Text>
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            ></Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -722,10 +783,10 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (password.value.length < 6) {
                             setPassword({ value: password.value + "0" });
@@ -738,12 +799,16 @@ export default function LoginAuthScreen({ navigation }) {
                           width="100%"
                         >
                           <Center>
-                            <Text fontSize="3xl" fontFamily="regular">
+                            <Text
+                              fontSize="3xl"
+                              color="#2a4c63"
+                              fontFamily="regular"
+                            >
                               0
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                     <Box
                       borderRadius={0}
@@ -751,10 +816,10 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
-                      <TouchableOpacity
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
                         onPress={() => {
                           if (
                             password.value.length < 7 &&
@@ -778,11 +843,11 @@ export default function LoginAuthScreen({ navigation }) {
                             <Ionicons
                               name="caret-back"
                               size={30}
-                              color="black"
+                              color="#2a4c63"
                             />
                           </Center>
                         </VStack>
-                      </TouchableOpacity>
+                      </TouchableHighlight>
                     </Box>
                   </HStack>
                 </View></VStack>
@@ -1010,7 +1075,7 @@ export default function LoginAuthScreen({ navigation }) {
                     </View>
                     <View style={{ flex: 5, marginTop: -5 }}>
                       <View style={styles.forgotPassword}>
-                        <TouchableOpacity
+                        <TouchableHighlight
                           onPress={() =>
                             navigation.navigate("ForgetPasswordScreen")
                           }
@@ -1018,7 +1083,7 @@ export default function LoginAuthScreen({ navigation }) {
                           <Text style={styles.forgot}>
                             Нууц үгээ мартсан уу?
                           </Text>
-                        </TouchableOpacity>
+                        </TouchableHighlight>
                       </View>
                     </View>
                   </View>
