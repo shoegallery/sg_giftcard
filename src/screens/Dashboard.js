@@ -2,16 +2,30 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import {
-  Alert, RefreshControl, ScrollView, Image, StatusBar,
+  Alert,
+  RefreshControl,
+  ScrollView,
+  Image,
+  StatusBar,
   View,
-  Pressable, TouchableHighlight, TouchableHighlightComponent
+  Pressable,
+  TouchableHighlight,
+  TouchableHighlightComponent,
 } from "react-native";
-import { MaterialIcons, Feather } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  Feather,
+  Entypo,
+  AntDesign,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  FontAwesome, Octicons, Ionicons, Foundation
+} from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 import Product from "../components/Product";
 import {
@@ -32,7 +46,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { CleanTabBar } from 'react-navigation-tabbar-collection';
+import { CleanTabBar } from "react-navigation-tabbar-collection";
 
 import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
@@ -43,83 +57,82 @@ import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const Tab = createBottomTabNavigator();
 
-
-
 export default function Dashboard({ navigation }) {
   return (
-    <Tab.Navigator initialRouteName="Хэтэвч"
-      barStyle={{ backgroundColor: 'tomato' }}
+    <Tab.Navigator
+      initialRouteName="Хэтэвч"
+      barStyle={{ backgroundColor: "tomato" }}
       screenOptions={{
         activeColor: "#e91e63",
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarLabelStyle: { fontSize: 12, fontFamily: "regular", fontWeight: "100" },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontFamily: "regular",
+          fontWeight: "100",
+        },
         tabBarStyle: {
-          height: hp("10%"),
+          height: hp("8%"),
           width: "100%",
-
-          justifyItems: "center"
+          justifyItems: "center",
         },
       }}
-
-
-
     >
-      <Tab.Screen name="Дэлгүүр" component={TestScreen} options={{
-        tabBarIcon: ({ focused, tintColor }) => (
-          <Image
-            tintColor={tintColor}
-            source={
-              focused
-                ? require('../assets/Icon/store.gif')
-                : require('../assets/Icon/store.png')
-            }
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        ),
-      }} />
-      <Tab.Screen name="Хэтэвч" component={WalletScreen} options={{
+      <Tab.Screen
+        name="Дэлгүүр"
+        component={TestScreen}
+        tabBarStyle={{ width: 80 }}
+        options={{
+          tabBarIcon: ({ focused, tintColor }) => (
+            <Feather name="shopping-bag" size={26} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Дэлsгүүрs"
+        component={TestScreen}
+        options={{
+          tabBarIcon: ({ focused, tintColor }) => (
+            <Octicons name="search" size={28} color="black" />
+          ),
+        }}
+      />
 
-        tabBarIcon: ({ focused, tintColor }) => (
-          <View><Image
-            source={
-              focused
-                ? require('../assets/Icon/wallet.gif')
-                : require('../assets/Icon/wallet.png')
-            }
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          /></View>
-        ),
-      }} />
+      <Tab.Screen
+        name="Хэтэвч"
+        component={WalletScreen}
+        options={{
+          tabBarIcon: ({ focused, tintColor }) => (
 
-      <Tab.Screen name="Бусад" component={ProfileScreen} options={{
 
-        tabBarIcon: ({ focused, tintColor }) => (
-          <Image
-            tintColor={tintColor}
-            source={
-              focused
-                ? require('../assets/Icon/profile.gif')
-                : require('../assets/Icon/profile.png')
-            }
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        ),
-      }} />
+            <Ionicons color="black" name="wallet-outline" size={32} />
+
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Дэлгүү"
+        component={TestScreen}
+        options={{
+          tabBarIcon: ({ focused, tintColor }) => (
+            <Octicons name="video" size={26} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Бусад"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused, tintColor }) => (
+            <AntDesign name="appstore-o" size={28} color="black" />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
 
-function WalletScreen({ navigation }, props) {
+function WalletScreen({ navigation }) {
   const successToast = useToast();
   const warnToast = useToast();
   const [userData, setUserData] = useContext(StateContext);
@@ -210,9 +223,7 @@ function WalletScreen({ navigation }, props) {
         if (response.data.success === true) {
           setReceiverPhone({ value: "", error: "" });
           setReceiverAmount({ value: "", error: "" });
-
           userTransactionHistory();
-
           dataRefresher();
           successToast.show({
             backgroundColor: "emerald.400",
@@ -227,24 +238,11 @@ function WalletScreen({ navigation }, props) {
             title: "Гүйлгээ амжилттай",
             placement: "top",
           });
-        } else {
-          warnToast.show({
-            backgroundColor: "red.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "250",
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Гүйлгээ aмжилтгүй",
-            placement: "top",
-          });
         }
       })
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
+        console.log(err);
         setReceiverAmount({ value: "", error: "" });
 
         setReceiverPhone({ value: "", error: "" });
@@ -453,31 +451,28 @@ function WalletScreen({ navigation }, props) {
   }, []);
 
   return (
-    <SafeAreaView style={{ height: hp("100%"), flex: 1 }}>
+    <SafeAreaView style={{ height: hp("100%"), flex: 1, backgroundColor: "#ececec" }}>
       <ScrollView
-        style={{ alignSelf: 'center', }}
+        style={{ alignSelf: "center" }}
         contentContainerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
         }}
         VirtualizedList-backed
         nestedScrollEnabled={true}
         refreshControl={
-
-
-
-          <RefreshControl tintColor={"black"} refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={"black"}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
       >
-
-        <Box
-          alignItems={"center"} height="100%"
-        >
+        <Box alignItems={"center"} height="100%">
           <View style={{ display: "flex" }}>
-            <Animatable.View
-              animation="slideInDown"
-              duration={2000}
-            ><CartStyle /></Animatable.View>
+            <Animatable.View animation="slideInDown" duration={2000}>
+              <CartStyle />
+            </Animatable.View>
             <View
               style={{
                 paddingTop: hp("0.5%"),
@@ -499,9 +494,9 @@ function WalletScreen({ navigation }, props) {
                   }}
                 >
                   <Button
-                    colorScheme="orange"
+                    colorScheme="coolGray"
                     variant="subtle"
-                    bg="white"
+                    bg="#ececec"
                     borderColor="#CC5801"
                     height={"90%"}
                     marginRight={1}
@@ -512,18 +507,9 @@ function WalletScreen({ navigation }, props) {
                     }}
                   >
                     <Box alignItems="center">
-                      <Feather
-                        name="shopping-bag"
-                        size={36}
-                        color="#CC5801"
-                      />
+                      <Feather name="shopping-bag" size={36} color="#CC5801" />
                     </Box>
-                    <Text
-                      bold
-                      textAlign="center"
-                      fontSize="xs"
-                      color="#CC5801"
-                    >
+                    <Text width={"100%"} textAlign="center" fontSize="xs" color="#CC5801">
                       Зарцуулах
                     </Text>
                   </Button>
@@ -533,7 +519,7 @@ function WalletScreen({ navigation }, props) {
                         isOpen={showModal}
                         onClose={() => setShowModal(false)}
                       >
-                        <Modal.Content width={wp("80%")} height={hp("50%")}>
+                        <Modal.Content width={wp("95%")} height={hp("50%")}>
                           <Modal.CloseButton />
                           <Modal.Header>
                             <Text
@@ -549,8 +535,8 @@ function WalletScreen({ navigation }, props) {
                             <FormControl>
                               <FormControl.Label>
                                 <Text
-                                  fontSize={20}
-                                  fontWeight="semibold"
+                                  fontSize={18}
+                                  fontWeight="normal"
                                   color="gray.700"
                                 >
                                   Салбар
@@ -561,9 +547,9 @@ function WalletScreen({ navigation }, props) {
                                   <Select
                                     height={50}
                                     width={"100%"}
-                                    placeholder="Салбар сонгоно уу"
+                                    placeholder="Энд дарна уу"
                                     selectedValue={receiverPhone.value}
-                                    fontSize={20}
+                                    fontSize={16}
                                     onValueChange={(itemValue) =>
                                       setReceiverPhone({
                                         value: itemValue,
@@ -614,8 +600,8 @@ function WalletScreen({ navigation }, props) {
 
                             <FormControl.Label>
                               <Text
-                                fontSize={20}
-                                fontWeight="semibold"
+                                fontSize={18}
+                                fontWeight="normal"
                                 color="gray.700"
                               >
                                 Үнийн дүн
@@ -624,7 +610,7 @@ function WalletScreen({ navigation }, props) {
                             <Box>
                               <Input
                                 height={50}
-                                fontSize={20}
+                                fontSize={16}
                                 value={String(receiverAmount.value)}
                                 returnKeyType="next"
                                 onChangeText={(receiverAmountNumber) =>
@@ -680,7 +666,7 @@ function WalletScreen({ navigation }, props) {
 
                   <Button
                     colorScheme="orange"
-                    bg="white"
+                    bg="#ececec"
                     variant="subtle"
                     marginLeft={1}
                     height={"90%"}
@@ -709,14 +695,14 @@ function WalletScreen({ navigation }, props) {
                         color="#CC5801"
                       />
                     </Box>
-                    <Text bold fontSize="xs" color="#CC5801">
+                    <Text width={"100%"} fontSize="xs" color="#CC5801">
                       Цэнэглэх
                     </Text>
                   </Button>
                   <Button
                     variant="subtle"
                     colorScheme="orange"
-                    bg="white"
+                    bg="#ececec"
                     marginLeft={1}
                     height={"90%"}
                     flex={1}
@@ -727,13 +713,9 @@ function WalletScreen({ navigation }, props) {
                     }}
                   >
                     <Box alignItems="center">
-                      <MaterialIcons
-                        name="loyalty"
-                        size={36}
-                        color="#CC5801"
-                      />
+                      <MaterialIcons name="loyalty" size={36} color="#CC5801" />
                     </Box>
-                    <Text bg="red" bold fontSize="xs" color="#CC5801">
+                    <Text width={"100%"} fontSize="xs" color="#CC5801">
                       Coupon оруулах
                     </Text>
                   </Button>
@@ -783,8 +765,8 @@ function WalletScreen({ navigation }, props) {
                                 flexWrap="wrap"
                                 alignItems="flex-start"
                               >
-                                Санамж: Купон код нь том жижиг үсгийн ялгаатай
-                                5 ширхэг тэмдэгт оруулахыг анхаарна уу
+                                Санамж: Купон код нь том жижиг үсгийн ялгаатай 5
+                                ширхэг тэмдэгт оруулахыг анхаарна уу
                               </Text>
                             </Box>
                           </Modal.Body>
@@ -811,17 +793,10 @@ function WalletScreen({ navigation }, props) {
                   )}
                 </View>
               </VStack>
-
-
-
-
             </View>
           </View>
-
         </Box>
-
       </ScrollView>
-
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }

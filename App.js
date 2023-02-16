@@ -1,24 +1,33 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef, useContext } from "react";
 import { Provider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import {
+  MaterialIcons,
+  Feather,
+  Entypo,
+  AntDesign,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  FontAwesome, Octicons
+} from "@expo/vector-icons";
+import {
   LoginScreen,
-  RegisterScreen,
+  ProfileScreen,
   ForgetPasswordScreen,
   LoginAuthScreen,
   Dashboard,
-  MainScreen,
+  ExpenseScreen, TermScreen
 } from "./src/screens";
-import { Text, TextInput, LogBox, StatusBar, Alert, Linking } from "react-native";
+import { Text, TextInput, LogBox, StatusBar, Alert, Linking, Button } from "react-native";
 import { SSRProvider } from "@react-aria/ssr";
-
-import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NativeBaseProvider, ToastProvider } from "native-base";
+import BackButton from "./src/components/BackButton"
+import { StateProvider, StateContextHistory } from "./src/Context/StateContext"; import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NativeBaseProvider, ToastProvider, IconButton } from "native-base";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -42,7 +51,7 @@ async function registerForPushNotificationsAsync() {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
-    console.log(existingStatus)
+
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
@@ -69,8 +78,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-    console.log(finalStatus)
+
   } else {
     alert('Бодит утас ашиглана уу ;)');
   }
@@ -98,7 +106,8 @@ if (Text.defaultProps == null) Text.defaultProps = {};
 Text.defaultProps.allowFontScaling = false;
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.allowFontScaling = false;
-export default function App() {
+export default function App({ navigation }) {
+
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -153,11 +162,50 @@ export default function App() {
                     <Stack.Screen name="LoginScreen" component={LoginScreen} />
                     <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen} />
                     <Stack.Screen name="Dashboard" component={Dashboard} />
-
-
                     <Stack.Screen
-                      name="RegisterScreen"
-                      component={RegisterScreen}
+                      name="ProfileScreen"
+                      component={ProfileScreen}
+
+                    />
+                    <Stack.Screen
+                      options={{
+                        headerShown: true,
+                        title: 'Үйлчилгээний нөхцөл',
+                        backgroundColor: "#ececec",
+                        headerTintColor: '#ececec',
+                        headerStyle: { backgroundColor: "#ececec", borderRadius: 0 },
+                        headerTitleStyle: {
+                          width: "80%",
+                          fontSize: 20,
+                          color: "black",
+                          fontWeight: "500",
+                          backgroundColor: "#ececec",
+                          fontFamily: "regular",
+                          textAlign: Platform.OS === "android" ? "center" : "auto"
+                        },
+                      }}
+                      name="Үйлчилгээний нөхцөл"
+                      component={TermScreen}
+                    />
+                    <Stack.Screen
+                      options={{
+                        headerShown: true,
+                        title: 'Зарцуулах',
+                        backgroundColor: "#ececec",
+                        headerTintColor: '#ececec',
+                        headerStyle: { backgroundColor: "#ececec", borderRadius: 0 },
+                        headerTitleStyle: {
+                          width: "80%",
+                          fontSize: 20,
+                          color: "black",
+                          fontWeight: "500",
+                          backgroundColor: "#ececec",
+                          fontFamily: "regular",
+                          textAlign: Platform.OS === "android" ? "center" : "auto"
+                        },
+                      }}
+                      name="Зарцуулах"
+                      component={ExpenseScreen}
                     />
                   </Stack.Navigator>
                 </NavigationContainer>

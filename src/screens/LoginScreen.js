@@ -42,8 +42,8 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginScreen({ navigation }) {
   const reactToUpdates = () => {
-    var dataVersion = JSON.stringify({});
-    var configVersion = {
+    let dataVersion = JSON.stringify({});
+    let configVersion = {
       method: "post",
       url: `${baseUrl}/wallets/version`,
       headers: {
@@ -53,7 +53,7 @@ export default function LoginScreen({ navigation }) {
     };
     axios(configVersion)
       .then(function (response) {
-        console.log(response.data.ios + " ------" + appJson.expo.version);
+
         if (Platform.OS === "android") {
           if (appJson.expo.version !== response.data.android) {
             setShowModal(true);
@@ -87,7 +87,6 @@ export default function LoginScreen({ navigation }) {
   const [userUUID, setUserUUID] = useState(undefined);
 
   const [seeLockPassword, setSeeLockPassword] = useState(false);
-
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -105,7 +104,6 @@ export default function LoginScreen({ navigation }) {
           placement: "top",
         });
       }
-
       AsyncStorage.getItem("user_uuid")
         .then((result) => {
           if (result === null) {
@@ -128,11 +126,8 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          console.log(result);
-          if (result !== phone.value) {
-            AsyncStorage.setItem("user_phone", phone.value);
-            setPhone({ value: phone.value, error: "" });
-          } else {
+          console.log(result)
+          if (result !== null) {
             setPhone({ value: result, error: "" });
           }
         })
@@ -147,12 +142,12 @@ export default function LoginScreen({ navigation }) {
     InternetCheck();
     console.log("first");
     if (phone.value !== "" && userUUID !== undefined) {
-      var requestToken = JSON.stringify({
+      let requestToken = JSON.stringify({
         phone: parseInt(phone.value),
         uuid: userUUID,
       });
 
-      var config = {
+      let config = {
         method: "POST",
         url: `${baseUrl}/wallets/create`,
         headers: {
@@ -180,6 +175,7 @@ export default function LoginScreen({ navigation }) {
               title: "Амжилттай нэвтэрлээ",
               placement: "top",
             });
+            AsyncStorage.setItem("user_phone", phone.value);
             navigation.reset({
               index: 0,
               routes: [{ name: "Dashboard" }],
@@ -282,8 +278,149 @@ export default function LoginScreen({ navigation }) {
         });
     }
   };
+  const autoLogin = () => {
+    reactToUpdates();
+    InternetCheck();
+    if (phone.value !== "" && userUUID !== undefined) {
+      let requestToken = JSON.stringify({
+        phone: parseInt(phone.value),
+        uuid: userUUID,
+      });
+
+      let config = {
+        method: "POST",
+        url: `${baseUrl}/wallets/create`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        maxRedirects: 0,
+        data: requestToken,
+      };
+
+      axios(config)
+        .then(function (response) {
+          if (showModal === false) {
+            setUserData(response.data);
+            warnToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "300",
+              fontSize: 20,
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Амжилттай нэвтэрлээ",
+              placement: "top",
+            });
+            AsyncStorage.setItem("user_phone", phone.value);
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Dashboard" }],
+            });
+          }
+        })
+        .catch(function (error) {
+          AsyncStorage.setItem("user_phone", phone.value)
+            .then(() => { })
+            .catch(() => console.log("password"));
+          const err = JSON.parse(JSON.stringify(error));
+          if (err.status === 492) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Таны хаяг түр блоклогдсон байна.",
+              placement: "top",
+            });
+          } else if (err.status === 491) {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Таны хаяг түр блоклогдлоо",
+              placement: "top",
+            });
+          } else {
+            if (err.status === 482) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 481) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 480) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            } else if (err.status === 499) {
+              warnToast.show({
+                backgroundColor: "emerald.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Мессеж илгээсэн.",
+                placement: "top",
+              });
+            }
+            navigation.navigate("LoginAuthScreen");
+          }
+        });
+    }
+  }
 
   useEffect(() => {
+    autoLogin();
     setUserUUID(undefined);
     setShowModal(false);
     reactToUpdates();
@@ -345,7 +482,7 @@ export default function LoginScreen({ navigation }) {
                     width="70%"
                     justifyContent="center"
                     backgroundColor="#ececec"
-                    shadow={"8"}
+                    shadow={"4"}
                   >
                     <Center>
                       <VStack>
@@ -750,7 +887,7 @@ export default function LoginScreen({ navigation }) {
                               fontSize="3xl"
                               color="#2a4c63"
                               fontFamily="regular"
-                            ></Text>
+                            >.</Text>
                           </Center>
                         </VStack>
                       </TouchableHighlight>
@@ -803,6 +940,7 @@ export default function LoginScreen({ navigation }) {
                             phone.value.length < 9 &&
                             phone.value.length > 0
                           ) {
+
                             setPhone({
                               value: phone.value.substr(
                                 0,

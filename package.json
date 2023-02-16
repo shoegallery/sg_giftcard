@@ -51,6 +51,7 @@
     "react-native-svg": "13.4.0",
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-virtualized-view": "^1.0.0",
     "react-native-web": "~0.18.9",
     "react-navigation-tabbar-collection": "^1.0.0",
     "react-number-format": "^4.9.3",

@@ -14,7 +14,8 @@ import {
   Center,
   Modal,
   Button,
-  Flex, Heading
+  Flex,
+  Heading,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
@@ -24,13 +25,12 @@ import * as Animatable from "react-native-animatable";
 const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-  console.log(userTransactionData);
-  return (
-    <View height={"100%"}>{
-      userTransactionData.length > 0 ? (
-        <ScrollView>{
-          userTransactionData.map((item, index) => (
 
+  return (
+    <View height={"100%"}>
+      {userTransactionData.length > 0 ? (
+        <ScrollView>
+          {userTransactionData.map((item, index) => (
             <View key={index}>
               <Box
                 alignItems="center"
@@ -49,9 +49,7 @@ const TransActionsList = () => {
                       <Text
                         fontSize={16}
                         color={
-                          item.trnxType === "Зарлага"
-                            ? "red.400"
-                            : "green.500"
+                          item.trnxType === "Зарлага" ? "red.400" : "green.500"
                         }
                         bold
                       >
@@ -72,7 +70,7 @@ const TransActionsList = () => {
                       value={item.amount.$numberDecimal}
                       displayType={"text"}
                       thousandSeparator={true}
-                      renderText={(formattedValue) => (
+                      onValueChange={(formattedValue) => (
                         <Text
                           bold
                           width="30%"
@@ -100,7 +98,7 @@ const TransActionsList = () => {
                       </Box>
                       <Box width={"30%"}>
                         <NumberFormat
-                          value={item.balanceBefore.$numberDecimal}
+                          value={item.balanceAfter.$numberDecimal}
                           displayType={"text"}
                           thousandSeparator={true}
                           renderText={(formattedValue) => (
@@ -115,33 +113,37 @@ const TransActionsList = () => {
                 </View>
               </Box>
             </View>
-
-          ))}</ScrollView>
+          ))}
+        </ScrollView>
       ) : (
+        <View style={{ paddingTop: 100 }}>
+          <Box height={"100%"} justifyContent={"center"}>
+            <View style={{ justifyItems: "center" }}>
+              <Image
+                source={require("../assets/empty.png")}
+                style={{
+                  height: 100,
+                  alignSelf: "center",
+                  justifyItems: "center",
 
-        <View style={{ paddingTop: 100 }}><Box height={"100%"} justifyContent={"center"} ><View style={{ justifyItems: "center", }}><Image
-          source={require("../assets/empty.png")}
-          style={{
-            height: 100,
-            alignSelf: "center",
-            justifyItems: "center",
-
-            resizeMode: "contain",
-          }}
-        />
-        </View><Text paddingTop={5} bold textAlign={"center"}>Уучлаарай гүйлгээ алга байна</Text></Box></View>
-
-      )
-    }</View>
-
-
+                  resizeMode: "contain",
+                }}
+              />
+            </View>
+            <Text paddingTop={5} bold textAlign={"center"}>
+              Уучлаарай гүйлгээ алга байна
+            </Text>
+          </Box>
+        </View>
+      )}
+    </View>
   );
 };
 
 export default function CartStyle() {
   const [modalVisible, setModalVisible] = useState(false);
   const [userData, setUserData] = useContext(StateContext);
-  console.log(userData);
+
   var imageSource;
   if (userData !== undefined) {
     if (userData.wallets.walletType === "member") {
@@ -197,10 +199,7 @@ export default function CartStyle() {
                 Хуулга <AntDesign name="right" size={14} color="white" />
               </Text>
               {modalVisible ? (
-                <Animatable.View
-                  animation="fadeInDown"
-                  duration={1000}
-                >
+                <Animatable.View animation="fadeInDown" duration={1000}>
                   <Modal
                     alignItems="center"
                     justifyContent="center"
@@ -211,11 +210,7 @@ export default function CartStyle() {
                   >
                     <Modal.Content height={"90%"}>
                       <Modal.Header borderRadius={0}>
-                        <Text
-                          color="#242B2E"
-                          fontSize={20}
-                          textAlign="center"
-                        >
+                        <Text color="#242B2E" fontSize={20} textAlign="center">
                           Гүйлгээний хуулга
                         </Text>
                       </Modal.Header>
@@ -240,7 +235,8 @@ export default function CartStyle() {
                         </Button.Group>
                       </Modal.Footer>
                     </Modal.Content>
-                  </Modal></Animatable.View>
+                  </Modal>
+                </Animatable.View>
               ) : (
                 <View></View>
               )}

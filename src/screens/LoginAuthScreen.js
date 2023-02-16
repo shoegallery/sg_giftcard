@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   Platform,
-  StatusBar, TouchableOpacity
+  StatusBar,
+  TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -125,7 +126,7 @@ export default function LoginAuthScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          console.log(result)
+          console.log(result);
           if (result !== null) {
             setPhone({ value: result, error: "" });
             setSeeLockPassword(true);
@@ -141,8 +142,6 @@ export default function LoginAuthScreen({ navigation }) {
         });
     });
   };
-
-
 
   const loginPressedAuth = () => {
     reactToUpdates();
@@ -165,8 +164,6 @@ export default function LoginAuthScreen({ navigation }) {
       };
       axios(config)
         .then(function (response) {
-
-
           if (response.status === 200) {
             setUserData(response.data);
             warnToast.show({
@@ -188,7 +185,6 @@ export default function LoginAuthScreen({ navigation }) {
               routes: [{ name: "Dashboard" }],
             });
           }
-
         })
         .catch(function (error) {
           const err = JSON.parse(JSON.stringify(error));
@@ -209,7 +205,6 @@ export default function LoginAuthScreen({ navigation }) {
             });
             navigation.navigate("MainScreen");
           } else if (err.status === 491) {
-
             warnToast.show({
               backgroundColor: "red.400",
               px: "2",
@@ -252,9 +247,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Мессеж илгээсэн.",
               placement: "top",
             });
-
-          }
-          else if (err.status === 485) {
+          } else if (err.status === 485) {
             warnToast.show({
               backgroundColor: "red.400",
               px: "2",
@@ -268,8 +261,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Баталгаажуулах код буруу",
               placement: "top",
             });
-          }
-          else if (err.status === 486) {
+          } else if (err.status === 486) {
             warnToast.show({
               backgroundColor: "red.400",
               px: "2",
@@ -284,8 +276,7 @@ export default function LoginAuthScreen({ navigation }) {
               placement: "top",
             });
             navigation.navigate("MainScreen");
-          }
-          else if (err.status === 487) {
+          } else if (err.status === 487) {
             warnToast.show({
               backgroundColor: "red.400",
               px: "2",
@@ -314,13 +305,19 @@ export default function LoginAuthScreen({ navigation }) {
     setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
-  console.log(password.value + " ---- " + password.value.length)
+  console.log(password.value + " ---- " + password.value.length);
   return (
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
       <ToastProvider>
         <View backgroundColor="#424242">
-          <View style={{ height: hp("60%"), justifyContent: "center", backgroundColor: "#ececec" }}>
+          <View
+            style={{
+              height: hp("60%"),
+              justifyContent: "center",
+              backgroundColor: "#ececec",
+            }}
+          >
             <Center>
               <Text
                 maxWidth={"90%"}
@@ -353,7 +350,7 @@ export default function LoginAuthScreen({ navigation }) {
                   width="70%"
                   justifyContent="center"
                   backgroundColor="#ececec"
-                  shadow={"8"}
+                  shadow={"4"}
                 >
                   <Center>
                     <VStack>
@@ -384,7 +381,6 @@ export default function LoginAuthScreen({ navigation }) {
             </Center>
             <TouchableOpacity
               onPress={() => {
-
                 loginPressedAuth();
               }}
             >
@@ -427,11 +423,14 @@ export default function LoginAuthScreen({ navigation }) {
               </Box>
             </TouchableOpacity>
           </View>
-          <View style={{ height: hp("40%"), backgroundColor: "red", justifyContent: "flex-end" }}>
-            <Center
-              alignSelf="center"
-              width="100%"
-            >
+          <View
+            style={{
+              height: hp("40%"),
+              backgroundColor: "red",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Center alignSelf="center" width="100%">
               <VStack>
                 <View style={{ height: hp("10%") }}>
                   <HStack>
@@ -474,7 +473,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -508,7 +506,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -580,7 +577,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -614,7 +610,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -652,7 +647,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -686,7 +680,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -720,7 +713,6 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
                       <TouchableHighlight
@@ -758,10 +750,12 @@ export default function LoginAuthScreen({ navigation }) {
                       borderColor="#353b48"
                       borderWidth={1 / 3}
                       width="1/3"
-
                       backgroundColor="#ececec"
                     >
-                      <TouchableHighlight underlayColor="#f8f8f8" onPress={() => { }}>
+                      <TouchableHighlight
+                        underlayColor="#f8f8f8"
+                        onPress={() => { }}
+                      >
                         <VStack
                           justifyContent="center"
                           height="100%"
@@ -772,7 +766,9 @@ export default function LoginAuthScreen({ navigation }) {
                               fontSize="3xl"
                               color="#2a4c63"
                               fontFamily="regular"
-                            ></Text>
+                            >
+                              .
+                            </Text>
                           </Center>
                         </VStack>
                       </TouchableHighlight>
@@ -850,9 +846,8 @@ export default function LoginAuthScreen({ navigation }) {
                       </TouchableHighlight>
                     </Box>
                   </HStack>
-                </View></VStack>
-
-
+                </View>
+              </VStack>
             </Center>
           </View>
 
