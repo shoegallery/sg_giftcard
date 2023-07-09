@@ -2,7 +2,7 @@ export { default as StartScreen } from "./StartScreen";
 export { default as LoginScreen } from "./LoginScreen";
 export { default as ProfileScreen } from "./ProfileScreen";
 export { default as LocationScreen } from "./LocationScreen";
-export { default as Dashboard } from "./Dashboard";
+export { default as TabbarScreen } from "./TabbarScreen";
 export { default as TermScreen } from "./TermScreen";
 export { default as LoginAuthScreen } from "./LoginAuthScreen";
 export { default as ExpenseScreen } from "./ExpenseScreen";
@@ -12,6 +12,9 @@ export { default as GetCouponScreen } from "./GetCouponScreen";
 export { default as BagScreen } from "./BagScreen";
 export { default as HistoryScreen } from "./HistoryScreen";
 export { default as WalletScreen } from "./WalletScreen";
+export { default as PromotionScreen } from "./PromotionScreen";
+
+
 
 
 

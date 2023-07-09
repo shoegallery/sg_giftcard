@@ -170,10 +170,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#89c4f4"
               onPress={() => {
-                navigation.navigate('Root', {
-                  screen: 'TermScreen',
-                  initial: false,
-                });
+                navigation.navigate('TermScreen');
               }}
               style={{
                 width: wp("96%"),

@@ -179,7 +179,7 @@ export default function LoginScreen({ navigation }) {
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
                 index: 0,
-                routes: [{ name: "Dashboard" }],
+                routes: [{ name: "TabbarScreen" }],
               });
             }
           })
@@ -322,7 +322,7 @@ export default function LoginScreen({ navigation }) {
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
                 index: 0,
-                routes: [{ name: "Dashboard" }],
+                routes: [{ name: "TabbarScreen" }],
               });
             }
           })

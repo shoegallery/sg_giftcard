@@ -54,7 +54,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider, ToastProvider, IconButton } from "native-base";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import MainScreen from "./src/screens/MainScreen";
+import StackScreen from "./src/screens/StackScreen";
 LogBox.ignoreLogs([
   "ViewPropTypes will be removed",
   "ColorPropType will be removed",
@@ -176,7 +176,7 @@ export default function App({ navigation }) {
               <Provider>
                 <StatusBar barStyle="dark-content" backgroundColor="white" />
                 <NavigationContainer>
-                  <MainScreen />
+                  <StackScreen />
                 </NavigationContainer>
               </Provider>
             </StateProvider>

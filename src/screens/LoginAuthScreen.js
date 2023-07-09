@@ -186,7 +186,7 @@ export default function LoginAuthScreen({ navigation }) {
             });
             navigation.reset({
               index: 0,
-              routes: [{ name: "Dashboard" }],
+              routes: [{ name: "TabbarScreen" }],
             });
           }
         })
@@ -207,7 +207,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Таны хаяг түр блоклогдсон байна.",
               placement: "top",
             });
-            navigation.navigate("MainScreen");
+            navigation.navigate("TabbarScreen");
           } else if (err.status === 491) {
             warnToast.show({
               backgroundColor: "red.400",
@@ -222,7 +222,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Таны хаяг түр блоклогдлоо",
               placement: "top",
             });
-            navigation.navigate("MainScreen");
+            navigation.navigate("TabbarScreen");
           } else if (err.status === 482) {
             warnToast.show({
               backgroundColor: "emerald.400",
@@ -279,7 +279,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Та үйлдэл хийх эрхгүй байна",
               placement: "top",
             });
-            navigation.navigate("MainScreen");
+            navigation.navigate("TabbarScreen");
           } else if (err.status === 487) {
             warnToast.show({
               backgroundColor: "red.400",
@@ -294,7 +294,7 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Та үйлдэл хийх эрхгүй байна",
               placement: "top",
             });
-            navigation.navigate("MainScreen");
+            navigation.navigate("TabbarScreen");
           }
         });
     }
