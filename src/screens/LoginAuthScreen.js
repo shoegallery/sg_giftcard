@@ -309,7 +309,7 @@ export default function LoginAuthScreen({ navigation }) {
     setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
-  console.log(password.value + " ---- " + password.value.length);
+  
   return (
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#ececec" />

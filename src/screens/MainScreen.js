@@ -1,6 +1,7 @@
+import React, { useState, useEffect, useContext } from "react";
 import { baseUrl } from "../baseUrl";
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+
 import NumberFormat from "react-number-format";
 import {
   Alert,
@@ -34,8 +35,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StateContext, StateContextHistory } from "../Context/StateContext";
+
 import Product from "../components/Product";
 import AppBar from "../components/AppBar";
 import {
@@ -69,21 +69,34 @@ import { CleanTabBar } from "react-navigation-tabbar-collection";
 import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProfileScreen from "./ProfileScreen";
+
 import TestScreen from "./TestScreen";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SearchScreen from "./SearchScreen";
 import ShoppingScreen from "./ShoppingScreen";
-import LocationScreen from "./LocationScreen";
-import WalletScreen from "./WalletScreen";
-import LoginScreen from "./LoginScreen";
+
+import { createStackNavigator } from "@react-navigation/stack";
+import { StateContext, StateContextHistory } from "../Context/StateContext";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  LoginScreen,
+  ProfileScreen,
+  LoginAuthScreen,
+  LocationScreen,
+  ExpenseScreen,
+  TermScreen,
+  PurchaseScreen,
+  TransferScreen,
+  GetCouponScreen,
+  BagScreen,
+  HistoryScreen,
+  WalletScreen,
+} from "../screens";
 
 const Tab = createBottomTabNavigator();
-
-export default function Dashboard({ navigation }) {
+const MainScreen = () => {
   const [userData, setUserData] = useContext(StateContext);
-  console.log(userData);
   return (
     <Tab.Navigator
       initialRouteName="Shopping"
@@ -109,26 +122,49 @@ export default function Dashboard({ navigation }) {
         },
       }}
     >
-      <Tab.Screen
-        name="Хэтэвч"
-        component={WalletScreen}
-        options={{
-          tabBarIcon: ({ focused, tintColor }) =>
-            focused ? (
-              <MaterialCommunityIcons
-                name="wallet-giftcard"
-                size={32}
-                color="#ff5252"
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="wallet-giftcard"
-                size={32}
-                color="grey"
-              />
-            ),
-        }}
-      />
+      {userData === undefined ? (
+        <Tab.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{
+            tabBarIcon: ({ focused, tintColor }) =>
+              focused ? (
+                <MaterialCommunityIcons
+                  name="wallet-giftcard"
+                  size={32}
+                  color="#ff5252"
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="wallet-giftcard"
+                  size={32}
+                  color="grey"
+                />
+              ),
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="Хэтэвч"
+          component={WalletScreen}
+          options={{
+            tabBarIcon: ({ focused, tintColor }) =>
+              focused ? (
+                <MaterialCommunityIcons
+                  name="wallet-giftcard"
+                  size={32}
+                  color="#ff5252"
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="wallet-giftcard"
+                  size={32}
+                  color="grey"
+                />
+              ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="Shopping"
         component={ShoppingScreen}
@@ -169,4 +205,6 @@ export default function Dashboard({ navigation }) {
       />
     </Tab.Navigator>
   );
-}
+};
+
+export default MainScreen;

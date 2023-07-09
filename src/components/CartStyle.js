@@ -116,24 +116,23 @@ const TransActionsList = () => {
           ))}
         </ScrollView>
       ) : (
-        <Center >
-            <Box  backgroundColor="red.400">
-              <Image
-                source={require("../assets/empty.png")}
-                style={{
-                  height: 100,
-                  alignSelf: "center",
-                  justifyItems: "center",
+        <Center>
+          <Box backgroundColor="red.400">
+            <Image
+              source={require("../assets/empty.png")}
+              style={{
+                height: 100,
+                alignSelf: "center",
+                justifyItems: "center",
 
-                  resizeMode: "contain",
-                }}
-              />
+                resizeMode: "contain",
+              }}
+            />
 
-              <Text paddingTop={5} textAlign={"center"}>
-                Уучлаарай гүйлгээ алга байна
-              </Text>
-            </Box>
-   
+            <Text paddingTop={5} textAlign={"center"}>
+              Уучлаарай гүйлгээ алга байна
+            </Text>
+          </Box>
         </Center>
       )}
     </View>

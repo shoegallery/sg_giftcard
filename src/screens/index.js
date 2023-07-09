@@ -6,3 +6,16 @@ export { default as Dashboard } from "./Dashboard";
 export { default as TermScreen } from "./TermScreen";
 export { default as LoginAuthScreen } from "./LoginAuthScreen";
 export { default as ExpenseScreen } from "./ExpenseScreen";
+export { default as PurchaseScreen } from "./PurchaseScreen";
+export { default as TransferScreen } from "./TransferScreen";
+export { default as GetCouponScreen } from "./GetCouponScreen";
+export { default as BagScreen } from "./BagScreen";
+export { default as HistoryScreen } from "./HistoryScreen";
+export { default as WalletScreen } from "./WalletScreen";
+
+
+
+
+
+
+
