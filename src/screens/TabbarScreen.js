@@ -88,6 +88,7 @@ export default function TabbarScreen({ navigation }) {
     <Tab.Navigator
       initialRouteName="Shopping"
       barStyle={{ backgroundColor: "tomato" }}
+   
       screenOptions={{
         tabBarActiveTintColor: "#e91e63",
         headerShown: false,
@@ -98,7 +99,9 @@ export default function TabbarScreen({ navigation }) {
           fontSize: 11,
           fontWeight: "500",
         },
-
+        tabBarOptions:{
+          style: { height: 50 }, // Adjust the height as per your requirements
+        },
         tabBarStyle: {
           height: 50,
           paddingBottom: 2,

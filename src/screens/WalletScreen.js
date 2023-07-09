@@ -404,8 +404,8 @@ export default function WalletScreen({ navigation }) {
         backgroundColor: "#ececec",
       }}
     >
-      <View style={{ height: "20%", backgroundColor: "red" }}></View>
-      <View style={{ height: "80%", backgroundColor: "orange" }}>
+      <View style={{ height: "20%", }}></View>
+      <View style={{ height: "80%",  }}>
         <Pressable
           paddingTop={50}
           alignItems={"center"}
