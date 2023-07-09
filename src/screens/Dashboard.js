@@ -11,6 +11,8 @@ import {
   Pressable,
   TouchableHighlight,
   TouchableHighlightComponent,
+  IconButton,
+  Icon,
 } from "react-native";
 import {
   MaterialIcons,
@@ -35,6 +37,7 @@ import { amountValidator } from "../helpers/amountValidator";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 import Product from "../components/Product";
+import AppBar from "../components/AppBar";
 import {
   Button,
   Modal,
@@ -48,6 +51,9 @@ import {
   useToast,
   Center,
   Select,
+  HStack,
+  PresenceTransition,
+  AlertDialog,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -82,12 +88,10 @@ export default function Dashboard({ navigation }) {
           alignItems: "center",
           fontSize: 11,
           fontWeight: "500",
-
-
         },
-        
+
         tabBarStyle: {
-          height:50,
+          height: 50,
           paddingBottom: 2,
           paddingTop: 2,
           width: "100%",
@@ -96,7 +100,7 @@ export default function Dashboard({ navigation }) {
         },
       }}
     >
-        <Tab.Screen
+      <Tab.Screen
         name="Хэтэвч"
         component={WalletScreen}
         options={{
@@ -129,9 +133,7 @@ export default function Dashboard({ navigation }) {
             ),
         }}
       />
-      
 
-    
       <Tab.Screen
         name="Promotion"
         component={LocationScreen}
@@ -561,32 +563,46 @@ function WalletScreen({ navigation }) {
                       fontSize="xs"
                       color="#CC5801"
                     >
-                      Зарцуулах
+                      Ашиглах
                     </Text>
                   </Button>
-                  {showModal ? (
+
+                  <PresenceTransition
+                    visible={showModal}
+                    initial={{
+                      opacity: 0,
+                      scale: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      transition: {
+                        duration: 250,
+                      },
+                    }}
+                  >
                     <Center>
-                      <Modal
+                      <AlertDialog
                         isOpen={showModal}
                         onClose={() => setShowModal(false)}
                       >
-                        <Modal.Content width={wp("95%")} height={hp("50%")}>
-                          <Modal.CloseButton />
-                          <Modal.Header>
+                        <AlertDialog.Content width={wp("95%")} height={hp("50%")}>
+                          <AlertDialog.CloseButton />
+                          <AlertDialog.Header>
                             <Text
                               bold
                               color="#242B2E"
                               fontSize={20}
-                              textAlign="center"
+                           
                             >
-                              Тооцоо хийх
+                              Бонус оноогоо ашиглах
                             </Text>
-                          </Modal.Header>
-                          <Modal.Body justifyItems="center">
+                          </AlertDialog.Header>
+                          <AlertDialog.Body justifyItems="center">
                             <FormControl>
                               <FormControl.Label>
                                 <Text
-                                  fontSize={18}
+                                  fontSize={20}
                                   fontWeight="normal"
                                   color="gray.700"
                                 >
@@ -600,7 +616,7 @@ function WalletScreen({ navigation }) {
                                     width={"100%"}
                                     placeholder="Энд дарна уу"
                                     selectedValue={receiverPhone.value}
-                                    fontSize={16}
+                                    fontSize={18}
                                     onValueChange={(itemValue) =>
                                       setReceiverPhone({
                                         value: itemValue,
@@ -620,7 +636,7 @@ function WalletScreen({ navigation }) {
                                       label="УБИД | Sasha Fabiani"
                                       value="10000003"
                                     />
-                                
+
                                     <Select.Item
                                       label="Максмоол | BASCONI"
                                       value="10000005"
@@ -629,12 +645,11 @@ function WalletScreen({ navigation }) {
                                       label="Максмоол | Sasha Fabiani"
                                       value="10000006"
                                     />
-                                 
+
                                     <Select.Item
                                       label="Хүннү-Моол | Shoe Gallery"
                                       value="10000008"
                                     />
-                                   
                                   </Select>
                                 </Box>
                               </View>
@@ -664,7 +679,7 @@ function WalletScreen({ navigation }) {
                                 keyboardType="number-pad"
                               />
                             </Box>
-                          </Modal.Body>
+                          </AlertDialog.Body>
 
                           <Modal.Footer>
                             <Button.Group space={5}>
@@ -683,29 +698,63 @@ function WalletScreen({ navigation }) {
                                   });
                                 }}
                               >
-                                <Text bold color="#242B2E">
+                                <Text fontWeight={"medium"} color="#242B2E">
                                   Хаах
                                 </Text>
                               </Button>
                               <Button
+                              borderRadius={5}
                                 onPress={() => {
                                   setShowModal(false);
                                   checkOut();
                                 }}
                               >
-                                <Text bold color="white">
-                                  Төлөх
+                                <Text fontWeight={"medium"} color="white">
+                                  Тооцоонд ашиглах
                                 </Text>
                               </Button>
                             </Button.Group>
                           </Modal.Footer>
-                        </Modal.Content>
-                      </Modal>
+                        </AlertDialog.Content>
+                      </AlertDialog>
                     </Center>
-                  ) : (
-                    <View></View>
-                  )}
+                  </PresenceTransition>
 
+                  <Button
+                    colorScheme="orange"
+                    bg="#ececec"
+                    variant="subtle"
+                    marginLeft={1}
+                    height={"90%"}
+                    flex={1}
+                    success
+                    onPress={() => {
+                      warnToast.show({
+                        backgroundColor: "red.400",
+                        px: "2",
+                        py: "1",
+                        rounded: "sm",
+                        height: "50",
+                        width: "250",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        title: "Тун удахгүй",
+                        placement: "top",
+                      });
+                    }}
+                  >
+                    <Box alignItems="center">
+                      <MaterialIcons
+                        name="card-giftcard"
+                        size={36}
+                        color="#CC5801"
+                      />
+                    </Box>
+                    <Text width={"100%"} fontSize="xs" color="#CC5801">
+                      Бэлэглэх
+                    </Text>
+                  </Button>
                   <Button
                     colorScheme="orange"
                     bg="#ececec"
@@ -758,18 +807,21 @@ function WalletScreen({ navigation }) {
                       <MaterialIcons name="loyalty" size={36} color="#CC5801" />
                     </Box>
                     <Text width={"100%"} fontSize="xs" color="#CC5801">
-                      Coupon оруулах
+                      Купон
                     </Text>
                   </Button>
                   {showCouponModal ? (
                     <Center>
-                      <Modal
+                      <AlertDialog
                         isOpen={showCouponModal}
                         onClose={() => setShowCouponModal(false)}
                       >
-                        <Modal.Content width={wp("80%")} height={hp("50%")}>
-                          <Modal.CloseButton />
-                          <Modal.Body justifyItems="center">
+                        <AlertDialog.Content
+                          width={wp("95%")}
+                          height={hp("50%")}
+                        >
+                          <AlertDialog.CloseButton />
+                          <AlertDialog.Body justifyItems="center">
                             <FormControl>
                               <FormControl.Label>
                                 <Text
@@ -810,7 +862,7 @@ function WalletScreen({ navigation }) {
                                 ширхэг тэмдэгт оруулахыг анхаарна уу
                               </Text>
                             </Box>
-                          </Modal.Body>
+                          </AlertDialog.Body>
 
                           <Modal.Footer>
                             <Button.Group space={5}>
@@ -820,14 +872,16 @@ function WalletScreen({ navigation }) {
                                   getCoupon();
                                 }}
                               >
-                                <Text bold color="white">
-                                  Кодыг идэвхжүүлэх
-                                </Text>
+                                <Center>
+                                  <Text bold color="white">
+                                    Кодыг идэвхжүүлэх
+                                  </Text>
+                                </Center>
                               </Button>
                             </Button.Group>
                           </Modal.Footer>
-                        </Modal.Content>
-                      </Modal>
+                        </AlertDialog.Content>
+                      </AlertDialog>
                     </Center>
                   ) : (
                     <View></View>

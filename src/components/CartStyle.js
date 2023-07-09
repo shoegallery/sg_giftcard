@@ -14,7 +14,8 @@ import {
   Center,
   Modal,
   Button,
-  Flex, Heading
+  Flex,
+  Heading,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import { AntDesign } from "@expo/vector-icons";
@@ -26,11 +27,10 @@ const TransActionsList = () => {
     useContext(StateContextHistory);
   console.log(userTransactionData);
   return (
-    <View height={"100%"}>{
-      userTransactionData.length > 0 ? (
-        <ScrollView>{
-          userTransactionData.map((item, index) => (
-
+    <View height={"100%"}>
+      {userTransactionData.length > 0 ? (
+        <ScrollView>
+          {userTransactionData.map((item, index) => (
             <View key={index}>
               <Box
                 alignItems="center"
@@ -49,9 +49,7 @@ const TransActionsList = () => {
                       <Text
                         fontSize={16}
                         color={
-                          item.trnxType === "Зарлага"
-                            ? "red.400"
-                            : "green.500"
+                          item.trnxType === "Зарлага" ? "red.400" : "green.500"
                         }
                         bold
                       >
@@ -115,26 +113,30 @@ const TransActionsList = () => {
                 </View>
               </Box>
             </View>
-
-          ))}</ScrollView>
+          ))}
+        </ScrollView>
       ) : (
+        <Center >
+            <Box  backgroundColor="red.400">
+              <Image
+                source={require("../assets/empty.png")}
+                style={{
+                  height: 100,
+                  alignSelf: "center",
+                  justifyItems: "center",
 
-        <View style={{ paddingTop: 100 }}><Box height={"100%"} justifyContent={"center"} ><View style={{ justifyItems: "center", }}><Image
-          source={require("../assets/empty.png")}
-          style={{
-            height: 100,
-            alignSelf: "center",
-            justifyItems: "center",
+                  resizeMode: "contain",
+                }}
+              />
 
-            resizeMode: "contain",
-          }}
-        />
-        </View><Text paddingTop={5} bold textAlign={"center"}>Уучлаарай гүйлгээ алга байна</Text></Box></View>
-
-      )
-    }</View>
-
-
+              <Text paddingTop={5} textAlign={"center"}>
+                Уучлаарай гүйлгээ алга байна
+              </Text>
+            </Box>
+   
+        </Center>
+      )}
+    </View>
   );
 };
 
@@ -197,10 +199,7 @@ export default function CartStyle() {
                 Хуулга <AntDesign name="right" size={14} color="white" />
               </Text>
               {modalVisible ? (
-                <Animatable.View
-                  animation="fadeInDown"
-                  duration={1000}
-                >
+                <Animatable.View animation="fadeInDown" duration={1000}>
                   <Modal
                     alignItems="center"
                     justifyContent="center"
@@ -210,7 +209,6 @@ export default function CartStyle() {
                     width={"100%"}
                   >
                     <Modal.Content height={"90%"}>
-
                       <Modal.Body height="full">
                         {modalVisible ? <TransActionsList /> : <View></View>}
                       </Modal.Body>
@@ -233,7 +231,8 @@ export default function CartStyle() {
                         </Button.Group>
                       </Modal.Footer>
                     </Modal.Content>
-                  </Modal></Animatable.View>
+                  </Modal>
+                </Animatable.View>
               ) : (
                 <View></View>
               )}
