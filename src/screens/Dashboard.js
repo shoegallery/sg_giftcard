@@ -19,8 +19,15 @@ import {
   AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
-  FontAwesome, Octicons, Ionicons, Foundation
+  FontAwesome,
+  Octicons,
+  Ionicons,
+  Foundation,
+  FontAwesomeIcon,
 } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
+import { HeaderBackContext } from "@react-navigation/elements";
+
 import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -55,6 +62,10 @@ import ProfileScreen from "./ProfileScreen";
 import TestScreen from "./TestScreen";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SearchScreen from "./SearchScreen";
+import ShoppingScreen from "./ShoppingScreen";
+import LocationScreen from "./LocationScreen";
+
 const Tab = createBottomTabNavigator();
 
 export default function Dashboard({ navigation }) {
@@ -63,69 +74,102 @@ export default function Dashboard({ navigation }) {
       initialRouteName="Хэтэвч"
       barStyle={{ backgroundColor: "tomato" }}
       screenOptions={{
-        activeColor: "#e91e63",
+        tabBarActiveTintColor: "#e91e63",
         headerShown: false,
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: "regular",
-          fontWeight: "100",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: 11,
+          fontWeight: "500",
+
+
         },
+        
         tabBarStyle: {
-          height: hp("8%"),
+          height:50,
+          paddingBottom: 2,
+          paddingTop: 2,
           width: "100%",
-          justifyItems: "center",
+          borderTopLeftRadius: 13, // Specify the top-left border radius
+          borderTopRightRadius: 13, // Specify the top-right border radius
         },
       }}
     >
-      <Tab.Screen
-        name="Дэлгүүр"
-        component={TestScreen}
-        tabBarStyle={{ width: 80 }}
-        options={{
-          tabBarIcon: ({ focused, tintColor }) => (
-            <Feather name="shopping-bag" size={26} color="black" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Дэлsгүүрs"
-        component={TestScreen}
-        options={{
-          tabBarIcon: ({ focused, tintColor }) => (
-            <Octicons name="search" size={28} color="black" />
-          ),
-        }}
-      />
-
-      <Tab.Screen
+        <Tab.Screen
         name="Хэтэвч"
         component={WalletScreen}
         options={{
-          tabBarIcon: ({ focused, tintColor }) => (
-
-
-            <Ionicons color="black" name="wallet-outline" size={32} />
-
-          ),
+          tabBarIcon: ({ focused, tintColor }) =>
+            focused ? (
+              <MaterialCommunityIcons
+                name="wallet-giftcard"
+                size={32}
+                color="#ff5252"
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="wallet-giftcard"
+                size={32}
+                color="grey"
+              />
+            ),
         }}
       />
+
       <Tab.Screen
-        name="Дэлгүү"
-        component={TestScreen}
+        name="Shopping"
+        component={ShoppingScreen}
         options={{
-          tabBarIcon: ({ focused, tintColor }) => (
-            <Octicons name="video" size={26} color="black" />
-          ),
+          tabBarIcon: ({ focused, tintColor }) =>
+            focused ? (
+              <Feather name="shopping-bag" size={28} color="#ff5252" />
+            ) : (
+              <Feather name="shopping-bag" size={28} color="grey" />
+            ),
+        }}
+      />
+      
+
+    
+      <Tab.Screen
+        name="Promotion"
+        component={LocationScreen}
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ focused, tintColor }) =>
+            focused ? (
+              <Octicons name="video" size={28} color="#ff5252" />
+            ) : (
+              <Octicons name="video" size={28} color="grey" />
+            ),
+          // headerLeft: () => {
+          //   return (
+          //     <TouchableOpacity onPress={() => console.log('click')}>
+          //       <View
+          //         style={{
+          //           width: 30,
+          //           height: 30,
+          //           justifyContent: 'center',
+          //           alignItems: 'center',
+          //         }}>
+          //         <AntDesign name="left" size={32} color="black" />
+          //       </View>
+          //     </TouchableOpacity>
+          //   );
+          // },
         }}
       />
       <Tab.Screen
-        name="Бусад"
+        name="MySG"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ focused, tintColor }) => (
-            <AntDesign name="appstore-o" size={28} color="black" />
-          ),
+          tabBarIcon: ({ focused, tintColor }) =>
+            focused ? (
+              <FontAwesome5 name="star" size={28} color="#ff5252" />
+            ) : (
+              <FontAwesome5 name="star" size={28} color="grey" />
+            ),
         }}
       />
     </Tab.Navigator>
@@ -451,7 +495,9 @@ function WalletScreen({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ height: hp("100%"), flex: 1, backgroundColor: "#ececec" }}>
+    <SafeAreaView
+      style={{ height: hp("100%"), flex: 1, backgroundColor: "#ececec" }}
+    >
       <ScrollView
         style={{ alignSelf: "center" }}
         contentContainerStyle={{
@@ -509,7 +555,12 @@ function WalletScreen({ navigation }) {
                     <Box alignItems="center">
                       <Feather name="shopping-bag" size={36} color="#CC5801" />
                     </Box>
-                    <Text width={"100%"} textAlign="center" fontSize="xs" color="#CC5801">
+                    <Text
+                      width={"100%"}
+                      textAlign="center"
+                      fontSize="xs"
+                      color="#CC5801"
+                    >
                       Зарцуулах
                     </Text>
                   </Button>
@@ -569,10 +620,7 @@ function WalletScreen({ navigation }) {
                                       label="УБИД | Sasha Fabiani"
                                       value="10000003"
                                     />
-                                    <Select.Item
-                                      label="УБИД | Bugatti"
-                                      value="10000004"
-                                    />
+                                
                                     <Select.Item
                                       label="Максмоол | BASCONI"
                                       value="10000005"
@@ -581,18 +629,12 @@ function WalletScreen({ navigation }) {
                                       label="Максмоол | Sasha Fabiani"
                                       value="10000006"
                                     />
-                                    <Select.Item
-                                      label="Максмоол | Shoe Gallery"
-                                      value="10000007"
-                                    />
+                                 
                                     <Select.Item
                                       label="Хүннү-Моол | Shoe Gallery"
                                       value="10000008"
                                     />
-                                    <Select.Item
-                                      label="Имарт Хан-уул | Shoe Gallery"
-                                      value="10000009"
-                                    />
+                                   
                                   </Select>
                                 </Box>
                               </View>
@@ -727,7 +769,6 @@ function WalletScreen({ navigation }) {
                       >
                         <Modal.Content width={wp("80%")} height={hp("50%")}>
                           <Modal.CloseButton />
-
                           <Modal.Body justifyItems="center">
                             <FormControl>
                               <FormControl.Label>

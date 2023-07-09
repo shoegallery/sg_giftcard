@@ -13,6 +13,7 @@ import {
   ScrollView,
   StatusBar,
   Linking,
+  Share,
 } from "react-native";
 import {
   MaterialIcons,
@@ -21,7 +22,8 @@ import {
   AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
-  FontAwesome, Octicons
+  FontAwesome,
+  Octicons,
 } from "@expo/vector-icons";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -56,6 +58,26 @@ import MyActionButtonComponent from "../components/MyActionButtonComponent";
 import appJson from "../../app.json";
 const Tab = createBottomTabNavigator();
 export default function ProfileScreen({ navigation }) {
+  const onShare = async () => {
+    try {
+      let messageOs;
+      if (Platform.OS === "android") {
+        messageOs = "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
+      } else if (Platform.OS === "ios") { messageOs = "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856" }
+      const result = await Share.share({ message: messageOs });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
   const [isopen, Setisopen] = useState();
   useEffect(() => {
     Setisopen(false);
@@ -67,7 +89,7 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       {/* <Box height={"100%"} width={"100%"} backgroundColor={"#ececec"}>
         <Box height={"100%"} width={"100%"} paddingRight={-100}>
           <Select
@@ -94,260 +116,390 @@ export default function ProfileScreen({ navigation }) {
           </Select>
         </Box>
       </Box> */}
-      <Box height={"90%"}><Box width={"100%"} backgroundColor={"#ececec"}>
-        <Center>
-          <Image
-            marginTop={30}
-            size={"32"}
-            borderWidth={"8"}
-            border
-            borderColor={"#ececec"}
-            borderRadius={"full"}
-            source={{
-              uri: "https://wallpaperaccess.com/full/317501.jpg",
-            }}
-            alt="Alternate Text"
-          />
-        </Center>
-        <Center>
-          <Text color="#325b77" fontSize={"xl"} bold>
-            Овог НЭРБАЙНА
-          </Text>
-        </Center>
-        <Center>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              console.log("first");
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              borderRadius={"md"}
-              justifyContent={"center"}
+      <Box height={"full"} backgroundColor={"#ececec"}>
+        <Box height={"80%"} width={"100%"} paddingTop={"6"} >
+          <Center>
+            <TouchableHighlight
+              underlayColor="#89c4f4"
+              onPress={() => {
+                console.log("first");
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Box >
-                  <Icon
-                    as={MaterialCommunityIcons}
-                    width={"xl"}
-                    size="xl"
-                    name="license"
-                    color="#1B3241"
-                  />
-                </Box>
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Хэрэглэгчийн мэдээлэл
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        </Center>
-        <Center>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              navigation.navigate("Үйлчилгээний нөхцөл");
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                borderRadius={"0"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box>
+                    <Box
+                      backgroundColor={"#acd6f7"}
+                      width={12}
+                      borderRadius={"sm"}
+                      height={12}
+                      alignItems="center"
+                      justifyContent={"center"}
+                    >
+                      <Icon
+                        as={MaterialCommunityIcons}
+                        width={"xl"}
+                        size="lg"
+                        name="license"
+                        color="#374e62"
+                      />
+                    </Box>
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Хэрэглэгчийн мэдээлэл
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"2"}>
+            <TouchableHighlight
+              underlayColor="#89c4f4"
+              onPress={() => {
+                navigation.navigate("TermScreen");
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon
-                  width={"30%"}
-                  as={AntDesign}
-                  size="xl"
-                  name="book"
-                  color="#1B3241"
-                />
-                <Text width={"70%"} fontSize={"md"} color="#325b77">
-                  {"    "}Үйлчилгээний нөхцөл
-                </Text>
-              </HStack>
-            </Box>
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#acd6f7"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
+                      width={"30%"}
+                      as={AntDesign}
+                      size="lg"
+                      name="book"
+                      color="#374e62"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Үйлчилгээний нөхцөл
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"6"}>
+            <TouchableHighlight
+              underlayColor="#b2dfdb"
+              onPress={() => {
+                console.log("first");
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
+            >
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#b2dfdb"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
 
-          </TouchableHighlight>
-        </Center>
-        <Center paddingTop={4}>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              console.log("first");
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+                      as={Octicons}
+                      size="lg"
+                      name="star"
+                      color="#004d40"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Брэндийн танилцуулга
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"2"}>
+            <TouchableHighlight
+              underlayColor="#b2dfdb"
+              onPress={() => {
+                navigation.navigate("LocationScreen");
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon as={Octicons} size="xl" name="star" color="#1B3241" />
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Брэндийн танилцуулга
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        </Center>
-        <Center>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              console.log("first");
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#b2dfdb"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
+                      as={Entypo}
+                      size="lg"
+                      name="location"
+                      color="#004d40"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Дэлгүүрийн хаяг, байршил
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"2"}>
+            <TouchableHighlight
+              underlayColor="#b2dfdb"
+              onPress={() => {
+                console.log("first");
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon as={Entypo} size="xl" name="location" color="#1B3241" />
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Дэлгүүрийн хаяг, байршил
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        </Center>
-        <Center>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              console.log("first");
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#b2dfdb"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
+                      as={MaterialCommunityIcons}
+                      size="lg"
+                      name="help-circle-outline"
+                      color="#004d40"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Тусламж, зөвлөгөө
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"2"}>
+            <TouchableHighlight
+              underlayColor="#b2dfdb"
+              onPress={() => {
+                if (Platform.OS === "android") {
+                  Linking.openURL(`tel:${80409000}`);
+                } else {
+                  Linking.openURL(`telprompt:${80409000}`);
+                }
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon
-                  as={MaterialCommunityIcons}
-                  size="xl"
-                  name="help-circle-outline"
-                  color="#1B3241"
-                />
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Тусламж, зөвлөгөө
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        </Center>
-        <Center>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              if (Platform.OS === "android") {
-                Linking.openURL(`tel:${80409000}`);
-              } else {
-                Linking.openURL(`telprompt:${80409000}`);
-              }
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#b2dfdb"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
+                      as={AntDesign}
+                      size="lg"
+                      name="phone"
+                      color="#004d40"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Холбоо барих
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"2"}>
+            <TouchableHighlight
+              underlayColor="#d1c4e9"
+              onPress={() => {
+                onShare()
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon as={AntDesign} size="xl" name="phone" color="#1B3241" />
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Холбоо барих
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight>
-        </Center>
-        <Center paddingTop={4}>
-          <TouchableHighlight
-            underlayColor="#bad6e8"
-            onPress={() => {
-              if (Platform.OS === "android") {
-                Linking.openURL(`tel:${80409000}`);
-              } else {
-                Linking.openURL(`telprompt:${80409000}`);
-              }
-            }}
-            style={{
-              width: wp("100%"),
-              borderRadius: hp("1%"),
-              justifyContent: "center",
-              height: hp("8%"),
-            }}
-          >
-            <Box
-              backgroundColor="#ececec"
-              h={"100%"}
-              w="100%"
-              borderRadius={"md"}
-              justifyContent={"center"}
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#d1c4e9"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Entypo name="slideshare" size={24} color="#673ab7" />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Найздаа хуваалцах
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+          <Center paddingTop={"6"}>
+            <TouchableHighlight
+              underlayColor="#ffcdd2"
+              onPress={() => {
+                if (Platform.OS === "android") {
+                  Linking.openURL(`tel:${80409000}`);
+                } else {
+                  Linking.openURL(`telprompt:${80409000}`);
+                }
+              }}
+              style={{
+                width: wp("96%"),
+                borderRadius: hp("1%"),
+                justifyContent: "center",
+                height: 60,
+              }}
             >
-              <HStack paddingLeft={"8"}>
-                <Icon as={Feather} size="xl" name="log-out" color="#1B3241" />
-                <Text fontSize={"md"} color="#325b77">
-                  {"    "}Гарах
-                </Text>
-              </HStack>
-            </Box>
-          </TouchableHighlight></Center></Box>
-        <Box backgroundColor={"#ececec"} height={"10%"}><View>
-          <Text textAlign={"center"} color="#192d3b" justifyItems="end">
-            Shoe Gallery LLC © {new Date().getFullYear()}
-          </Text>
-        </View>
+              <Box
+                backgroundColor="#ececec"
+                h={"100%"}
+                w="100%"
+                borderRadius={"md"}
+                justifyContent={"center"}
+              >
+                <HStack alignItems="center" justifyContent={"center"}>
+                  <Box
+                    backgroundColor={"#ffcdd2"}
+                    width={12}
+                    borderRadius={"sm"}
+                    height={12}
+                    alignItems="center"
+                    justifyContent={"center"}
+                  >
+                    <Icon
+                      as={Feather}
+                      size="lg"
+                      name="log-out"
+                      color="#ef5350"
+                    />
+                  </Box>
+                  <Text width={"80%"} fontSize={"md"} color="#325b77">
+                    {"    "}Гарах
+                  </Text>
+                  <Box justifyContent="center">
+                    <AntDesign name="right" size={16} color="#616161" />
+                  </Box>
+                </HStack>
+              </Box>
+            </TouchableHighlight>
+          </Center>
+        </Box>
+        <Box height={"20%"} justifyContent={"flex-end"}><Box justifyContent={"flex-end"} backgroundColor={"#ececec"} >
+          <View>
+            <Text textAlign={"center"} color="#192d3b" justifyItems="end">
+              Shoe Gallery LLC © {new Date().getFullYear()}
+            </Text>
+          </View>
           <Text
             textAlign={"center"}
             color="#192d3b"
@@ -355,7 +507,8 @@ export default function ProfileScreen({ navigation }) {
             justifyItems="end"
           >
             Аппликейшны хувилбар {appJson.expo.version}
-          </Text></Box>
+          </Text>
+        </Box></Box>
       </Box>
     </SafeAreaView>
   );

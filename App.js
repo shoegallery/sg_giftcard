@@ -21,6 +21,7 @@ import {
   ForgetPasswordScreen,
   LoginAuthScreen,
   Dashboard,
+  LocationScreen,
   ExpenseScreen, TermScreen
 } from "./src/screens";
 import { Text, TextInput, LogBox, StatusBar, Alert, Linking, Button } from "react-native";
@@ -30,6 +31,7 @@ import { StateProvider, StateContextHistory } from "./src/Context/StateContext";
 import { NativeBaseProvider, ToastProvider, IconButton } from "native-base";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+
 
 LogBox.ignoreLogs([
   "ViewPropTypes will be removed",
@@ -173,18 +175,18 @@ export default function App({ navigation }) {
                         title: 'Үйлчилгээний нөхцөл',
                         backgroundColor: "#ececec",
                         headerTintColor: '#ececec',
-                        headerStyle: { backgroundColor: "#ececec", borderRadius: 0 },
+                        headerStyle: { backgroundColor: "white", borderRadius: 0 },
                         headerTitleStyle: {
-                          width: "80%",
-                          fontSize: 20,
+                          width: "85%",
+                          fontSize: 17,
                           color: "black",
                           fontWeight: "500",
-                          backgroundColor: "#ececec",
+                          backgroundColor: "white",
                           fontFamily: "regular",
                           textAlign: Platform.OS === "android" ? "center" : "auto"
                         },
                       }}
-                      name="Үйлчилгээний нөхцөл"
+                      name="TermScreen"
                       component={TermScreen}
                     />
                     <Stack.Screen
@@ -206,6 +208,25 @@ export default function App({ navigation }) {
                       }}
                       name="Зарцуулах"
                       component={ExpenseScreen}
+                    />
+                    <Stack.Screen
+                      options={{
+                        headerShown: true,
+                        title: 'Дэлгүүрийн хаяг',
+                        backgroundColor: "#ececec",
+                        headerTintColor: '#ececec',
+                        headerStyle: { backgroundColor: "white", borderRadius: 0 },
+                        headerTitleStyle: {
+                          width: "85%",
+                          fontSize: 17,
+                          color: "black",
+                          fontWeight: "500",
+                          fontFamily: "regular",
+                          textAlign: Platform.OS === "android" ? "center" : "auto"
+                        },
+                      }}
+                      name="LocationScreen"
+                      component={LocationScreen}
                     />
                   </Stack.Navigator>
                 </NavigationContainer>

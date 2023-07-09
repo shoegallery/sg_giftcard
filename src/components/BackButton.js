@@ -1,19 +1,15 @@
 import React from "react";
+import { StyleSheet, View, Platform, TouchableOpacity, StatusBar, SafeAreaView } from "react-native";
 
-import { IconButton, Icon, View } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
+
 export default function BackButton({ goBack }) {
   return (
-    <IconButton onPress={goBack} size={"lg"} variant="solid" backgroundColor={"#ececec"} _icon={{
-      as: AntDesign,
-      name: "arrowleft",
-      color: "black"
-    }} />
-
+    <TouchableOpacity style={{ height: "100%", width: 50, justifyContent: "center", alignItems: "center" }} onPress={goBack}><AntDesign name="arrowleft" size={24} color="black" /></TouchableOpacity>
   );
 }

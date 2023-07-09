@@ -97,7 +97,6 @@ export default function TermScreen({ navigation }) {
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
       headerLeft: () => (
-
         <BackButton goBack={navigation.goBack} />
       ),
     });
@@ -121,7 +120,7 @@ export default function TermScreen({ navigation }) {
           }}
         >
           <AccordionList
-            style={{ height: hp("100%"), backgroundColor: "#ececec", margin: 6 }}
+            style={{ height: hp("100%"), backgroundColor: "#ececec", margin: 6, borderRadius: 5 }}
             data={data}
             customTitle={(item) => (
               <Box justifyContent="center" backgroundColor="white" height={"12"}>

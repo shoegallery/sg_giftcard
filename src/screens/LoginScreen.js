@@ -41,6 +41,20 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginScreen({ navigation }) {
+
+
+  const warnToast = useToast();
+  const [show, setShow] = useState(false);
+  const [phone, setPhone] = useState({ value: "" });
+
+  const [userData, setUserData] = useContext(StateContext);
+  const [showModal, setShowModal] = useState(false);
+
+  const [versionUpdate, setVersionUpdate] = useState(false);
+
+  const [userUUID, setUserUUID] = useState(undefined);
+
+  const [seeLockPassword, setSeeLockPassword] = useState(false);
   const reactToUpdates = () => {
     let dataVersion = JSON.stringify({});
     let configVersion = {
@@ -74,19 +88,6 @@ export default function LoginScreen({ navigation }) {
       })
       .catch(function (error) { });
   };
-
-  const warnToast = useToast();
-  const [show, setShow] = useState(false);
-  const [phone, setPhone] = useState({ value: "" });
-
-  const [userData, setUserData] = useContext(StateContext);
-  const [showModal, setShowModal] = useState(false);
-
-  const [versionUpdate, setVersionUpdate] = useState(false);
-
-  const [userUUID, setUserUUID] = useState(undefined);
-
-  const [seeLockPassword, setSeeLockPassword] = useState(false);
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -141,282 +142,287 @@ export default function LoginScreen({ navigation }) {
     reactToUpdates();
     InternetCheck();
     console.log("first");
-    if (phone.value !== "" && userUUID !== undefined) {
-      let requestToken = JSON.stringify({
-        phone: parseInt(phone.value),
-        uuid: userUUID,
-      });
+    if (versionUpdate !== true) {
+      if (phone.value !== "" && userUUID !== undefined) {
+        let requestToken = JSON.stringify({
+          phone: parseInt(phone.value),
+          uuid: userUUID,
+        });
+        let config = {
+          method: "POST",
+          url: `${baseUrl}/wallets/create`,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          maxRedirects: 0,
+          data: requestToken,
+        };
 
-      let config = {
-        method: "POST",
-        url: `${baseUrl}/wallets/create`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        maxRedirects: 0,
-        data: requestToken,
-      };
-
-      axios(config)
-        .then(function (response) {
-          if (showModal === false) {
-            setUserData(response.data);
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "300",
-              fontSize: 20,
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Амжилттай нэвтэрлээ",
-              placement: "top",
-            });
-            AsyncStorage.setItem("user_phone", phone.value);
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Dashboard" }],
-            });
-          }
-        })
-        .catch(function (error) {
-          AsyncStorage.setItem("user_phone", phone.value)
-            .then(() => { })
-            .catch(() => console.log("password"));
-          const err = JSON.parse(JSON.stringify(error));
-          if (err.status === 492) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдсон байна.",
-              placement: "top",
-            });
-          } else if (err.status === 491) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдлоо",
-              placement: "top",
-            });
-          } else {
-            if (err.status === 482) {
+        axios(config)
+          .then(function (response) {
+            if (showModal === false) {
+              setUserData(response.data);
               warnToast.show({
                 backgroundColor: "emerald.400",
                 px: "2",
                 py: "1",
                 rounded: "sm",
                 height: "50",
-                width: "250",
+                width: "300",
+                fontSize: 20,
                 textAlign: "center",
                 justifyContent: "center",
                 alignItems: "center",
-                title: "Мессеж илгээсэн.",
+                title: "Амжилттай нэвтэрлээ",
                 placement: "top",
               });
-            } else if (err.status === 481) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 480) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 499) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
+              AsyncStorage.setItem("user_phone", phone.value);
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Dashboard" }],
               });
             }
-            navigation.navigate("LoginAuthScreen");
-          }
-        });
+          })
+          .catch(function (error) {
+            AsyncStorage.setItem("user_phone", phone.value)
+              .then(() => { })
+              .catch(() => console.log("password"));
+            const err = JSON.parse(JSON.stringify(error));
+            if (err.status === 492) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Таны хаяг түр блоклогдсон байна.",
+                placement: "top",
+              });
+            } else if (err.status === 491) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Таны хаяг түр блоклогдлоо",
+                placement: "top",
+              });
+            } else {
+              if (err.status === 482) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 481) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 480) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 499) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              }
+              navigation.navigate("LoginAuthScreen");
+            }
+          });
+      }
     }
+
   };
   const autoLogin = () => {
     reactToUpdates();
     InternetCheck();
-    if (phone.value !== "" && userUUID !== undefined) {
-      let requestToken = JSON.stringify({
-        phone: parseInt(phone.value),
-        uuid: userUUID,
-      });
+    if (versionUpdate !== true) {
+      if (phone.value !== "" && userUUID !== undefined) {
+        let requestToken = JSON.stringify({
+          phone: parseInt(phone.value),
+          uuid: userUUID,
+        });
 
-      let config = {
-        method: "POST",
-        url: `${baseUrl}/wallets/create`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        maxRedirects: 0,
-        data: requestToken,
-      };
+        let config = {
+          method: "POST",
+          url: `${baseUrl}/wallets/create`,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          maxRedirects: 0,
+          data: requestToken,
+        };
 
-      axios(config)
-        .then(function (response) {
-          if (showModal === false) {
-            setUserData(response.data);
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "300",
-              fontSize: 20,
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Амжилттай нэвтэрлээ",
-              placement: "top",
-            });
-            AsyncStorage.setItem("user_phone", phone.value);
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Dashboard" }],
-            });
-          }
-        })
-        .catch(function (error) {
-          AsyncStorage.setItem("user_phone", phone.value)
-            .then(() => { })
-            .catch(() => console.log("password"));
-          const err = JSON.parse(JSON.stringify(error));
-          if (err.status === 492) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдсон байна.",
-              placement: "top",
-            });
-          } else if (err.status === 491) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдлоо",
-              placement: "top",
-            });
-          } else {
-            if (err.status === 482) {
+        axios(config)
+          .then(function (response) {
+            if (showModal === false) {
+              setUserData(response.data);
               warnToast.show({
                 backgroundColor: "emerald.400",
                 px: "2",
                 py: "1",
                 rounded: "sm",
                 height: "50",
-                width: "250",
+                width: "300",
+                fontSize: 20,
                 textAlign: "center",
                 justifyContent: "center",
                 alignItems: "center",
-                title: "Мессеж илгээсэн.",
+                title: "Амжилттай нэвтэрлээ",
                 placement: "top",
               });
-            } else if (err.status === 481) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 480) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
-              });
-            } else if (err.status === 499) {
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Мессеж илгээсэн.",
-                placement: "top",
+              AsyncStorage.setItem("user_phone", phone.value);
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Dashboard" }],
               });
             }
-            navigation.navigate("LoginAuthScreen");
-          }
-        });
+          })
+          .catch(function (error) {
+            AsyncStorage.setItem("user_phone", phone.value)
+              .then(() => { })
+              .catch(() => console.log("password"));
+            const err = JSON.parse(JSON.stringify(error));
+            if (err.status === 492) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Таны хаяг түр блоклогдсон байна.",
+                placement: "top",
+              });
+            } else if (err.status === 491) {
+              warnToast.show({
+                backgroundColor: "red.400",
+                px: "2",
+                py: "1",
+                rounded: "sm",
+                height: "50",
+                width: "250",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                title: "Таны хаяг түр блоклогдлоо",
+                placement: "top",
+              });
+            } else {
+              if (err.status === 482) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 481) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 480) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              } else if (err.status === 499) {
+                warnToast.show({
+                  backgroundColor: "emerald.400",
+                  px: "2",
+                  py: "1",
+                  rounded: "sm",
+                  height: "50",
+                  width: "250",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  title: "Мессеж илгээсэн.",
+                  placement: "top",
+                });
+              }
+              navigation.navigate("LoginAuthScreen");
+            }
+          });
+      }
     }
+
   }
 
   useEffect(() => {
@@ -433,6 +439,7 @@ export default function LoginScreen({ navigation }) {
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
       <ToastProvider>
+
         <View style={{ justifyContent: "center", alignContent: "center" }}>
           <View style={{ height: hp("60%"), backgroundColor: "#ececec" }}>
             <Box height={"100%"} justifyContent="center">
@@ -536,11 +543,11 @@ export default function LoginScreen({ navigation }) {
                         <Text
                           alignItems={"center"}
                           textAlign={"center"}
-                          fontFamily="bold"
+
                           color="white"
                           fontSize="2xl"
                         >
-                          Болсон
+                          Үргэлжлүүлэх
                         </Text>
                       </Box>
                     </TouchableHighlight>
@@ -978,14 +985,13 @@ export default function LoginScreen({ navigation }) {
                 bg: "coolGray.800",
               }}
             >
-              <Modal.Content maxWidth="90%" height="300" maxH="300">
-                <Modal.Header>Шинэ хувилбар</Modal.Header>
+              <Modal.Content width="90%" >
+
                 <Modal.Body
                   width="100%"
                   maxWidth="100%"
-                  size="xs"
-                  height="200"
-                  maxH="200"
+
+
                 >
                   Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү
                   олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та
@@ -994,6 +1000,7 @@ export default function LoginScreen({ navigation }) {
                 <Modal.Footer>
                   <Button.Group space={2}>
                     <Button
+                      width={"100%"}
                       onPress={() => {
                         if (Platform.OS === "android") {
                           Linking.openURL(

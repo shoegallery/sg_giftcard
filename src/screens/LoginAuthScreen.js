@@ -13,6 +13,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import uuid from "react-native-uuid";
+import RnOtpTimer from 'react-native-otp-timer';
+
+
 
 import axios from "axios";
 
@@ -38,6 +41,7 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginAuthScreen({ navigation }) {
+
   const reactToUpdates = () => {
     var dataVersion = JSON.stringify({});
     var configVersion = {
@@ -375,9 +379,14 @@ export default function LoginAuthScreen({ navigation }) {
                           : "-"}
                       </Text>
                     </VStack>
+
                   </Center>
+
                 </Box>
+
               </HStack>
+
+
             </Center>
             <TouchableOpacity
               onPress={() => {
@@ -397,6 +406,7 @@ export default function LoginAuthScreen({ navigation }) {
                   display: password.value.length === 6 ? "flex" : "none",
                 }}
               >
+
                 <Center>
                   <TouchableHighlight
                     underlayColor="#bad6e8"
@@ -411,7 +421,7 @@ export default function LoginAuthScreen({ navigation }) {
                       <Text
                         alignItems={"center"}
                         textAlign={"center"}
-                        fontFamily="bold"
+
                         color="white"
                         fontSize="2xl"
                       >
