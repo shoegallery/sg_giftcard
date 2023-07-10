@@ -47,7 +47,7 @@ import {
   Linking,
   Button,
 } from "react-native";
-import { SSRProvider } from "@react-aria/ssr";
+
 import BackButton from "./src/components/BackButton";
 import { StateProvider } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -168,7 +168,7 @@ export default function App({ navigation }) {
     return null;
   }
   return (
-    <SSRProvider>
+
       <NativeBaseProvider>
         <ToastProvider>
           <SafeAreaProvider>
@@ -183,6 +183,6 @@ export default function App({ navigation }) {
           </SafeAreaProvider>
         </ToastProvider>
       </NativeBaseProvider>
-    </SSRProvider>
+ 
   );
 }

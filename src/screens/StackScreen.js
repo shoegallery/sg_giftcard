@@ -15,21 +15,9 @@ import {
   IconButton,
   Icon,
 } from "react-native";
-import {
-  MaterialIcons,
-  Feather,
-  Entypo,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-  Ionicons,
-  Foundation,
-  FontAwesomeIcon,
-} from "@expo/vector-icons";
+import * as vectorIcons from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import { HeaderBackContext } from "@react-navigation/elements";
+
 
 import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
@@ -84,7 +72,6 @@ import {
   ProfileScreen,
   LoginAuthScreen,
   LocationScreen,
-  ExpenseScreen,
   TermScreen,
   PurchaseScreen,
   TransferScreen,
@@ -229,7 +216,6 @@ const StackScreen = ({ navigation }) => {
         name="LocationScreen"
         component={LocationScreen}
       />
-      
     </Stack.Navigator>
   );
 };
