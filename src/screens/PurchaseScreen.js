@@ -69,7 +69,8 @@ const PurchaseScreen = ({ navigation }) => {
     value: "",
     error: "",
   });
-
+  const [userTransactionData, setUserTransactionData] =
+    useContext(StateContextHistory);
   const dataRefresher = () => {
     InternetCheck();
     try {
@@ -206,6 +207,7 @@ const PurchaseScreen = ({ navigation }) => {
             title: "Гүйлгээ амжилттай",
             placement: "top",
           });
+          navigation.goBack();
         }
       })
       .catch(function (error) {
