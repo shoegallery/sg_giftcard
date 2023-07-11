@@ -1,7 +1,7 @@
 import { baseUrl } from "../baseUrl";
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import {NumericFormat} from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { Alert, View, SafeAreaView } from "react-native";
 import {
   MaterialIcons,
@@ -158,6 +158,51 @@ const WalletScreen = ({ navigation }) => {
         });
       });
   };
+  const dataRefresher = () => {
+    InternetCheck();
+    try {
+      var requests = JSON.stringify({
+        walletSuperId: userData.wallets.walletSuperId,
+      });
+
+      var configs = {
+        method: "POST",
+        url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        maxRedirects: 0,
+        data: requests,
+      };
+      console.log(configs);
+      axios(configs)
+        .then(function (response) {
+          userTransactionHistory();
+          setUserData({
+            token: userData.token,
+            wallets: response.data.wallets,
+          });
+        })
+        .catch(function (error) {
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Сервер түр унтарсан.",
+            placement: "top",
+          });
+        });
+    } catch (err) {
+      {
+      }
+    }
+  };
   const getCoupon = () => {
     InternetCheck();
     if (receiverCoupon.length !== 5) {
@@ -256,50 +301,6 @@ const WalletScreen = ({ navigation }) => {
           setReceiverCoupon("");
         }
       });
-  };
-  const dataRefresher = () => {
-    InternetCheck();
-    try {
-      var requests = JSON.stringify({
-        walletSuperId: userData.wallets.walletSuperId,
-      });
-
-      var configs = {
-        method: "POST",
-        url: `${baseUrl}/wallets/my/${userData.wallets._id}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        maxRedirects: 0,
-        data: requests,
-      };
-      axios(configs)
-        .then(function (response) {
-          userTransactionHistory();
-          setUserData({
-            token: userData.token,
-            wallets: response.data.wallets,
-          });
-        })
-        .catch(function (error) {
-          warnToast.show({
-            backgroundColor: "red.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "250",
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Сервер түр унтарсан.",
-            placement: "top",
-          });
-        });
-    } catch (err) {
-      {
-      }
-    }
   };
 
   const userTransactionHistory = () => {
@@ -424,7 +425,7 @@ const WalletScreen = ({ navigation }) => {
                     />
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>
@@ -480,7 +481,7 @@ const WalletScreen = ({ navigation }) => {
                     </HStack>
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>
@@ -538,7 +539,7 @@ const WalletScreen = ({ navigation }) => {
                     </HStack>
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>
@@ -612,7 +613,7 @@ const WalletScreen = ({ navigation }) => {
                     </HStack>
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>
@@ -671,7 +672,7 @@ const WalletScreen = ({ navigation }) => {
                     </HStack>
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>
@@ -733,7 +734,7 @@ const WalletScreen = ({ navigation }) => {
                     </HStack>
                   </Box>
                   <Box width={"8%"} justifyContent="center">
-                    <AntDesign name="right" size={28} color="#616161" />
+                    <AntDesign name="right" size={20} color="#616161" />
                   </Box>
                 </HStack>
               </Box>

@@ -1,4 +1,5 @@
 import { baseUrl } from "../baseUrl";
+import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import {
   TouchableOpacity,
@@ -11,7 +12,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
 
-import axios from "axios";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -41,8 +41,6 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginScreen({ navigation }) {
-
-
   const warnToast = useToast();
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
@@ -55,87 +53,18 @@ export default function LoginScreen({ navigation }) {
   const [userUUID, setUserUUID] = useState(undefined);
 
   const [seeLockPassword, setSeeLockPassword] = useState(false);
-  const reactToUpdates = () => {
-    let dataVersion = JSON.stringify({});
-    let configVersion = {
-      method: "post",
-      url: `${baseUrl}/wallets/version`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: dataVersion,
-    };
-    axios(configVersion)
-      .then(function (response) {
+  const [isPressed, setIsPressed] = useState(false);
 
-        if (Platform.OS === "android") {
-          if (appJson.expo.version !== response.data.android) {
-            setShowModal(true);
-            setVersionUpdate(true);
-          } else {
-            setShowModal(false);
-            setVersionUpdate(false);
-          }
-        } else if (Platform.OS === "ios") {
-          if (appJson.expo.version !== response.data.ios) {
-            setShowModal(true);
-            setVersionUpdate(true);
-          } else {
-            setShowModal(false);
-            setVersionUpdate(false);
-          }
-        }
-      })
-      .catch(function (error) { });
-  };
-  const InternetCheck = () => {
-    NetInfo.fetch().then((networkState) => {
-      if (networkState.isConnected !== true) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Интернет холболт алга",
-          placement: "top",
-        });
-      }
-      AsyncStorage.getItem("user_uuid")
-        .then((result) => {
-          if (result === null) {
-            AsyncStorage.setItem("user_uuid", uuid.v4())
-              .then(() => console.log("uuid ok"))
-              .catch(() => console.log("uuid error"));
-          } else {
-            AsyncStorage.getItem("user_uuid")
-              .then((result) => {
-                setUserUUID(result);
-              })
-              .catch(() => {
-                console.log("uuid baihgui");
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("uuid error");
-        });
+  const handlePress = () => {
+    if (!isPressed) {
+      setIsPressed(true);
+      loginPressed()
+    
 
-      AsyncStorage.getItem("user_phone")
-        .then((result) => {
-          console.log(result)
-          if (result !== null) {
-            setPhone({ value: result, error: "" });
-          }
-        })
-        .catch((err) => {
-          console.log("user_phone baihgui");
-        });
-    });
+      setTimeout(() => {
+        setIsPressed(false);
+      }, 10000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
+    }
   };
 
   const loginPressed = () => {
@@ -185,7 +114,7 @@ export default function LoginScreen({ navigation }) {
           })
           .catch(function (error) {
             AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => { })
+              .then(() => {})
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
@@ -279,7 +208,6 @@ export default function LoginScreen({ navigation }) {
           });
       }
     }
-
   };
   const autoLogin = () => {
     reactToUpdates();
@@ -328,7 +256,7 @@ export default function LoginScreen({ navigation }) {
           })
           .catch(function (error) {
             AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => { })
+              .then(() => {})
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
@@ -422,11 +350,93 @@ export default function LoginScreen({ navigation }) {
           });
       }
     }
+  };
+  const reactToUpdates = () => {
+    let dataVersion = JSON.stringify({});
+    let configVersion = {
+      method: "post",
+      url: `${baseUrl}/wallets/version`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: dataVersion,
+    };
+    axios(configVersion)
+      .then(function (response) {
+        if (Platform.OS === "android") {
+          if (appJson.expo.version !== response.data.android) {
+            setShowModal(true);
+            setVersionUpdate(true);
+          } else {
+            setShowModal(false);
+            setVersionUpdate(false);
+          }
+        } else if (Platform.OS === "ios") {
+          if (appJson.expo.version !== response.data.ios) {
+            setShowModal(true);
+            setVersionUpdate(true);
+          } else {
+            setShowModal(false);
+            setVersionUpdate(false);
+          }
+        }
+      })
+      .catch(function (error) {});
+  };
+  const InternetCheck = () => {
+    NetInfo.fetch().then((networkState) => {
+      if (networkState.isConnected !== true) {
+        warnToast.show({
+          backgroundColor: "red.400",
+          px: "2",
+          py: "1",
+          rounded: "sm",
+          height: "50",
+          width: "250",
+          textAlign: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          title: "Интернет холболт алга",
+          placement: "top",
+        });
+      }
+      AsyncStorage.getItem("user_uuid")
+        .then((result) => {
+          if (result === null) {
+            AsyncStorage.setItem("user_uuid", uuid.v4())
+              .then(() => console.log("uuid ok"))
+              .catch(() => console.log("uuid error"));
+          } else {
+            AsyncStorage.getItem("user_uuid")
+              .then((result) => {
+                setUserUUID(result);
+              })
+              .catch(() => {
+                console.log("uuid baihgui");
+              });
+          }
+        })
+        .catch((err) => {
+          console.log("uuid error");
+        });
 
-  }
+      AsyncStorage.getItem("user_phone")
+        .then((result) => {
+          console.log(result);
+          if (result !== null) {
+            setPhone({ value: result, error: "" });
+          }
+        })
+        .catch((err) => {
+          console.log("user_phone baihgui");
+        });
+    });
+  };
+
+
 
   useEffect(() => {
-    autoLogin();
+
     setUserUUID(undefined);
     setShowModal(false);
     reactToUpdates();
@@ -439,7 +449,6 @@ export default function LoginScreen({ navigation }) {
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
       <ToastProvider>
-
         <View style={{ justifyContent: "center", alignContent: "center" }}>
           <View style={{ height: hp("60%"), backgroundColor: "#ececec" }}>
             <Box height={"100%"} justifyContent="center">
@@ -511,10 +520,8 @@ export default function LoginScreen({ navigation }) {
                 </HStack>
               </Center>
               <TouchableOpacity
-                onPress={() => {
-                  setShowModal(false);
-                  loginPressed();
-                }}
+                   onPress={handlePress}
+                   disabled={isPressed}
               >
                 <Box
                   paddingTop={2}
@@ -531,6 +538,7 @@ export default function LoginScreen({ navigation }) {
                 >
                   <Center>
                     <TouchableHighlight
+                  
                       underlayColor="#bad6e8"
                       style={{
                         borderRadius: 30,
@@ -543,7 +551,6 @@ export default function LoginScreen({ navigation }) {
                         <Text
                           alignItems={"center"}
                           textAlign={"center"}
-
                           color="white"
                           fontSize="2xl"
                         >
@@ -882,7 +889,7 @@ export default function LoginScreen({ navigation }) {
                     >
                       <TouchableHighlight
                         underlayColor="#f8f8f8"
-                        onPress={() => { }}
+                        onPress={() => {}}
                       >
                         <VStack
                           justifyContent="center"
@@ -894,7 +901,9 @@ export default function LoginScreen({ navigation }) {
                               fontSize="3xl"
                               color="#2a4c63"
                               fontFamily="regular"
-                            >.</Text>
+                            >
+                              .
+                            </Text>
                           </Center>
                         </VStack>
                       </TouchableHighlight>
@@ -947,7 +956,6 @@ export default function LoginScreen({ navigation }) {
                             phone.value.length < 9 &&
                             phone.value.length > 0
                           ) {
-
                             setPhone({
                               value: phone.value.substr(
                                 0,
@@ -985,14 +993,8 @@ export default function LoginScreen({ navigation }) {
                 bg: "coolGray.800",
               }}
             >
-              <Modal.Content width="90%" >
-
-                <Modal.Body
-                  width="100%"
-                  maxWidth="100%"
-
-
-                >
+              <Modal.Content width="90%">
+                <Modal.Body width="100%" maxWidth="100%">
                   Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү
                   олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та
                   заавал аппаа шинэчилж ашиглана уу.

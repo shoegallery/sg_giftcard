@@ -18,7 +18,6 @@ import {
 import * as vectorIcons from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 
-
 import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -104,7 +103,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-           width: "100%",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -144,7 +143,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-           width: "100%",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -159,12 +158,13 @@ const StackScreen = ({ navigation }) => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: "HistoryScreen",
+          title: "Худалдан авалтын түүх",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-           width: "100%",
+            alignContent:"center",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -184,7 +184,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-           width: "100%",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -205,7 +205,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-           width: "100%",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
