@@ -2,21 +2,38 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { NumericFormat } from "react-number-format";
-import { Alert, View, SafeAreaView } from "react-native";
+import {
+  Alert,
+  View,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
 import {
   MaterialIcons,
   Feather,
   AntDesign,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-
+import { LinearGradient } from "expo-linear-gradient";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
 
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 
-import { Text, Box, useToast, HStack, Pressable } from "native-base";
+import {
+  Text,
+  Box,
+  useToast,
+  HStack,
+  Pressable,
+  Popover,
+  Button,
+  Center,
+  Modal
+} from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -30,7 +47,7 @@ const WalletScreen = ({ navigation }) => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
 
-  const [showModal, setShowModal] = useState(false);
+
   const [showCouponModal, setShowCouponModal] = useState(false);
 
   const [receiverPhone, setReceiverPhone] = useState({ value: "", error: "" });
@@ -230,7 +247,7 @@ const WalletScreen = ({ navigation }) => {
     axios(config)
       .then(function (response) {
         if (response.data.success === true) {
-          setShowCouponModal(false);
+    
           setReceiverCoupon("");
           userTransactionHistory();
           dataRefresher();
@@ -248,7 +265,7 @@ const WalletScreen = ({ navigation }) => {
             placement: "top",
           });
         } else {
-          setShowCouponModal(false);
+    
           setReceiverCoupon("");
           warnToast.show({
             backgroundColor: "red.400",
@@ -281,7 +298,7 @@ const WalletScreen = ({ navigation }) => {
             title: "Ашигласан купон код",
             placement: "top",
           });
-          setShowCouponModal(false);
+
           setReceiverCoupon("");
         } else if (err.status === 403) {
           warnToast.show({
@@ -297,11 +314,13 @@ const WalletScreen = ({ navigation }) => {
             title: "Идэвхгүй купон код",
             placement: "top",
           });
-          setShowCouponModal(false);
+
           setReceiverCoupon("");
         }
       });
   };
+
+  
 
   const userTransactionHistory = () => {
     InternetCheck();
@@ -328,8 +347,8 @@ const WalletScreen = ({ navigation }) => {
       });
   };
   useEffect(() => {
-    setShowCouponModal(false);
-    setShowModal(false);
+
+
     InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
@@ -344,16 +363,30 @@ const WalletScreen = ({ navigation }) => {
   return (
     <SafeAreaView
       style={{
-        height: hp("100%"),
+        height: "100%",
         width: "100%",
         flex: 1,
-        backgroundColor: "#ececec",
       }}
     >
-      <Box style={{ height: "20%", backgroundColor: "red" }}></Box>
-      <Box style={{ height: "80%", backgroundColor: "orange" }}>
+      <StatusBar translucent={false} backgroundColor="#f4d0e0" />
+
+      <LinearGradient
+        start={{ x: 0.0, y: 0.1 }}
+        end={{ x: 0.7, y: 0.8 }}
+        locations={[0.0, 0.1, 0.9]}
+        colors={["#f4d0e0", "#f4d0e0", "#fffcdc"]}
+        style={{
+          position: "absolute",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          width: "100%",
+        }}
+      ></LinearGradient>
+      <ScrollView>
+        <View style={{ height: 200 }}></View>
         <Pressable
-          paddingTop={50}
+          paddingTop={"6"}
           alignItems={"center"}
           onPress={() => {
             navigation.navigate("PurchaseScreen");
@@ -416,8 +449,8 @@ const WalletScreen = ({ navigation }) => {
                         <Text
                           bold
                           textAlign="right"
-                          color="#00308F"
-                          fontSize={18}
+                          color="#325b77"
+                          fontSize={20}
                         >
                           {formattedValue}₮
                         </Text>
@@ -432,7 +465,7 @@ const WalletScreen = ({ navigation }) => {
             );
           }}
         </Pressable>
-        <Pressable paddingTop={3} alignItems={"center"}>
+        <Pressable paddingTop={3} alignItems={"center"} onPress={() => {}}>
           {({ isHovered, isPressed }) => {
             return (
               <Box
@@ -563,6 +596,7 @@ const WalletScreen = ({ navigation }) => {
               title: "Тун удахгүй",
               placement: "top",
             });
+            return;
           }}
           /* onPress={() => {
             navigation.navigate("TransferScreen");
@@ -681,6 +715,7 @@ const WalletScreen = ({ navigation }) => {
         </Pressable>
         <Pressable
           paddingTop={3}
+          paddingBottom={6}
           alignItems={"center"}
           onPress={() => {
             navigation.navigate("HistoryScreen");
@@ -741,9 +776,22 @@ const WalletScreen = ({ navigation }) => {
             );
           }}
         </Pressable>
-      </Box>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  linearGradient: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "120%",
+    width: "100%",
+  },
+});
 export default WalletScreen;

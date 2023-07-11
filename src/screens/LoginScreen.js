@@ -104,7 +104,9 @@ export default function LoginScreen({ navigation }) {
                 alignItems: "center",
                 title: "Амжилттай нэвтэрлээ",
                 placement: "top",
+                
               });
+              
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
                 index: 0,
@@ -131,6 +133,7 @@ export default function LoginScreen({ navigation }) {
                 title: "Таны хаяг түр блоклогдсон байна.",
                 placement: "top",
               });
+              
             } else if (err.status === 491) {
               warnToast.show({
                 backgroundColor: "red.400",

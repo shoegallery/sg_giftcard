@@ -159,8 +159,8 @@ const PurchaseScreen = ({ navigation }) => {
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
       navigation.goBack();
       Alert.alert(
-        "Та шилжүүлгийн мэдээллээ зөв оруулна уу",
-        `Салбарыг заавал сонгоно, үнийн дүнд зөвхөн тоо агуулна.`,
+        "",
+        `Та шилжүүлгийн мэдээллээ зөв оруулна уу. Салбарыг заавал сонгоно, үнийн дүнд зөвхөн тоо агуулна.`,
         [
           {
             text: "OK",
@@ -217,7 +217,7 @@ const PurchaseScreen = ({ navigation }) => {
         navigation.goBack();
         setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
-          Alert.alert("Дахин оролдоно уу", "Ямар нэгэн зүйл буруу байна.", [
+          Alert.alert("", "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.", [
             {
               text: "OK",
             },
@@ -339,9 +339,10 @@ const PurchaseScreen = ({ navigation }) => {
                   fontSize="md"
                   height="16"
                   accessibilityLabel="Choose Service"
-                  placeholder="Энд дарна уу"
+                  placeholder="Энд дарж салбарыг сонгоно уу"
                   _selectedItem={{
-                    bg: "teal.600",
+                    bg: "#5499c7",
+                    borderRadius: 10,
                     width: "full",
                     endIcon: <CheckIcon color="red" size={5} />,
                   }}

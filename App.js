@@ -174,7 +174,7 @@ export default function App({ navigation }) {
           <SafeAreaProvider>
             <StateProvider>
               <Provider>
-                <StatusBar barStyle="dark-content" backgroundColor="white" />
+                <StatusBar barStyle="dark-content"/>
                 <NavigationContainer>
                   <StackScreen />
                 </NavigationContainer>

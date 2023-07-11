@@ -82,15 +82,13 @@ import PromotionScreen from "./PromotionScreen";
 
 const Tab = createBottomTabNavigator();
 
-const TabbarScreen= ({ navigation }) =>{
- 
+const TabbarScreen = ({ navigation }) => {
   return (
     <Tab.Navigator
       initialRouteName="Shopping"
       barStyle={{ backgroundColor: "tomato" }}
-   
       screenOptions={{
-        tabBarActiveTintColor: "#e91e63",
+        tabBarActiveTintColor: "#ff5252",
         headerShown: false,
         tabBarShowLabel: true,
         tabBarLabelStyle: {
@@ -99,7 +97,7 @@ const TabbarScreen= ({ navigation }) =>{
           fontSize: 11,
           fontWeight: "500",
         },
-        tabBarOptions:{
+        tabBarOptions: {
           style: { height: 50 }, // Adjust the height as per your requirements
         },
         tabBarStyle: {
@@ -172,5 +170,5 @@ const TabbarScreen= ({ navigation }) =>{
       />
     </Tab.Navigator>
   );
-}
-export default TabbarScreen
+};
+export default TabbarScreen;
