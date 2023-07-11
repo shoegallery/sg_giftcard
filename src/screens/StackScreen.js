@@ -104,7 +104,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+           width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -124,7 +124,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+            width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -144,7 +144,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+           width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -164,7 +164,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+           width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -184,7 +184,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+           width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",
@@ -205,7 +205,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            width: "85%",
+           width: "100%",
             fontSize: 17,
             color: "black",
             fontWeight: "500",

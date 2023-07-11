@@ -9,12 +9,14 @@ import {
   UIManager,
   TouchableOpacity,
   TouchableHighlight,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   Linking,
   Share,
+  
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import {
   MaterialIcons,
   Feather,
@@ -62,8 +64,12 @@ export default function ProfileScreen({ navigation }) {
     try {
       let messageOs;
       if (Platform.OS === "android") {
-        messageOs = "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app"
-      } else if (Platform.OS === "ios") { messageOs = "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856" }
+        messageOs =
+          "https://play.google.com/store/apps/details?id=com.shoegallery.sg_wallet_app";
+      } else if (Platform.OS === "ios") {
+        messageOs =
+          "https://apps.apple.com/us/app/shoegallery-wallet/id1631641856";
+      }
       const result = await Share.share({ message: messageOs });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -77,7 +83,7 @@ export default function ProfileScreen({ navigation }) {
     } catch (error) {
       alert(error.message);
     }
-  }
+  };
   const [isopen, Setisopen] = useState();
   useEffect(() => {
     Setisopen(false);
@@ -117,7 +123,7 @@ export default function ProfileScreen({ navigation }) {
         </Box>
       </Box> */}
       <Box height={"full"} backgroundColor={"#ececec"}>
-        <Box height={"80%"} width={"100%"} paddingTop={"6"} >
+        <Box height={"80%"} width={"100%"} paddingTop={"6"}>
           <Center>
             <TouchableHighlight
               underlayColor="#89c4f4"
@@ -170,7 +176,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#89c4f4"
               onPress={() => {
-                navigation.navigate('TermScreen');
+                navigation.navigate("TermScreen");
               }}
               style={{
                 width: wp("96%"),
@@ -242,13 +248,7 @@ export default function ProfileScreen({ navigation }) {
                     alignItems="center"
                     justifyContent={"center"}
                   >
-                    <Icon
-
-                      as={Octicons}
-                      size="lg"
-                      name="star"
-                      color="#004d40"
-                    />
+                    <Icon as={Octicons} size="lg" name="star" color="#004d40" />
                   </Box>
                   <Text width={"80%"} fontSize={"md"} color="#325b77">
                     {"    "}Брэндийн танилцуулга
@@ -406,7 +406,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#d1c4e9"
               onPress={() => {
-                onShare()
+                onShare();
               }}
               style={{
                 width: wp("96%"),
@@ -494,21 +494,18 @@ export default function ProfileScreen({ navigation }) {
             </TouchableHighlight>
           </Center>
         </Box>
-        <Box height={"20%"} justifyContent={"flex-end"}><Box justifyContent={"flex-end"} backgroundColor={"#ececec"} >
-          <View>
-            <Text textAlign={"center"} color="#192d3b" justifyItems="end">
-              Shoe Gallery LLC © {new Date().getFullYear()}
+        <Box height={"20%"} justifyContent={"flex-end"}>
+          <Box justifyContent={"flex-end"} backgroundColor={"#ececec"}>
+            <View>
+              <Text textAlign={"center"} color="#192d3b">
+                Shoe Gallery LLC © {new Date().getFullYear()}
+              </Text>
+            </View>
+            <Text textAlign={"center"} color="#192d3b" fontSize="xs">
+              Аппликейшны хувилбар {appJson.expo.version}
             </Text>
-          </View>
-          <Text
-            textAlign={"center"}
-            color="#192d3b"
-            fontSize="xs"
-            justifyItems="end"
-          >
-            Аппликейшны хувилбар {appJson.expo.version}
-          </Text>
-        </Box></Box>
+          </Box>
+        </Box>
       </Box>
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState,useContext } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import {
   Animated,
   View,
@@ -9,8 +9,8 @@ import {
   Platform,
   UIManager,
 } from "react-native";
-import * as Haptics from 'expo-haptics';
-import NumberFormat from "react-number-format";
+import * as Haptics from "expo-haptics";
+import { NumericFormat } from "react-number-format";
 import {
   MaterialIcons,
   Feather,
@@ -72,18 +72,21 @@ const PurchaseScreen = ({ navigation }) => {
       <View style={{ height: hp("60%") - 50, backgroundColor: "#ececec" }}>
         <Box height={"100%"}>
           <Center>
-          <NumberFormat
-                        value={userData.wallets.balance.$numberDecimal}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        renderText={(formattedValue) => (
-                          <Text
-                          paddingTop={5} maxWidth={"90%"} color="#424242" fontSize="sm"
-                          >
-                           Боломжит үлдэгдэл: {formattedValue}₮
-                          </Text>
-                        )}
-                      />
+            <NumericFormat
+              value={userData.wallets.balance.$numberDecimal}
+              displayType={"text"}
+              thousandSeparator={true}
+              renderText={(formattedValue) => (
+                <Text
+                  paddingTop={5}
+                  maxWidth={"90%"}
+                  color="#424242"
+                  fontSize="sm"
+                >
+                  Боломжит үлдэгдэл: {formattedValue}₮
+                </Text>
+              )}
+            />
             <HStack
               marginTop={5}
               height="16"
@@ -146,7 +149,7 @@ const PurchaseScreen = ({ navigation }) => {
                         0₮
                       </Text>
                     ) : (
-                      <NumberFormat
+                      <NumericFormat
                         value={phone.value}
                         displayType={"text"}
                         thousandSeparator={true}

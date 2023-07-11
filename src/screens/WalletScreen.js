@@ -1,83 +1,28 @@
 import { baseUrl } from "../baseUrl";
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import NumberFormat from "react-number-format";
-import {
-  Alert,
-  RefreshControl,
-  ScrollView,
-  Image,
-  StatusBar,
-  View,
-  TouchableHighlight,
-  TouchableHighlightComponent,
-  IconButton,
-  Icon,
-} from "react-native";
+import {NumericFormat} from "react-number-format";
+import { Alert, View, SafeAreaView } from "react-native";
 import {
   MaterialIcons,
   Feather,
-  Entypo,
   AntDesign,
-  FontAwesome5,
   MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-  Ionicons,
-  Foundation,
-  FontAwesomeIcon,
 } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
-import { HeaderBackContext } from "@react-navigation/elements";
 
-import { NavigationContainer } from "@react-navigation/native";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { StateContext, StateContextHistory } from "../Context/StateContext";
-import Product from "../components/Product";
-import AppBar from "../components/AppBar";
-import {
-  Button,
-  Modal,
-  Text,
-  NativeBaseProvider,
-  FormControl,
-  Input,
-  Box,
-  VStack,
-  Heading,
-  useToast,
-  Center,
-  Select,
-  HStack,
-  PresenceTransition,
-  AlertDialog,
-  Pressable,
-  Spacer,
-  Flex,
-  Badge,
-  CheckIcon,
-} from "native-base";
+
+import { Text, Box, useToast, HStack, Pressable } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { CleanTabBar } from "react-navigation-tabbar-collection";
 
-import CartStyle from "../components/CartStyle";
-import MyActionButtonComponent from "../components/MyActionButtonComponent";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ProfileScreen from "./ProfileScreen";
-import TestScreen from "./TestScreen";
-import * as Animatable from "react-native-animatable";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import SearchScreen from "./SearchScreen";
-import ShoppingScreen from "./ShoppingScreen";
-import LocationScreen from "./LocationScreen";
-
-export default function WalletScreen({ navigation }) {
+const WalletScreen = ({ navigation }) => {
   const successToast = useToast();
   const warnToast = useToast();
   const [userData, setUserData] = useContext(StateContext);
@@ -404,8 +349,8 @@ export default function WalletScreen({ navigation }) {
         backgroundColor: "#ececec",
       }}
     >
-      <View style={{ height: "20%", }}></View>
-      <View style={{ height: "80%",  }}>
+      <Box style={{ height: "20%", backgroundColor: "red" }}></Box>
+      <Box style={{ height: "80%", backgroundColor: "orange" }}>
         <Pressable
           paddingTop={50}
           alignItems={"center"}
@@ -462,7 +407,7 @@ export default function WalletScreen({ navigation }) {
                     </HStack>
                   </Box>
                   <Box width={"42%"} justifyContent="center">
-                    <NumberFormat
+                    <NumericFormat
                       value={userData.wallets.balance.$numberDecimal}
                       displayType={"text"}
                       thousandSeparator={true}
@@ -619,9 +564,9 @@ export default function WalletScreen({ navigation }) {
             });
           }}
           /* onPress={() => {
-              navigation.navigate("TransferScreen");
-            }}
-            */
+            navigation.navigate("TransferScreen");
+          }}
+          */
         >
           {({ isHovered, isPressed }) => {
             return (
@@ -795,7 +740,9 @@ export default function WalletScreen({ navigation }) {
             );
           }}
         </Pressable>
-      </View>
+      </Box>
     </SafeAreaView>
   );
-}
+};
+
+export default WalletScreen;

@@ -82,7 +82,7 @@ import PromotionScreen from "./PromotionScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabbarScreen({ navigation }) {
+const TabbarScreen= ({ navigation }) =>{
  
   return (
     <Tab.Navigator
@@ -173,3 +173,4 @@ export default function TabbarScreen({ navigation }) {
     </Tab.Navigator>
   );
 }
+export default TabbarScreen
