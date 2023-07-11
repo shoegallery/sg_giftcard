@@ -32,7 +32,9 @@ import {
   Popover,
   Button,
   Center,
-  Modal
+  Modal,
+  FormControl,
+  Input,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -40,13 +42,14 @@ import {
 } from "react-native-responsive-screen";
 
 const WalletScreen = ({ navigation }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const successToast = useToast();
   const warnToast = useToast();
   const [userData, setUserData] = useContext(StateContext);
 
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-
 
   const [showCouponModal, setShowCouponModal] = useState(false);
 
@@ -247,7 +250,6 @@ const WalletScreen = ({ navigation }) => {
     axios(config)
       .then(function (response) {
         if (response.data.success === true) {
-    
           setReceiverCoupon("");
           userTransactionHistory();
           dataRefresher();
@@ -265,7 +267,6 @@ const WalletScreen = ({ navigation }) => {
             placement: "top",
           });
         } else {
-    
           setReceiverCoupon("");
           warnToast.show({
             backgroundColor: "red.400",
@@ -320,8 +321,6 @@ const WalletScreen = ({ navigation }) => {
       });
   };
 
-  
-
   const userTransactionHistory = () => {
     InternetCheck();
     var datas = JSON.stringify({
@@ -347,8 +346,6 @@ const WalletScreen = ({ navigation }) => {
       });
   };
   useEffect(() => {
-
-
     InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
@@ -465,7 +462,13 @@ const WalletScreen = ({ navigation }) => {
             );
           }}
         </Pressable>
-        <Pressable paddingTop={3} alignItems={"center"} onPress={() => {}}>
+        <Pressable
+          paddingTop={3}
+          alignItems={"center"}
+          onPress={() => {
+            setShowModal(true);
+          }}
+        >
           {({ isHovered, isPressed }) => {
             return (
               <Box
@@ -654,7 +657,52 @@ const WalletScreen = ({ navigation }) => {
             );
           }}
         </Pressable>
-
+        {showModal === true ? (
+          <Center>
+            <Modal
+              isOpen={showModal}
+              onClose={() => setShowModal(false)}
+              _backdrop={{
+                _dark: {
+                  bg: "coolGray.800",
+                },
+                bg: "warmGray.50",
+              }}
+            >
+              <Modal.Content  width={"80%"} maxH="412">
+                <Modal.CloseButton />
+                <Modal.Header>Цэнэглэх заавар</Modal.Header>
+                <Modal.Body>
+                  Та доорх дансаар төлбөрөө төлж, SG Wallet аппын дансаа цэнэглээрэй.
+                  <Box width={"100%"} backgroundColor={"red.300"}><HStack><Text pt={2} fontSize={'md'} space={2}>Хаанбанк: 12345678  </Text><Box alignSelf={"flex-end"}><Button justifyItems={"center"} variant={"link"}>Хуулах</Button></Box></HStack></Box>
+                </Modal.Body>
+                
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button
+                      variant="ghost"
+                      colorScheme="blueGray"
+                      onPress={() => {
+                        setShowModal(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onPress={() => {
+                        setShowModal(false);
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
+          </Center>
+        ) : (
+          <View></View>
+        )}
         <Pressable
           paddingTop={3}
           alignItems={"center"}
