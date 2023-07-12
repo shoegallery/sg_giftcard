@@ -58,8 +58,7 @@ export default function LoginScreen({ navigation }) {
   const handlePress = () => {
     if (!isPressed) {
       setIsPressed(true);
-      loginPressed()
-    
+      loginPressed();
 
       setTimeout(() => {
         setIsPressed(false);
@@ -104,9 +103,8 @@ export default function LoginScreen({ navigation }) {
                 alignItems: "center",
                 title: "Амжилттай нэвтэрлээ",
                 placement: "top",
-                
               });
-              
+
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
                 index: 0,
@@ -133,7 +131,6 @@ export default function LoginScreen({ navigation }) {
                 title: "Таны хаяг түр блоклогдсон байна.",
                 placement: "top",
               });
-              
             } else if (err.status === 491) {
               warnToast.show({
                 backgroundColor: "red.400",
@@ -250,6 +247,7 @@ export default function LoginScreen({ navigation }) {
                 title: "Амжилттай нэвтэрлээ",
                 placement: "top",
               });
+
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
                 index: 0,
@@ -436,10 +434,7 @@ export default function LoginScreen({ navigation }) {
     });
   };
 
-
-
   useEffect(() => {
-
     setUserUUID(undefined);
     setShowModal(false);
     reactToUpdates();
@@ -522,10 +517,7 @@ export default function LoginScreen({ navigation }) {
                   </Box>
                 </HStack>
               </Center>
-              <TouchableOpacity
-                   onPress={handlePress}
-                   disabled={isPressed}
-              >
+              <TouchableOpacity onPress={handlePress} disabled={isPressed}>
                 <Box
                   paddingTop={2}
                   borderWidth={0}
@@ -541,7 +533,6 @@ export default function LoginScreen({ navigation }) {
                 >
                   <Center>
                     <TouchableHighlight
-                  
                       underlayColor="#bad6e8"
                       style={{
                         borderRadius: 30,

@@ -20,6 +20,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
+import * as Clipboard from "expo-clipboard";
 
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 
@@ -43,6 +44,7 @@ import {
 
 const WalletScreen = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
+  const [copiedText, setCopiedText] = useState("");
 
   const successToast = useToast();
   const warnToast = useToast();
@@ -61,6 +63,10 @@ const WalletScreen = ({ navigation }) => {
   const [receiverCoupon, setReceiverCoupon] = useState("");
 
   const [refreshing, setRefreshing] = useState(false);
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync("123456789");
+  };
+
   const wait = (timeout) => {
     InternetCheck();
     userTransactionHistory();
@@ -75,6 +81,11 @@ const WalletScreen = ({ navigation }) => {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
+        toast.show({
+          backgroundColor: "red.400",
+          description: "Интэрнет холболт алга",
+          placement: "top",
+        })
         warnToast.show({
           backgroundColor: "red.400",
           px: "2",
@@ -86,7 +97,7 @@ const WalletScreen = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
           title: "Интэрнет холболт алга",
-          placement: "top",
+       
         });
       }
     });
@@ -175,7 +186,8 @@ const WalletScreen = ({ navigation }) => {
           alignItems: "center",
           title: "Гүйлгээ aмжилтгүй",
           placement: "top",
-        });
+        })
+       
       });
   };
   const dataRefresher = () => {
@@ -345,6 +357,7 @@ const WalletScreen = ({ navigation }) => {
         }
       });
   };
+  console.log(userData.wallets.phone);
   useEffect(() => {
     InternetCheck();
     userTransactionHistory();
@@ -666,34 +679,63 @@ const WalletScreen = ({ navigation }) => {
                 _dark: {
                   bg: "coolGray.800",
                 },
-                bg: "warmGray.50",
+                bg: "coolGray.800",
               }}
             >
-              <Modal.Content  width={"80%"} maxH="412">
-                <Modal.CloseButton />
+              <Modal.Content width={"80%"} maxH="412">
                 <Modal.Header>Цэнэглэх заавар</Modal.Header>
                 <Modal.Body>
-                  Та доорх дансаар төлбөрөө төлж, SG Wallet аппын дансаа цэнэглээрэй.
-                  <Box width={"100%"} backgroundColor={"red.300"}><HStack><Text pt={2} fontSize={'md'} space={2}>Хаанбанк: 12345678  </Text><Box alignSelf={"flex-end"}><Button justifyItems={"center"} variant={"link"}>Хуулах</Button></Box></HStack></Box>
+                  Та доорх дансаар төлбөрөө төлж, SG Wallet аппын дансаа
+                  цэнэглээрэй.
+                  <Box width={"100%"}>
+                    <HStack>
+                      <Text pt={3} fontSize={"md"} space={2}>
+                        Хаанбанк: <Text fontWeight={"semibold"}>12345678</Text>
+                      </Text>
+                      <Box>
+                        <Box>
+                          <Button onPress={copyToClipboard} variant={"link"}>
+                            Хуулах
+                          </Button>
+                        </Box>
+                      </Box>
+                    </HStack>
+                    <HStack>
+                      <Text pt={1} fontSize={"md"} space={2}>
+                        Хүлээн авагч:{" "}
+                        <Text fontWeight={"semibold"}>
+                          Шүү Галлерэй Монголиа ХХК
+                        </Text>
+                      </Text>
+                    </HStack>
+                    <HStack>
+                      <Text pt={1} fontSize={"md"} space={2}>
+                        Утга:{" "}
+                        <Text fontWeight={"semibold"}>
+                          {userData.wallets.phone}
+                        </Text>
+                      </Text>
+                    </HStack>
+                  </Box>
                 </Modal.Body>
-                
+
                 <Modal.Footer>
-                  <Button.Group space={2}>
+                  <Button.Group>
                     <Button
+                      width={"100%"}
                       variant="ghost"
                       colorScheme="blueGray"
                       onPress={() => {
                         setShowModal(false);
                       }}
                     >
-                      Cancel
-                    </Button>
-                    <Button
-                      onPress={() => {
-                        setShowModal(false);
-                      }}
-                    >
-                      Save
+                      <Text
+                        textAlign={"center"}
+                        color={"#325b77"}
+                        fontWeight={"bold"}
+                      >
+                        Болсон
+                      </Text>
                     </Button>
                   </Button.Group>
                 </Modal.Footer>

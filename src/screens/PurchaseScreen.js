@@ -13,6 +13,7 @@ import {
   UIManager,
   Alert,
 } from "react-native";
+
 import * as Haptics from "expo-haptics";
 import { NumericFormat } from "react-number-format";
 import {
@@ -57,6 +58,8 @@ import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
 const PurchaseScreen = ({ navigation }) => {
+  const toast = useToast();
+
   const successToast = useToast();
   const warnToast = useToast();
 
@@ -157,6 +160,7 @@ const PurchaseScreen = ({ navigation }) => {
     if (receiverAmountError || receiverPhoneError) {
       setReceiverAmount({ ...receiverAmount, error: receiverAmountError });
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       navigation.goBack();
       Alert.alert(
         "",
@@ -178,7 +182,6 @@ const PurchaseScreen = ({ navigation }) => {
       id: userData.wallets._id,
       walletSuperId: userData.wallets.walletSuperId,
     });
-
     var config = {
       method: "POST",
       url: `${baseUrl}/transactions/purchase`,
@@ -194,6 +197,7 @@ const PurchaseScreen = ({ navigation }) => {
           setReceiverAmount({ value: "", error: "" });
           userTransactionHistory();
           dataRefresher();
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           successToast.show({
             backgroundColor: "emerald.400",
             px: "2",
@@ -207,6 +211,7 @@ const PurchaseScreen = ({ navigation }) => {
             title: "Гүйлгээ амжилттай",
             placement: "top",
           });
+
           navigation.goBack();
         }
       })
@@ -217,6 +222,7 @@ const PurchaseScreen = ({ navigation }) => {
         navigation.goBack();
         setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
           Alert.alert("", "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.", [
             {
               text: "OK",
