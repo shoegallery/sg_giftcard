@@ -16,6 +16,14 @@ import {
   AntDesign,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { LoadingDots } from "@mrakesh0608/react-native-loading-dots";
+
 import { LinearGradient } from "expo-linear-gradient";
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
@@ -45,7 +53,7 @@ import {
 const WalletScreen = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const [copiedText, setCopiedText] = useState("");
-
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const successToast = useToast();
   const warnToast = useToast();
   const [userData, setUserData] = useContext(StateContext);
@@ -85,7 +93,7 @@ const WalletScreen = ({ navigation }) => {
           backgroundColor: "red.400",
           description: "Интэрнет холболт алга",
           placement: "top",
-        })
+        });
         warnToast.show({
           backgroundColor: "red.400",
           px: "2",
@@ -97,7 +105,6 @@ const WalletScreen = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
           title: "Интэрнет холболт алга",
-       
         });
       }
     });
@@ -186,8 +193,7 @@ const WalletScreen = ({ navigation }) => {
           alignItems: "center",
           title: "Гүйлгээ aмжилтгүй",
           placement: "top",
-        })
-       
+        });
       });
   };
   const dataRefresher = () => {
@@ -359,6 +365,7 @@ const WalletScreen = ({ navigation }) => {
   };
   console.log(userData.wallets.phone);
   useEffect(() => {
+    setLoadingStatus(false);
     InternetCheck();
     userTransactionHistory();
     setUserTransactionData("");
@@ -599,20 +606,11 @@ const WalletScreen = ({ navigation }) => {
           paddingTop={3}
           alignItems={"center"}
           onPress={() => {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Тун удахгүй",
-              placement: "top",
+            Dialog.show({
+              type: ALERT_TYPE.WARNING,
+              title: "Тун удахгүй...",
+              button: "Ойлголоо",
             });
-            return;
           }}
           /* onPress={() => {
             navigation.navigate("TransferScreen");
@@ -808,7 +806,9 @@ const WalletScreen = ({ navigation }) => {
           paddingBottom={6}
           alignItems={"center"}
           onPress={() => {
+      
             navigation.navigate("HistoryScreen");
+       
           }}
         >
           {({ isHovered, isPressed }) => {
@@ -866,6 +866,21 @@ const WalletScreen = ({ navigation }) => {
             );
           }}
         </Pressable>
+        {loadingStatus === true ? (
+          <LoadingDots
+            animation="typing"
+            containerStyle={{
+              position: "absolute",
+              height: "100%",
+              padding: 18,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignSelf: "center",
+            }}
+          />
+        ) : (
+          <View></View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

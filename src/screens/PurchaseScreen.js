@@ -13,6 +13,12 @@ import {
   UIManager,
   Alert,
 } from "react-native";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 import * as Haptics from "expo-haptics";
 import { NumericFormat } from "react-number-format";
@@ -162,15 +168,18 @@ const PurchaseScreen = ({ navigation }) => {
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       navigation.goBack();
-      Alert.alert(
-        "",
-        `Та шилжүүлгийн мэдээллээ зөв оруулна уу. Салбар болон үнийн дүнг заавал агуулна.`,
-        [
-          {
-            text: "OK",
-          },
-        ]
-      );
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Амжилтгүй",
+        textBody: "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.",
+        button: "Дахин оролдох",
+      
+        onPressButton: () => {
+          Dialog.hide();
+          navigation.navigate("PurchaseScreen");
+        },
+      });
+
       return;
     }
 
@@ -198,21 +207,17 @@ const PurchaseScreen = ({ navigation }) => {
           userTransactionHistory();
           dataRefresher();
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          successToast.show({
-            backgroundColor: "emerald.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "250",
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Гүйлгээ амжилттай",
-            placement: "top",
-          });
 
-          navigation.goBack();
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Гүйлгээ амжилттай",
+            button: "Ok",
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.goBack();
+            },
+          });
         }
       })
       .catch(function (error) {
@@ -223,26 +228,21 @@ const PurchaseScreen = ({ navigation }) => {
         setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          Alert.alert("", "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.", [
-            {
-              text: "OK",
+
+          Dialog.show({
+            type: ALERT_TYPE.DANGER,
+            title: "Амжилтгүй",
+            textBody: "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.",
+            button: "Дахин оролдох",
+          
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.navigate("PurchaseScreen");
             },
-          ]);
+          });
         }
 
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Гүйлгээ aмжилтгүй",
-          placement: "top",
-        });
+       
       });
   };
   const userTransactionHistory = () => {

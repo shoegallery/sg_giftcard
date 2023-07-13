@@ -9,6 +9,7 @@ import {
   StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import uuid from "react-native-uuid";
 
@@ -41,7 +42,7 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginScreen({ navigation }) {
-  const warnToast = useToast();
+
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
 
@@ -90,20 +91,11 @@ export default function LoginScreen({ navigation }) {
           .then(function (response) {
             if (showModal === false) {
               setUserData(response.data);
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "300",
-                fontSize: 20,
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Амжилттай нэвтэрлээ",
-                placement: "top",
-              });
+              Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Success',
+                textBody: 'Амжилттай нэвтэрлээ',
+              })
 
               AsyncStorage.setItem("user_phone", phone.value);
               navigation.reset({
@@ -118,6 +110,10 @@ export default function LoginScreen({ navigation }) {
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
+
+
+
+              
               warnToast.show({
                 backgroundColor: "red.400",
                 px: "2",

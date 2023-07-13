@@ -1,43 +1,11 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  useContext,
-} from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Provider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import {
-  MaterialIcons,
-  Feather,
-  Entypo,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-} from "@expo/vector-icons";
-import {
-  LoginScreen,
-  ProfileScreen,
-  ForgetPasswordScreen,
-  LoginAuthScreen,
 
-  LocationScreen,
-  ExpenseScreen,
-  TermScreen,
-  PurchaseScreen,
-  TransferScreen,
-  GetCouponScreen,
-  BagScreen,
-  HistoryScreen,
-  WalletScreen,
-} from "./src/screens";
 import {
   Text,
   TextInput,
@@ -47,6 +15,7 @@ import {
   Linking,
   Button,
 } from "react-native";
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import BackButton from "./src/components/BackButton";
 import { StateProvider } from "./src/Context/StateContext";
@@ -55,10 +24,7 @@ import { NativeBaseProvider, ToastProvider, IconButton } from "native-base";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import StackScreen from "./src/screens/StackScreen";
-LogBox.ignoreLogs([
-  "ViewPropTypes will be removed",
-  "ColorPropType will be removed",
-]);
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -168,21 +134,19 @@ export default function App({ navigation }) {
     return null;
   }
   return (
-
-      <NativeBaseProvider>
-        <ToastProvider>
-          <SafeAreaProvider>
-            <StateProvider>
-              <Provider>
-                <StatusBar barStyle="dark-content"/>
-                <NavigationContainer>
-                  <StackScreen />
-                </NavigationContainer>
-              </Provider>
-            </StateProvider>
-          </SafeAreaProvider>
-        </ToastProvider>
-      </NativeBaseProvider>
- 
+    <NativeBaseProvider>
+      <AlertNotificationRoot>
+        <SafeAreaProvider>
+          <StateProvider>
+            <Provider>
+              <StatusBar barStyle="dark-content" />
+              <NavigationContainer>
+                <StackScreen />
+              </NavigationContainer>
+            </Provider>
+          </StateProvider>
+        </SafeAreaProvider>
+      </AlertNotificationRoot>
+    </NativeBaseProvider>
   );
 }

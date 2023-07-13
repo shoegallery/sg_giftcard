@@ -14,7 +14,6 @@ index 43b4bd1..dd1329c 100644
              <OverlayProvider isSSR>
                <ToastProvider>
                  <InitializeToastRef />
--                <SSRProvider>{children}</SSRProvider>
 +                {children}
                </ToastProvider>
              </OverlayProvider>
