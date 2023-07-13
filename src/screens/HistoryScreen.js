@@ -10,7 +10,7 @@ import {
   Platform,
   UIManager,
   SafeAreaView,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import moment from "moment";
 
@@ -73,13 +73,12 @@ const HistoryScreen = ({ navigation }) => {
         height: "100%",
         width: "100%",
         flex: 1,
-   
       }}
     >
       {userTransactionData.length > 0 ? (
         <ScrollView>
           {userTransactionData.map((item, index) => (
-            <View style={{paddingTop:5, paddingBottom:5}} key={index}>
+            <View style={{ paddingTop: 5, paddingBottom: 5 }} key={index}>
               <Box
                 alignSelf="center"
                 justifyContent="center"
@@ -100,8 +99,7 @@ const HistoryScreen = ({ navigation }) => {
                           item.trnxType === "Зарлага" ? "red.400" : "green.500"
                         }
                         fontWeight={"semibold"}
-                      >
-                        {item.trnxType}
+                      >{item.trnxType}
                       </Text>
                       <Text
                         fontSize={11}
@@ -131,27 +129,26 @@ const HistoryScreen = ({ navigation }) => {
                               ? "red.400"
                               : "green.400"
                           }
-                        >
-                          {formattedValue}₮
+                        >{item.trnxType === "Зарлага"?("-"):("+")}{formattedValue}₮
                         </Text>
                       )}
                     />
                   </HStack>
                   <Box paddingBottom={"2"} width={"100%"}>
                     <HStack>
-                      <Box width={"70%"}>
+                      <Box width={"50%"}>
                         <Text fontSize={10} color="#242B2E">
                           {moment(item.createdAt).format("YYYY-MM-DD LT")}
                         </Text>
                       </Box>
-                      <Box width={"30%"}>
+                      <Box width={"50%"}>
                         <NumericFormat
                           value={item.balanceBefore.$numberDecimal}
                           displayType={"text"}
                           thousandSeparator={true}
                           renderText={(formattedValue) => (
                             <Text bold textAlign="right" fontSize={10}>
-                              {formattedValue}₮
+                             Үлдэгдэл: {formattedValue}₮
                             </Text>
                           )}
                         />
@@ -168,7 +165,6 @@ const HistoryScreen = ({ navigation }) => {
           style={{
             justifyContent: "center",
             height: "100%",
-          
           }}
         >
           <Box>
@@ -191,20 +187,5 @@ const HistoryScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  box: {
-    minHeight: height * 0.7,
-    width,
-    backgroundColor: "blue",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-});
 
 export default HistoryScreen;

@@ -172,11 +172,10 @@ const PurchaseScreen = ({ navigation }) => {
         type: ALERT_TYPE.DANGER,
         title: "Амжилтгүй",
         textBody: "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.",
-        button: "Дахин оролдох",
-      
+        button: "Okey",
+
         onPressButton: () => {
           Dialog.hide();
-          navigation.navigate("PurchaseScreen");
         },
       });
 
@@ -211,8 +210,8 @@ const PurchaseScreen = ({ navigation }) => {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
             title: "Success",
-            textBody: "Гүйлгээ амжилттай",
-            button: "Ok",
+            textBody: "Гүйлгээ амжилттай хийгдлээ",
+            button: "Okey",
             onPressButton: () => {
               Dialog.hide();
               navigation.goBack();
@@ -233,16 +232,13 @@ const PurchaseScreen = ({ navigation }) => {
             type: ALERT_TYPE.DANGER,
             title: "Амжилтгүй",
             textBody: "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.",
-            button: "Дахин оролдох",
-          
+            button: "Okey",
+
             onPressButton: () => {
               Dialog.hide();
-              navigation.navigate("PurchaseScreen");
             },
           });
         }
-
-       
       });
   };
   const userTransactionHistory = () => {

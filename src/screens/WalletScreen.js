@@ -15,6 +15,8 @@ import {
   Feather,
   AntDesign,
   MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome5,
 } from "@expo/vector-icons";
 import {
   ALERT_TYPE,
@@ -42,6 +44,7 @@ import {
   Button,
   Center,
   Modal,
+  VStack,
   FormControl,
   Input,
 } from "native-base";
@@ -196,6 +199,7 @@ const WalletScreen = ({ navigation }) => {
         });
       });
   };
+  console.log(userData);
   const dataRefresher = () => {
     InternetCheck();
     try {
@@ -380,7 +384,7 @@ const WalletScreen = ({ navigation }) => {
   return (
     <SafeAreaView
       style={{
-        height: "100%",
+        height: "60%",
         width: "100%",
         flex: 1,
       }}
@@ -401,7 +405,165 @@ const WalletScreen = ({ navigation }) => {
         }}
       ></LinearGradient>
       <ScrollView>
-        <View style={{ height: 200 }}></View>
+        <View
+          style={{
+            alignSelf: "center",
+
+            width: "95%",
+          }}
+        >
+          <Box paddingTop={"5"}>
+            {userData.wallets.walletType === "member" ? (
+              <Box>
+                <Text
+                  fontSize={"2xl"}
+                  fontWeight={"semibold"}
+                  fontStyle={"italic"}
+                >
+                  Үнэнч үйлчлүүлэгч
+                </Text>
+
+                <HStack height={180} width={"100%"}>
+                  <Pressable disabled width={"1/3"}>
+                    <Box
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      bg={"white"}
+                      p="2"
+                      rounded="8"
+                      shadow={2}
+                      borderWidth="0"
+                      borderColor="coolGray.300"
+                    >
+                      <VStack>
+                        <Box alignSelf="center">
+                          <Ionicons
+                            name="ios-reload-outline"
+                            size={36}
+                            color="red"
+                          />
+                        </Box>
+                        <Box justifyContent="center">
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            fontSize="sm"
+                            textAlign={"center"}
+                          >
+                            Цуглуулах
+                          </Text>
+                        </Box>
+                        <Box paddingTop={"2"}>
+                          <Text
+                            textAlign={"center"}
+                            color="#325b77"
+                            fontSize={"xs"}
+                          >
+                            Худалдан авалт бүрийнхээ үнийн дүнгийн{" "}
+                            <Text fontSize={"xs"} bold>
+                              5%
+                            </Text>{" "}
+                            оноо цуглуулах
+                          </Text>
+                        </Box>
+                      </VStack>
+                    </Box>
+                  </Pressable>
+                  <Pressable
+                    paddingLeft={2}
+                    height={"100%"}
+                    disabled
+                    width={"1/3"}
+                  >
+                    <Box
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      bg={"white"}
+                      p="2"
+                      rounded="8"
+                      shadow={2}
+                      borderWidth="0"
+                      borderColor="coolGray.300"
+                    >
+                      <VStack>
+                        <Box alignSelf="center">
+                          <Ionicons
+                            name="ios-reload-outline"
+                            size={36}
+                            color="red"
+                          />
+                        </Box>
+                        <Box justifyContent="center">
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            fontSize="sm"
+                            textAlign={"center"}
+                          >
+                            Шуурхай
+                          </Text>
+                        </Box>
+                        <Box paddingTop={"2"}>
+                          <Text
+                            textAlign={"center"}
+                            color="#325b77"
+                            fontSize={"xs"}
+                          >
+                            Хямдралын мэдээг цаг алдалгүй зөвхөн танд хүргэнэ.
+                          </Text>
+                        </Box>
+                      </VStack>
+                    </Box>
+                  </Pressable>
+                  <Pressable paddingLeft={2} disabled width={"1/3"}>
+                    <Box
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      bg={"white"}
+                      pt={"2"}
+                      pb={"2"}
+                      rounded="8"
+                      shadow={2}
+                      borderWidth="0"
+                      borderColor="coolGray.300"
+                    >
+                      <VStack>
+                        <Box alignSelf="center">
+                          <Ionicons
+                            name="ios-reload-outline"
+                            size={36}
+                            color="red"
+                          />
+                        </Box>
+                        <Box justifyContent="center">
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            fontSize="sm"
+                            textAlign={"center"}
+                          >
+                            Хадгалах
+                          </Text>
+                        </Box>
+                        <Box paddingTop={"2"}>
+                          <Text
+                            textAlign={"center"}
+                            color="#325b77"
+                            fontSize={"xs"}
+                          >
+                            Таны таалагдсан загвар, хэмжээг 5 хоног хадгална.
+                          </Text>
+                        </Box>
+                      </VStack>
+                    </Box>
+                  </Pressable>
+                </HStack>
+              </Box>
+            ) : (
+              <Text></Text>
+            )}
+          </Box>
+        </View>
         <Pressable
           paddingTop={"6"}
           alignItems={"center"}
@@ -806,9 +968,7 @@ const WalletScreen = ({ navigation }) => {
           paddingBottom={6}
           alignItems={"center"}
           onPress={() => {
-      
             navigation.navigate("HistoryScreen");
-       
           }}
         >
           {({ isHovered, isPressed }) => {
