@@ -27,6 +27,7 @@ import { StateContext } from "../Context/StateContext";
 import { Ionicons } from "@expo/vector-icons";
 
 import NetInfo from "@react-native-community/netinfo";
+
 import {
   VStack,
   Text,
@@ -42,7 +43,7 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginScreen({ navigation }) {
-
+  const toast = useToast();
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
 
@@ -111,93 +112,61 @@ export default function LoginScreen({ navigation }) {
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
 
-
+              Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: "Уучлаарай",
+                textBody: "Таны хаяг түр блоклогдсон байна.",
+                button: "Okey",
+      
+                onPressButton: () => {
+                  Dialog.hide();
+                },
+              });
 
               
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Таны хаяг түр блоклогдсон байна.",
-                placement: "top",
-              });
+             
             } else if (err.status === 491) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Таны хаяг түр блоклогдлоо",
-                placement: "top",
+              Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: "Уучлаарай",
+                textBody: "Таны хаяг түр блоклогдлоо.",
+                button: "Okey",
+      
+                onPressButton: () => {
+                  Dialog.hide();
+                },
               });
+
+             
             } else {
               if (err.status === 482) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Амжилттай',
+                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
+                })
+                
               } else if (err.status === 481) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Амжилттай',
+                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
+                })
+               
               } else if (err.status === 480) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Амжилттай',
+                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
+                })
+               
               } else if (err.status === 499) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Амжилттай',
+                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
+                })
+                
               }
               navigation.navigate("LoginAuthScreen");
             }
@@ -383,19 +352,18 @@ export default function LoginScreen({ navigation }) {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Интернет холболт алга",
-          placement: "top",
+
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: "Уучлаарай",
+          textBody: "Интернет холболт алга байна. Шалгана уу.",
+          button: "Okey",
+
+          onPressButton: () => {
+            Dialog.hide();
+          },
         });
+      
       }
       AsyncStorage.getItem("user_uuid")
         .then((result) => {

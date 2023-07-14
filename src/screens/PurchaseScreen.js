@@ -106,18 +106,16 @@ const PurchaseScreen = ({ navigation }) => {
           });
         })
         .catch(function (error) {
-          warnToast.show({
-            backgroundColor: "red.400",
-            px: "2",
-            py: "1",
-            rounded: "sm",
-            height: "50",
-            width: "250",
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            title: "Сервер түр унтарсан.",
-            placement: "top",
+       
+          Dialog.show({
+            type: ALERT_TYPE.DANGER,
+            title: "Уучлаарай",
+            textBody: "Дараа дахин оролдоно уу",
+            button: "Okey",
+  
+            onPressButton: () => {
+              Dialog.hide();
+            },
           });
         });
     } catch (err) {
@@ -128,18 +126,16 @@ const PurchaseScreen = ({ navigation }) => {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Интэрнет холболт алга",
-          placement: "top",
+     
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: "Уучлаарай",
+          textBody: "Интэрнет холболт алга байна. Шалгана уу.",
+          button: "Okey",
+
+          onPressButton: () => {
+            Dialog.hide();
+          },
         });
       }
     });

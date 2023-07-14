@@ -437,10 +437,10 @@ const WalletScreen = ({ navigation }) => {
                     >
                       <VStack>
                         <Box alignSelf="center">
-                          <Ionicons
-                            name="ios-reload-outline"
+                        <MaterialCommunityIcons
+                            name="check-decagram-outline"
                             size={36}
-                            color="red"
+                            color="blue"
                           />
                         </Box>
                         <Box justifyContent="center">
@@ -487,10 +487,10 @@ const WalletScreen = ({ navigation }) => {
                     >
                       <VStack>
                         <Box alignSelf="center">
-                          <Ionicons
-                            name="ios-reload-outline"
+                        <MaterialCommunityIcons
+                            name="check-decagram-outline"
                             size={36}
-                            color="red"
+                            color="blue"
                           />
                         </Box>
                         <Box justifyContent="center">
@@ -529,10 +529,10 @@ const WalletScreen = ({ navigation }) => {
                     >
                       <VStack>
                         <Box alignSelf="center">
-                          <Ionicons
-                            name="ios-reload-outline"
+                          <MaterialCommunityIcons
+                            name="check-decagram-outline"
                             size={36}
-                            color="red"
+                            color="blue"
                           />
                         </Box>
                         <Box justifyContent="center">

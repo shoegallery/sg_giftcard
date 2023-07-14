@@ -13,15 +13,19 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import uuid from "react-native-uuid";
-import RnOtpTimer from 'react-native-otp-timer';
-
-
+import RnOtpTimer from "react-native-otp-timer";
 
 import axios from "axios";
 
 import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 import { StateContext } from "../Context/StateContext";
 
@@ -41,7 +45,6 @@ import {
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function LoginAuthScreen({ navigation }) {
-
   const reactToUpdates = () => {
     var dataVersion = JSON.stringify({});
     var configVersion = {
@@ -72,7 +75,7 @@ export default function LoginAuthScreen({ navigation }) {
           }
         }
       })
-      .catch(function (error) { });
+      .catch(function (error) {});
   };
 
   const warnToast = useToast();
@@ -94,18 +97,15 @@ export default function LoginAuthScreen({ navigation }) {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
-        warnToast.show({
-          backgroundColor: "red.400",
-          px: "2",
-          py: "1",
-          rounded: "sm",
-          height: "50",
-          width: "250",
-          textAlign: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          title: "Интернет холболт алга",
-          placement: "top",
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: "Уучлаарай",
+          textBody: "Интернет холболт алга байна. Шалгана уу.",
+          button: "Okey",
+
+          onPressButton: () => {
+            Dialog.hide();
+          },
         });
       }
       AsyncStorage.getItem("user_uuid")
@@ -170,19 +170,10 @@ export default function LoginAuthScreen({ navigation }) {
         .then(function (response) {
           if (response.status === 200) {
             setUserData(response.data);
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "300",
-              fontSize: 20,
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Амжилттай нэвтэрлээ",
-              placement: "top",
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: "Амжилттай",
+              textBody: "Амжилттай нэвтэрлээ",
             });
             navigation.reset({
               index: 0,
@@ -194,107 +185,80 @@ export default function LoginAuthScreen({ navigation }) {
           const err = JSON.parse(JSON.stringify(error));
           console.log(err);
           if (err.status === 492) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдсон байна.",
-              placement: "top",
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: "Уучлаарай",
+              textBody: "Таны хаяг түр блоклогдсон байна.",
+              button: "Okey",
+              onPressButton: () => {
+                Dialog.hide();
+              },
             });
+
             navigation.navigate("TabbarScreen");
           } else if (err.status === 491) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Таны хаяг түр блоклогдлоо",
-              placement: "top",
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: "Уучлаарай",
+              textBody: "Таны хаяг түр блоклогдлоо.",
+              button: "Okey",
+
+              onPressButton: () => {
+                Dialog.hide();
+              },
             });
+
             navigation.navigate("TabbarScreen");
           } else if (err.status === 482) {
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Мессеж илгээсэн.",
-              placement: "top",
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: "Амжилттай",
+              textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
             });
           } else if (err.status === 481) {
-            warnToast.show({
-              backgroundColor: "emerald.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Мессеж илгээсэн.",
-              placement: "top",
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: "Амжилттай",
+              textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
             });
           } else if (err.status === 485) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Баталгаажуулах код буруу",
-              placement: "top",
+            setPassword({ value: "" });
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: "Уучлаарай",
+              textBody: "Баталгаажуулах код буруу.",
+              button: "Okey",
+
+              onPressButton: () => {
+                Dialog.hide();
+              },
             });
           } else if (err.status === 486) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Та үйлдэл хийх эрхгүй байна",
-              placement: "top",
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: "Уучлаарай",
+              textBody: "Та үйлдэл хийх эрхгүй байна.",
+              button: "Okey",
+
+              onPressButton: () => {
+                Dialog.hide();
+              },
             });
-            navigation.navigate("TabbarScreen");
+
+            navigation.navigate("LoginScreen");
           } else if (err.status === 487) {
-            warnToast.show({
-              backgroundColor: "red.400",
-              px: "2",
-              py: "1",
-              rounded: "sm",
-              height: "50",
-              width: "250",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              title: "Та үйлдэл хийх эрхгүй байна",
-              placement: "top",
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: "Уучлаарай",
+              textBody: "Та үйлдэл хийх эрхгүй байна.",
+              button: "Okey",
+
+              onPressButton: () => {
+                Dialog.hide();
+              },
             });
-            navigation.navigate("TabbarScreen");
+
+            navigation.navigate("LoginScreen");
           }
         });
     }
@@ -309,7 +273,7 @@ export default function LoginAuthScreen({ navigation }) {
     setPassword({ value: "" });
     setLoginToken({ value: "" });
   }, []);
-  
+
   return (
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
@@ -379,14 +343,9 @@ export default function LoginAuthScreen({ navigation }) {
                           : "-"}
                       </Text>
                     </VStack>
-
                   </Center>
-
                 </Box>
-
               </HStack>
-
-
             </Center>
             <TouchableOpacity
               onPress={() => {
@@ -406,7 +365,6 @@ export default function LoginAuthScreen({ navigation }) {
                   display: password.value.length === 6 ? "flex" : "none",
                 }}
               >
-
                 <Center>
                   <TouchableHighlight
                     underlayColor="#bad6e8"
@@ -421,7 +379,6 @@ export default function LoginAuthScreen({ navigation }) {
                       <Text
                         alignItems={"center"}
                         textAlign={"center"}
-
                         color="white"
                         fontSize="2xl"
                       >
@@ -764,7 +721,7 @@ export default function LoginAuthScreen({ navigation }) {
                     >
                       <TouchableHighlight
                         underlayColor="#f8f8f8"
-                        onPress={() => { }}
+                        onPress={() => {}}
                       >
                         <VStack
                           justifyContent="center"
