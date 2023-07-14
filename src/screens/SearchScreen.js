@@ -44,7 +44,7 @@ const { width, height } = Dimensions.get("window");
 
 const SearchScreen = ({ navigation }) => {
   const [searchText, setSearchText] = useState("");
-  console.log(searchText);
+
 
   useEffect(() => {
     setSearchText("");
@@ -78,7 +78,7 @@ const SearchScreen = ({ navigation }) => {
                       <TouchableOpacity
                         onPress={() => {
                           if (searchText.length > 0) {
-                            console.log("HE");
+                
                           }
                         }}
                       >

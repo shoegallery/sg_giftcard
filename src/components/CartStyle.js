@@ -25,7 +25,7 @@ import * as Animatable from "react-native-animatable";
 const TransActionsList = () => {
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-  console.log(userTransactionData);
+
   return (
     <View height={"100%"}>
       {userTransactionData.length > 0 ? (
@@ -142,7 +142,7 @@ const TransActionsList = () => {
 export default function CartStyle() {
   const [modalVisible, setModalVisible] = useState(false);
   const [userData, setUserData] = useContext(StateContext);
-  console.log(userData);
+
   var imageSource;
   if (userData !== undefined) {
     if (userData.wallets.walletType === "member") {

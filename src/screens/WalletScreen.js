@@ -199,7 +199,7 @@ const WalletScreen = ({ navigation }) => {
         });
       });
   };
-  console.log(userData);
+
   const dataRefresher = () => {
     InternetCheck();
     try {
@@ -216,7 +216,7 @@ const WalletScreen = ({ navigation }) => {
         maxRedirects: 0,
         data: requests,
       };
-      console.log(configs);
+
       axios(configs)
         .then(function (response) {
           userTransactionHistory();
@@ -367,7 +367,7 @@ const WalletScreen = ({ navigation }) => {
         }
       });
   };
-  console.log(userData.wallets.phone);
+
   useEffect(() => {
     setLoadingStatus(false);
     InternetCheck();
@@ -417,7 +417,7 @@ const WalletScreen = ({ navigation }) => {
               <Box justifyContent={"center"}>
                 <Pressable
                   onPress={() => {
-                    console.log("first");
+                
                   }}
                   paddingTop={3}
                   alignItems={"center"}

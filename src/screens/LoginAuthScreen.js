@@ -19,12 +19,7 @@ import axios from "axios";
 import appJson from "../../app.json";
 
 import { theme } from "../core/theme";
-import {
-  ALERT_TYPE,
-  Dialog,
-
-  Toast,
-} from "react-native-alert-notification";
+import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
 
 import { StateContext } from "../Context/StateContext";
 
@@ -155,7 +150,7 @@ export default function LoginAuthScreen({ navigation }) {
         phone: parseInt(phone.value),
         password: password.value,
       });
-      console.log(requestToken);
+
       var config = {
         method: "POST",
         url: `${baseUrl}/wallets/login`,
@@ -169,18 +164,22 @@ export default function LoginAuthScreen({ navigation }) {
         .then(function (response) {
           if (response.status === 200) {
             setUserData(response.data);
-            console.log(response.data)
-            Toast.show({
-              type: ALERT_TYPE.SUCCESS,
-              title: "Амжилттай",
-              textBody: "Амжилттай нэвтэрлээ",
-            });
             if (response.data.wallets.compilation === false) {
+              Toast.show({
+                type: ALERT_TYPE.WARNING,
+                title: "Анхааруулга",
+                textBody: "Нэмэлт мэдээлэл шаардлагатай",
+              });
               navigation.reset({
                 index: 0,
-                routes: [{ name: "CommpilationScreen" }],
+                routes: [{ name: "CompilationScreen" }],
               });
             } else {
+              Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: "Success",
+                textBody: "Амжилттай нэвтэрлээ",
+              });
               navigation.reset({
                 index: 0,
                 routes: [{ name: "TabbarScreen" }],
@@ -211,7 +210,6 @@ export default function LoginAuthScreen({ navigation }) {
                 Dialog.hide();
               },
             });
-
           } else if (err.status === 482) {
             Toast.show({
               type: ALERT_TYPE.SUCCESS,

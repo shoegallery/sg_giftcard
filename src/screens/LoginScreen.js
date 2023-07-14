@@ -92,23 +92,30 @@ export default function LoginScreen({ navigation }) {
           .then(function (response) {
             if (showModal === false) {
               setUserData(response.data);
-              Toast.show({
-                type: ALERT_TYPE.SUCCESS,
-                title: "Success",
-                textBody: "Амжилттай нэвтэрлээ",
-              });
-
-              if (response.data.wallets.commpilation === false) {
+            
+              if (response.data.wallets.compilation === false) {
+                Toast.show({
+                  type: ALERT_TYPE.WARNING,
+                  title: "Анхааруулга",
+                  textBody: "Нэмэлт мэдээлэл шаардлагатай",
+                });
                 navigation.reset({
                   index: 0,
                   routes: [{ name: "CompilationScreen" }],
                 });
+             
               } else {
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: "Success",
+                  textBody: "Амжилттай нэвтэрлээ",
+                });
                 navigation.reset({
                   index: 0,
                   routes: [{ name: "TabbarScreen" }],
                 });
               }
+             
             }
           })
           .catch(function (error) {
@@ -389,7 +396,7 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          console.log(result);
+
           if (result !== null) {
             setPhone({ value: result, error: "" });
           }

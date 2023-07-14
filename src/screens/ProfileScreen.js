@@ -118,7 +118,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#89c4f4"
               onPress={() => {
-                console.log("first");
+             
               }}
               style={{
                 width: wp("96%"),
@@ -213,7 +213,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#b2dfdb"
               onPress={() => {
-                console.log("first");
+     
               }}
               style={{
                 width: wp("96%"),
@@ -300,7 +300,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#b2dfdb"
               onPress={() => {
-                console.log("first");
+        
               }}
               style={{
                 width: wp("96%"),
