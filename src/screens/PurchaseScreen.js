@@ -1,37 +1,13 @@
 import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
-import React, { useRef, useEffect, useState, useContext } from "react";
-import {
-  Animated,
-  View,
-  StyleSheet,
-  PanResponder,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-  UIManager,
-  Alert,
-} from "react-native";
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-  Toast,
-} from "react-native-alert-notification";
+import React, { useEffect, useState, useContext } from "react";
+import { View, Dimensions, Platform, UIManager } from "react-native";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
 import * as Haptics from "expo-haptics";
 import { NumericFormat } from "react-number-format";
-import {
-  MaterialIcons,
-  Feather,
-  Entypo,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-} from "@expo/vector-icons";
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -45,17 +21,11 @@ import {
   VStack,
   Text,
   Select,
-  NativeBaseProvider,
   useToast,
-  ToastProvider,
   Center,
   Box,
   HStack,
-  Modal,
-  Button,
-  FormControl,
   CheckIcon,
-  WarningOutlineIcon,
 } from "native-base";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
@@ -64,10 +34,9 @@ import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
 const PurchaseScreen = ({ navigation }) => {
-  const toast = useToast();
 
-  const successToast = useToast();
-  const warnToast = useToast();
+
+
 
   const [userData, setUserData] = useContext(StateContext);
 
@@ -106,13 +75,12 @@ const PurchaseScreen = ({ navigation }) => {
           });
         })
         .catch(function (error) {
-       
           Dialog.show({
             type: ALERT_TYPE.DANGER,
             title: "Уучлаарай",
             textBody: "Дараа дахин оролдоно уу",
             button: "Okey",
-  
+
             onPressButton: () => {
               Dialog.hide();
             },
@@ -126,7 +94,6 @@ const PurchaseScreen = ({ navigation }) => {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
-     
         Dialog.show({
           type: ALERT_TYPE.DANGER,
           title: "Уучлаарай",

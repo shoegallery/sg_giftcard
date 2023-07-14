@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
-  Animated,
   View,
-  StyleSheet,
-  PanResponder,
   Dimensions,
   TouchableOpacity,
   UIManager,
@@ -11,27 +8,15 @@ import {
   Linking,
   Platform,
 } from "react-native";
-import {
-  MaterialIcons,
-  Feather,
-  Entypo,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-} from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import {
   Box,
   FlatList,
-  Heading,
   Avatar,
   HStack,
   VStack,
   Text,
   Spacer,
-  Center,
-  NativeBaseProvider,
   Icon,
 } from "native-base";
 import BackButton from "../components/BackButton";

@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
 
-
   Dimensions,
 
   Platform,
@@ -13,25 +12,17 @@ import {
 
 import {
  
-    Text,
-    
-  } from "native-base";
-import BackButton from "../components/BackButton";
+  Text,
+  
+} from "native-base";
+
 const { width, height } = Dimensions.get("window");
 
-const BagScreen = ({ navigation }) => {
+const CompilationScreen = ({ navigation }) => {
   useEffect(() => {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
-    navigation.setOptions({
-      headerLeft: () => (
-        <BackButton
-          style={{ backgroundColor: "white" }}
-          goBack={navigation.goBack}
-        />
-      ),
-   
-    });
+    
 
     if (Platform.OS === "android") {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -41,7 +32,7 @@ const BagScreen = ({ navigation }) => {
   }, [navigation]);
   return (
     <View style={styles.container}>
-      <Text>BagScreen</Text>
+      <Text>CompilationScreen</Text>
     </View>
   );
 };
@@ -61,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BagScreen;
+export default CompilationScreen;

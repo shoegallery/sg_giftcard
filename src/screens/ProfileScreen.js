@@ -1,15 +1,13 @@
-import { baseUrl } from "../baseUrl";
-import axios from "axios";
-import { NavigationContainer } from "@react-navigation/native";
+
 import React, { useState, useEffect, useContext } from "react";
 import {
-  StyleSheet,
+
   View,
   Platform,
   UIManager,
-  TouchableOpacity,
+
   TouchableHighlight,
-  ScrollView,
+
   StatusBar,
   Linking,
   Share,
@@ -27,26 +25,18 @@ import {
   FontAwesome,
   Octicons,
 } from "@expo/vector-icons";
-import NetInfo from "@react-native-community/netinfo";
-import { phoneValidator } from "../helpers/phoneValidator";
-import { amountValidator } from "../helpers/amountValidator";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
-import Product from "../components/Product";
+
 import {
-  Button,
-  Modal,
+
   Text,
-  NativeBaseProvider,
-  FormControl,
-  Input,
+
   Box,
-  VStack,
-  Heading,
-  Image,
-  useToast,
+
   Center,
-  Select,
+
   Icon,
   HStack,
 } from "native-base";

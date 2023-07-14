@@ -80,6 +80,7 @@ import {
   WalletScreen,
   TabbarScreen,
   PromotionScreen,
+  CompilationScreen,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -135,6 +136,27 @@ const StackScreen = ({ navigation }) => {
         name="PurchaseScreen"
         component={PurchaseScreen}
       />
+
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "CompilationScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="CompilationScreen"
+        component={CompilationScreen}
+      />
       <Stack.Screen
         options={{
           headerShown: true,
@@ -163,7 +185,7 @@ const StackScreen = ({ navigation }) => {
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
           headerTitleStyle: {
-            alignContent:"center",
+            alignContent: "center",
             width: "100%",
             fontSize: 17,
             color: "black",

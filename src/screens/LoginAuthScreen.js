@@ -13,7 +13,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import uuid from "react-native-uuid";
-import RnOtpTimer from "react-native-otp-timer";
 
 import axios from "axios";
 
@@ -23,7 +22,7 @@ import { theme } from "../core/theme";
 import {
   ALERT_TYPE,
   Dialog,
-  AlertNotificationRoot,
+
   Toast,
 } from "react-native-alert-notification";
 
@@ -170,15 +169,23 @@ export default function LoginAuthScreen({ navigation }) {
         .then(function (response) {
           if (response.status === 200) {
             setUserData(response.data);
+            console.log(response.data)
             Toast.show({
               type: ALERT_TYPE.SUCCESS,
               title: "Амжилттай",
               textBody: "Амжилттай нэвтэрлээ",
             });
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "TabbarScreen" }],
-            });
+            if (response.data.wallets.compilation === false) {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "CommpilationScreen" }],
+              });
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
+            }
           }
         })
         .catch(function (error) {
@@ -194,21 +201,17 @@ export default function LoginAuthScreen({ navigation }) {
                 Dialog.hide();
               },
             });
-
-            navigation.navigate("TabbarScreen");
           } else if (err.status === 491) {
             Dialog.show({
               type: ALERT_TYPE.DANGER,
               title: "Уучлаарай",
               textBody: "Таны хаяг түр блоклогдлоо.",
               button: "Okey",
-
               onPressButton: () => {
                 Dialog.hide();
               },
             });
 
-            navigation.navigate("TabbarScreen");
           } else if (err.status === 482) {
             Toast.show({
               type: ALERT_TYPE.SUCCESS,
@@ -228,7 +231,6 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Уучлаарай",
               textBody: "Баталгаажуулах код буруу.",
               button: "Okey",
-
               onPressButton: () => {
                 Dialog.hide();
               },
@@ -239,7 +241,6 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Уучлаарай",
               textBody: "Та үйлдэл хийх эрхгүй байна.",
               button: "Okey",
-
               onPressButton: () => {
                 Dialog.hide();
               },
@@ -252,7 +253,6 @@ export default function LoginAuthScreen({ navigation }) {
               title: "Уучлаарай",
               textBody: "Та үйлдэл хийх эрхгүй байна.",
               button: "Okey",
-
               onPressButton: () => {
                 Dialog.hide();
               },

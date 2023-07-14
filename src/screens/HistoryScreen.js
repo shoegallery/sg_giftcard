@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, {  useEffect, useContext } from "react";
 import {
-  Animated,
+
   View,
-  StyleSheet,
-  PanResponder,
+
   Image,
   Dimensions,
-  TouchableOpacity,
+
   Platform,
   UIManager,
   SafeAreaView,
@@ -15,33 +14,18 @@ import {
 import moment from "moment";
 
 import { NumericFormat } from "react-number-format";
-import { StateContextHistory, StateContext } from "../Context/StateContext";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import {
-  MaterialIcons,
-  Feather,
-  Entypo,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-  FontAwesome,
-  Octicons,
-} from "@expo/vector-icons";
+import { StateContextHistory } from "../Context/StateContext";
+
+
 import {
   Box,
-  FlatList,
-  Heading,
-  Avatar,
+
   HStack,
   VStack,
   Text,
   Spacer,
   Center,
-  NativeBaseProvider,
-  Icon,
+ 
 } from "native-base";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");

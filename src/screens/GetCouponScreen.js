@@ -1,38 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
-  Animated,
   View,
   StyleSheet,
-  PanResponder,
-
   Dimensions,
-  TouchableOpacity,
   Platform,
   UIManager,
 } from "react-native";
-import {
-    MaterialIcons,
-    Feather,
-    Entypo,
-    AntDesign,
-    FontAwesome5,
-    MaterialCommunityIcons,
-    FontAwesome,
-    Octicons,
-  } from "@expo/vector-icons";
-import {
-    Box,
-    FlatList,
-    Heading,
-    Avatar,
-    HStack,
-    VStack,
-    Text,
-    Spacer,
-    Center,
-    NativeBaseProvider,
-    Icon,
-  } from "native-base";
+
+import { Text } from "native-base";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
@@ -47,7 +22,6 @@ const GetCouponScreen = ({ navigation }) => {
           goBack={navigation.goBack}
         />
       ),
-   
     });
 
     if (Platform.OS === "android") {
@@ -79,9 +53,3 @@ const styles = StyleSheet.create({
 });
 
 export default GetCouponScreen;
-
-
-
-
-
-

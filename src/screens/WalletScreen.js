@@ -412,18 +412,67 @@ const WalletScreen = ({ navigation }) => {
             width: "95%",
           }}
         >
-          <Box paddingTop={"5"}>
+          <Box paddingTop={"3"}>
             {userData.wallets.walletType === "member" ? (
-              <Box>
-                <Text
-                  fontSize={"2xl"}
-                  fontWeight={"semibold"}
-                  fontStyle={"italic"}
+              <Box justifyContent={"center"}>
+                <Pressable
+                  onPress={() => {
+                    console.log("first");
+                  }}
+                  paddingTop={3}
+                  alignItems={"center"}
                 >
-                  Үнэнч үйлчлүүлэгч
-                </Text>
+                  {({ isHovered, isPressed }) => {
+                    return (
+                      <Box
+                        justifyContent={"center"}
+                        shadow={"3"}
+                        width={"100%"}
+                        borderRadius={"10"}
+                        height={"100"}
+                        backgroundColor={"white"}
+                        bg={
+                          isPressed
+                            ? "coolGray.200"
+                            : isHovered
+                            ? "coolGray.200"
+                            : "coolGray.100"
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 1.02 : 1,
+                            },
+                          ],
+                        }}
+                      >
+                        <Box>
+                          <Text
+                            fontWeight={"semibold"}
+                            pl={"1"}
+                            fontSize={"xl"}
+                          >
+                            <Text fontSize={"xl"} fontWeight={"semibold"}>
+                              Зэрэглэл : Үнэнч үйлчлүүлэгч 😎
+                            </Text>
+                          </Text>
+                          <Text
+                            fontWeight={"semibold"}
+                            pl={"1"}
+                            fontSize={"xl"}
+                          >
+                            Оноо ⭐️
+                          </Text>
+                        </Box>
+                      </Box>
+                    );
+                  }}
+                </Pressable>
 
-                <HStack height={180} width={"100%"}>
+                <Text paddingTop={"2"} fontSize={"lg"} fontWeight={"semibold"}>
+                  Танд санал болгох үйлчилгээ
+                </Text>
+                <HStack paddingTop={"1"} height={180} width={"100%"}>
                   <Pressable disabled width={"1/3"}>
                     <Box
                       justifyContent={"center"}
@@ -437,7 +486,7 @@ const WalletScreen = ({ navigation }) => {
                     >
                       <VStack>
                         <Box alignSelf="center">
-                        <MaterialCommunityIcons
+                          <MaterialCommunityIcons
                             name="check-decagram-outline"
                             size={36}
                             color="blue"
@@ -487,7 +536,7 @@ const WalletScreen = ({ navigation }) => {
                     >
                       <VStack>
                         <Box alignSelf="center">
-                        <MaterialCommunityIcons
+                          <MaterialCommunityIcons
                             name="check-decagram-outline"
                             size={36}
                             color="blue"

@@ -9,7 +9,7 @@ import {
   StatusBar,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
 
 import uuid from "react-native-uuid";
 
@@ -87,22 +87,28 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: requestToken,
         };
-
+        AsyncStorage.setItem("user_phone", phone.value);
         axios(config)
           .then(function (response) {
             if (showModal === false) {
               setUserData(response.data);
               Toast.show({
                 type: ALERT_TYPE.SUCCESS,
-                title: 'Success',
-                textBody: 'Амжилттай нэвтэрлээ',
-              })
-
-              AsyncStorage.setItem("user_phone", phone.value);
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "TabbarScreen" }],
+                title: "Success",
+                textBody: "Амжилттай нэвтэрлээ",
               });
+
+              if (response.data.wallets.commpilation === false) {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "CompilationScreen" }],
+                });
+              } else {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "TabbarScreen" }],
+                });
+              }
             }
           })
           .catch(function (error) {
@@ -111,62 +117,52 @@ export default function LoginScreen({ navigation }) {
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
-
               Dialog.show({
                 type: ALERT_TYPE.DANGER,
                 title: "Уучлаарай",
                 textBody: "Таны хаяг түр блоклогдсон байна.",
                 button: "Okey",
-      
+
                 onPressButton: () => {
                   Dialog.hide();
                 },
               });
-
-              
-             
             } else if (err.status === 491) {
               Dialog.show({
                 type: ALERT_TYPE.DANGER,
                 title: "Уучлаарай",
                 textBody: "Таны хаяг түр блоклогдлоо.",
                 button: "Okey",
-      
+
                 onPressButton: () => {
                   Dialog.hide();
                 },
               });
-
-             
             } else {
               if (err.status === 482) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: 'Амжилттай',
-                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
-                })
-                
+                  title: "Амжилттай",
+                  textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
+                });
               } else if (err.status === 481) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: 'Амжилттай',
-                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
-                })
-               
+                  title: "Амжилттай",
+                  textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
+                });
               } else if (err.status === 480) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: 'Амжилттай',
-                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
-                })
-               
+                  title: "Амжилттай",
+                  textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
+                });
               } else if (err.status === 499) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: 'Амжилттай',
-                  textBody: 'Таны гар утсанд баталгаажуулах код илгээсэн.',
-                })
-                
+                  title: "Амжилттай",
+                  textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
+                });
               }
               navigation.navigate("LoginAuthScreen");
             }
@@ -214,10 +210,18 @@ export default function LoginScreen({ navigation }) {
               });
 
               AsyncStorage.setItem("user_phone", phone.value);
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "TabbarScreen" }],
-              });
+
+              if (response.data.wallets.compilation === false) {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "CommpilationScreen" }],
+                });
+              } else {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "TabbarScreen" }],
+                });
+              }
             }
           })
           .catch(function (error) {
@@ -352,7 +356,6 @@ export default function LoginScreen({ navigation }) {
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
-
         Dialog.show({
           type: ALERT_TYPE.DANGER,
           title: "Уучлаарай",
@@ -363,7 +366,6 @@ export default function LoginScreen({ navigation }) {
             Dialog.hide();
           },
         });
-      
       }
       AsyncStorage.getItem("user_uuid")
         .then((result) => {
