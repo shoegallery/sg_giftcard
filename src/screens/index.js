@@ -13,7 +13,7 @@ export { default as BagScreen } from "./BagScreen";
 export { default as HistoryScreen } from "./HistoryScreen";
 export { default as WalletScreen } from "./WalletScreen";
 export { default as PromotionScreen } from "./PromotionScreen";
-export { default as CompilationScreen } from "./CompilationScreen";
+
 
 
 

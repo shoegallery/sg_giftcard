@@ -21,7 +21,6 @@ import * as Linking from "expo-linking";
 
 import appJson from "../../app.json";
 
-import { theme } from "../core/theme";
 import { StateContext } from "../Context/StateContext";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -32,7 +31,6 @@ import {
   VStack,
   Text,
   NativeBaseProvider,
-  useToast,
   ToastProvider,
   Center,
   Box,
@@ -41,9 +39,10 @@ import {
   Button,
 } from "native-base";
 import { TouchableHighlight } from "react-native-gesture-handler";
-
+import { useTheme } from "../features/theme";
 export default function LoginScreen({ navigation }) {
-  const toast = useToast();
+  const theme = useTheme();
+
   const [show, setShow] = useState(false);
   const [phone, setPhone] = useState({ value: "" });
 
@@ -92,30 +91,16 @@ export default function LoginScreen({ navigation }) {
           .then(function (response) {
             if (showModal === false) {
               setUserData(response.data);
-            
-              if (response.data.wallets.compilation === false) {
-                Toast.show({
-                  type: ALERT_TYPE.WARNING,
-                  title: "Анхааруулга",
-                  textBody: "Нэмэлт мэдээлэл шаардлагатай",
-                });
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "CompilationScreen" }],
-                });
-             
-              } else {
-                Toast.show({
-                  type: ALERT_TYPE.SUCCESS,
-                  title: "Success",
-                  textBody: "Амжилттай нэвтэрлээ",
-                });
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "TabbarScreen" }],
-                });
-              }
-             
+
+              Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: "Success",
+                textBody: "Амжилттай нэвтэрлээ",
+              });
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
             }
           })
           .catch(function (error) {
@@ -218,17 +203,10 @@ export default function LoginScreen({ navigation }) {
 
               AsyncStorage.setItem("user_phone", phone.value);
 
-              if (response.data.wallets.compilation === false) {
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "CommpilationScreen" }],
-                });
-              } else {
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "TabbarScreen" }],
-                });
-              }
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
             }
           })
           .catch(function (error) {
@@ -368,7 +346,6 @@ export default function LoginScreen({ navigation }) {
           title: "Уучлаарай",
           textBody: "Интернет холболт алга байна. Шалгана уу.",
           button: "Okey",
-
           onPressButton: () => {
             Dialog.hide();
           },
@@ -396,7 +373,6 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-
           if (result !== null) {
             setPhone({ value: result, error: "" });
           }
@@ -418,15 +394,17 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <NativeBaseProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#ececec" />
+      <StatusBar barStyle={theme.status} backgroundColor={theme.background} />
       <ToastProvider>
         <View style={{ justifyContent: "center", alignContent: "center" }}>
-          <View style={{ height: hp("60%"), backgroundColor: "#ececec" }}>
+          <View
+            style={{ height: hp("60%"), backgroundColor: theme.background }}
+          >
             <Box height={"100%"} justifyContent="center">
               <Center>
                 <Text
                   maxWidth={"90%"}
-                  color="#5499c7"
+                  color={theme.text}
                   fontFamily="bold"
                   fontSize="3xl"
                 >
@@ -435,7 +413,7 @@ export default function LoginScreen({ navigation }) {
                 <Text
                   maxWidth={"90%"}
                   marginTop={1}
-                  color="#424242"
+                  color={theme.textSecond}
                   fontSize="sm"
                 >
                   Та өөрийн гар утасны дугаарыг оруулна уу
@@ -451,12 +429,16 @@ export default function LoginScreen({ navigation }) {
                     marginRight={1 / 2}
                     width="30%"
                     justifyContent="center"
-                    backgroundColor="#65a3cc"
+                    backgroundColor={theme.main}
                     borderRadius="sm"
                   >
                     <Center>
                       <VStack>
-                        <Text fontSize="3xl" fontFamily="bold" color="white">
+                        <Text
+                          fontSize="3xl"
+                          fontFamily="bold"
+                          color={theme.background}
+                        >
                           +976
                         </Text>
                       </VStack>
@@ -468,12 +450,16 @@ export default function LoginScreen({ navigation }) {
                     marginLeft={1 / 2}
                     width="70%"
                     justifyContent="center"
-                    backgroundColor="#ececec"
+                    backgroundColor={theme.buttonText}
                     shadow={"4"}
                   >
                     <Center>
                       <VStack>
-                        <Text fontSize="3xl" fontFamily="bold" color="#325b77">
+                        <Text
+                          fontSize="3xl"
+                          fontFamily="bold"
+                          color={theme.main}
+                        >
                           {phone.value[0] !== undefined ? phone.value[0] : "-"}
                           {phone.value[1] !== undefined ? phone.value[1] : "-"}
                           {phone.value[2] !== undefined ? phone.value[2] : "-"}
@@ -506,19 +492,19 @@ export default function LoginScreen({ navigation }) {
                 >
                   <Center>
                     <TouchableHighlight
-                      underlayColor="#bad6e8"
+                      underlayColor={theme.overlay}
                       style={{
                         borderRadius: 30,
                         height: hp("7%"),
                         width: wp("70%"),
-                        backgroundColor: "#5499c7",
+                        backgroundColor: theme.main,
                       }}
                     >
                       <Box height={"100%"} justifyContent={"center"}>
                         <Text
                           alignItems={"center"}
                           textAlign={"center"}
-                          color="white"
+                          color={theme.buttonText}
                           fontSize="2xl"
                         >
                           Үргэлжлүүлэх
@@ -539,13 +525,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "1" });
@@ -560,7 +546,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               1
@@ -572,13 +558,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "2" });
@@ -593,7 +579,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               2
@@ -605,13 +591,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "3" });
@@ -626,7 +612,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               3
@@ -642,14 +628,14 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
                       minH={"16"}
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "4" });
@@ -664,7 +650,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               4
@@ -676,13 +662,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "5" });
@@ -697,7 +683,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               5
@@ -709,13 +695,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "6" });
@@ -730,7 +716,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               6
@@ -746,13 +732,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "7" });
@@ -767,7 +753,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               7
@@ -779,13 +765,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "8" });
@@ -800,7 +786,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               8
@@ -812,13 +798,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "9" });
@@ -833,7 +819,7 @@ export default function LoginScreen({ navigation }) {
                           >
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               9
@@ -849,13 +835,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {}}
                       >
                         <VStack
@@ -866,7 +852,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               .
@@ -878,13 +864,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "0" });
@@ -899,7 +885,7 @@ export default function LoginScreen({ navigation }) {
                           <Center>
                             <Text
                               fontSize="3xl"
-                              color="#2a4c63"
+                              color={theme.text}
                               fontFamily="regular"
                             >
                               0
@@ -911,13 +897,13 @@ export default function LoginScreen({ navigation }) {
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor="#c5c5c5"
+                      borderColor={theme.border}
                       borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor="#ececec"
+                      backgroundColor={theme.background}
                     >
                       <TouchableHighlight
-                        underlayColor="#f8f8f8"
+                        underlayColor={theme.overlay}
                         onPress={() => {
                           if (
                             phone.value.length < 9 &&
@@ -941,7 +927,7 @@ export default function LoginScreen({ navigation }) {
                             <Ionicons
                               name="caret-back"
                               size={30}
-                              color="#2a4c63"
+                              color={theme.text}
                             />
                           </Center>
                         </VStack>
@@ -989,257 +975,8 @@ export default function LoginScreen({ navigation }) {
               </Modal.Content>
             </Modal>
           </Center>
-          {/* 
-        <Center>
-          <Modal
-            isOpen={showLoginTokenModal}
-            onClose={() => setShowLoginTokenModal(false)}
-            _backdrop={{
-              bg: "coolGray.800",
-            }}
-          >
-            <Modal.Content maxWidth="90%" height={"300"} maxH="400">
-              <Modal.Header>Хандах зөвшөөрөл өгөх</Modal.Header>
-              <Modal.Body>
-                <Text>
-                  Таны гар утсанд илгээсэн баталгаажуулах кодыг оруулна уу
-                </Text>
-                <View>
-                  <Box>
-                    <Input
-                      placeholder="Энд кодоо оруулна уу"
-                      marginTop={5}
-                      fontSize={20}
-                      returnKeyType="done"
-                      onChangeText={(tokenCode) =>
-                        setLoginToken({
-                          value: tokenCode,
-                          error: "",
-                        })
-                      }
-                      keyboardType="number-pad"
-                    />
-                  </Box>
-                </View>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button.Group space={5}>
-                  <Button
-                    onPress={() => {
-                      setShowModal(false);
-                      onLoginAuthPressed();
-                    }}
-                  >
-                    <Text bold color="white">
-                      Нэвтрэх
-                    </Text>
-                  </Button>
-                </Button.Group>
-              </Modal.Footer>
-            </Modal.Content>
-          </Modal>
-        </Center>
-        <VStack>
-          <Background>
-            <VStack>
-              <Center>
-                <Logo
-                  style={{
-                    width: wp("25%"),
-                    heigth: wp("25%"),
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                />
-              </Center>
-            </VStack>
-            <SafeAreaView
-              style={{
-                justifyContent: "flex-start",
-                width: "100%",
-                height: hp("50%"),
-              }}
-            >
-              <Input
-                w={{
-                  base: "100%",
-                  md: "25%",
-                }}
-                h={16}
-                fontSize={24}
-                InputLeftElement={
-                  <Icon
-                    as={<MaterialIcons name="phone" />}
-                    size={8}
-                    ml="2"
-                    color="muted.400"
-                  />
-                }
-                placeholder="Утасны дугаар"
-                returnKeyType="next"
-                textContentType="telephoneNumber"
-                keyboardType="number-pad"
-                value={phone.value}
-                onChangeText={(number) => {
-                  setPhone({ value: number, error: "" });
-                  if (
-                    passwordSaveSwitch === true &&
-                    passwordSave === true &&
-                    seeLockPassword === true
-                  ) {
-                    SetPasswordSave(false);
-                  }
-                }}
-              />
-
-              <Input
-                mt={"5%"}
-                w={{
-                  base: "100%",
-                  md: "25%",
-                }}
-                h={16}
-                fontSize={24}
-                type={show ? "text" : "password"}
-                InputRightElement={
-                  seeLockPassword === false ? (
-                    <Icon
-                      as={
-                        <MaterialIcons
-                          name={show ? "visibility" : "visibility-off"}
-                        />
-                      }
-                      size={8}
-                      mr="2"
-                      color="muted.400"
-                      onPress={() => setShow(!show)}
-                    />
-                  ) : (
-                    <View></View>
-                  )
-                }
-                placeholder="Нууц үг"
-                label="Нууц үг"
-                returnKeyType="done"
-                textContentType="password"
-                keyboardType="default"
-                value={password.value}
-                onChangeText={(text) => {
-                  setPassword({ value: text, error: "" });
-                  if (
-                    passwordSaveSwitch === true &&
-                    passwordSave === true &&
-                    seeLockPassword === true
-                  ) {
-                    SetPasswordSave(false);
-                  }
-                }}
-              />
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-              >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 5,
-                    }}
-                  >
-                    <View style={{ flex: 4 }}>
-                      <BouncyCheckbox
-                        isChecked={passwordSave}
-                        size={20}
-                        fillColor="#1B98F5"
-                        unfillColor="#FFFFFF"
-                        text="Нууц үг сануулах"
-                        iconStyle={{ borderColor: "#1B98F5" }}
-                        textStyle={{
-                          color: "#1B98F5",
-                          textDecorationLine: "none",
-                          fontWeight: "bold",
-                        }}
-                        disableBuiltInState
-                        onPress={() => SetPasswordSave(!passwordSave)}
-                      />
-                    </View>
-                    <View style={{ flex: 5, marginTop: -5 }}>
-                      <View style={styles.forgotPassword}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("ForgetPasswordScreen")
-                          }
-                        >
-                          <Text style={styles.forgot}>
-                            Нууц үгээ мартсан уу?
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              </KeyboardAvoidingView>
-              <View style={{ marginVertical: 0, marginTop: 10 }}>
-                <Button
-                  colorScheme="blue"
-                  bg="#1B98F5"
-                  size="md"
-                  shadow="5"
-                  mode="contained"
-                  onPress={onLoginPressed}
-                >
-                  <Text fontSize="xl" bold color="white">
-                    Нэвтрэх
-                  </Text>
-                </Button>
-              </View>
-              <Button
-                colorScheme="blue"
-                shadow="5"
-                marginTop={hp("2%")}
-                bordered
-                bg="white"
-                margin="0"
-                variant="Subtle"
-                borderColor="#1B98F5"
-                borderWidth="2"
-                size="md"
-                onPress={() => navigation.navigate("RegisterScreen")}
-              >
-                <Text fontSize="xl" bold color="#1B98F5">
-                  Шинээр бүртгүүлэх
-                </Text>
-              </Button>
-            </SafeAreaView>
-            <View
-              style={{
-                flex: 1,
-                marginTop: Platform.OS === "ios" ? "25%" : "35%",
-                alignSelf: "center",
-              }}
-            >
-              <Text fontSize="xl" bold color="#1B98F5">
-                {appJson.expo.version}
-              </Text>
-            </View>
-          </Background>
-        </VStack> */}
         </View>
       </ToastProvider>
     </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  forgotPassword: {
-    width: "100%",
-    alignItems: "flex-end",
-    marginBottom: 10,
-  },
-  forgot: {
-    fontWeight: "bold",
-    paddingTop: 4,
-    fontSize: 14,
-    color: theme.colors.secondary,
-  },
-});

@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Button as PaperButton } from "react-native-paper";
-import { theme } from "../core/theme";
 
 import {
   widthPercentageToDP as wp,
@@ -11,11 +10,7 @@ import {
 export default function Button({ mode, style, ...props }) {
   return (
     <PaperButton
-      style={[
-        styles.button,
-        mode === "outlined" && { backgroundColor: theme.colors.surface },
-        style,
-      ]}
+      style={[styles.button, mode === "outlined" && {}, style]}
       labelStyle={styles.text}
       mode={mode}
       {...props}

@@ -13,21 +13,19 @@ import {
   StatusBar,
   Alert,
   Linking,
-  Button,
 } from "react-native";
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-
-import BackButton from "./src/components/BackButton";
+import { AlertNotificationRoot } from "react-native-alert-notification";
+import { ThemeProvider } from "./src/features/theme";
 import { StateProvider } from "./src/Context/StateContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NativeBaseProvider, ToastProvider, IconButton } from "native-base";
+import { NativeBaseProvider } from "native-base";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import StackScreen from "./src/screens/StackScreen";
 
-
-
-LogBox.ignoreLogs([ 'In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.', ])
+LogBox.ignoreLogs([
+  "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
+]);
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -92,6 +90,7 @@ Text.defaultProps.allowFontScaling = false;
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.allowFontScaling = false;
 export default function App({ navigation }) {
+  const [themeName, setThemeName] = useState("main");
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
 
@@ -99,6 +98,7 @@ export default function App({ navigation }) {
   const responseListener = useRef();
 
   useEffect(() => {
+    setThemeName("light");
     onLayoutRootView();
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -138,18 +138,20 @@ export default function App({ navigation }) {
   }
   return (
     <NativeBaseProvider>
-      <AlertNotificationRoot>
-        <SafeAreaProvider>
-          <StateProvider>
-            <Provider>
-              <StatusBar barStyle="dark-content" />
-              <NavigationContainer>
-                <StackScreen />
-              </NavigationContainer>
-            </Provider>
-          </StateProvider>
-        </SafeAreaProvider>
-      </AlertNotificationRoot>
+      <ThemeProvider value={themeName}>
+        <AlertNotificationRoot>
+          <SafeAreaProvider>
+            <StateProvider>
+              <Provider>
+                <StatusBar barStyle="dark-content" />
+                <NavigationContainer>
+                  <StackScreen />
+                </NavigationContainer>
+              </Provider>
+            </StateProvider>
+          </SafeAreaProvider>
+        </AlertNotificationRoot>
+      </ThemeProvider>
     </NativeBaseProvider>
   );
 }

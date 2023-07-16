@@ -101,6 +101,7 @@ const TabbarScreen = ({ navigation }) => {
           style: { height: 50 }, // Adjust the height as per your requirements
         },
         tabBarStyle: {
+          foreground:"red",
           height: 50,
           paddingBottom: 2,
           paddingTop: 2,

@@ -18,7 +18,7 @@ import axios from "axios";
 
 import appJson from "../../app.json";
 
-import { theme } from "../core/theme";
+
 import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
 
 import { StateContext } from "../Context/StateContext";
@@ -164,27 +164,16 @@ export default function LoginAuthScreen({ navigation }) {
         .then(function (response) {
           if (response.status === 200) {
             setUserData(response.data);
-            if (response.data.wallets.compilation === false) {
-              Toast.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Анхааруулга",
-                textBody: "Нэмэлт мэдээлэл шаардлагатай",
-              });
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "CompilationScreen" }],
-              });
-            } else {
-              Toast.show({
-                type: ALERT_TYPE.SUCCESS,
-                title: "Success",
-                textBody: "Амжилттай нэвтэрлээ",
-              });
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "TabbarScreen" }],
-              });
-            }
+
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: "Success",
+              textBody: "Амжилттай нэвтэрлээ",
+            });
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "TabbarScreen" }],
+            });
           }
         })
         .catch(function (error) {
@@ -1100,16 +1089,4 @@ export default function LoginAuthScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  forgotPassword: {
-    width: "100%",
-    alignItems: "flex-end",
-    marginBottom: 10,
-  },
-  forgot: {
-    fontWeight: "bold",
-    paddingTop: 4,
-    fontSize: 14,
-    color: theme.colors.secondary,
-  },
-});
+

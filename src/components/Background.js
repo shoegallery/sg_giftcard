@@ -4,7 +4,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
 } from "react-native";
-import { theme } from "../core/theme";
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: wp("100%"),
-    backgroundColor: theme.colors.surface,
+
     position: "absolute",
     height: hp("110%"),
   },
