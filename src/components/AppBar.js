@@ -37,9 +37,6 @@ const AppBar = () => {
           </Text>
         </HStack>
         <HStack>
-        
-        
-         
         </HStack>
       </HStack>
     </>
