@@ -7,6 +7,7 @@ import {
   View,
   Platform,
   StatusBar,
+  Pressable, Image
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
@@ -38,7 +39,8 @@ import {
   Modal,
   Button,
 } from "native-base";
-import { TouchableHighlight } from "react-native-gesture-handler";
+
+
 import { useTheme } from "../features/theme";
 export default function LoginScreen({ navigation }) {
   const theme = useTheme();
@@ -57,20 +59,25 @@ export default function LoginScreen({ navigation }) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    if (!isPressed) {
-      setIsPressed(true);
-      loginPressed();
+    console.log("Hi")
+    if (phone.value.length === 8) {
+      if (!isPressed) {
+        setIsPressed(true);
+        loginPressed();
+        setTimeout(() => {
+          setIsPressed(false);
+        }, 10000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
+      }
 
-      setTimeout(() => {
-        setIsPressed(false);
-      }, 10000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
     }
+
   };
 
   const loginPressed = () => {
+
     reactToUpdates();
     InternetCheck();
-    console.log("first");
+
     if (versionUpdate !== true) {
       if (phone.value !== "" && userUUID !== undefined) {
         let requestToken = JSON.stringify({
@@ -105,7 +112,7 @@ export default function LoginScreen({ navigation }) {
           })
           .catch(function (error) {
             AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => {})
+              .then(() => { })
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
@@ -134,25 +141,25 @@ export default function LoginScreen({ navigation }) {
               if (err.status === 482) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: "Амжилттай",
+                  title: "",
                   textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
                 });
               } else if (err.status === 481) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: "Амжилттай",
+                  title: "",
                   textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
                 });
               } else if (err.status === 480) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: "Амжилттай",
+                  title: "",
                   textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
                 });
               } else if (err.status === 499) {
                 Toast.show({
                   type: ALERT_TYPE.SUCCESS,
-                  title: "Амжилттай",
+                  title: "",
                   textBody: "Таны гар утсанд баталгаажуулах код илгээсэн.",
                 });
               }
@@ -211,7 +218,7 @@ export default function LoginScreen({ navigation }) {
           })
           .catch(function (error) {
             AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => {})
+              .then(() => { })
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
@@ -336,7 +343,7 @@ export default function LoginScreen({ navigation }) {
           }
         }
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
@@ -384,6 +391,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   useEffect(() => {
+
     setUserUUID(undefined);
     setShowModal(false);
     reactToUpdates();
@@ -398,13 +406,13 @@ export default function LoginScreen({ navigation }) {
       <ToastProvider>
         <View style={{ justifyContent: "center", alignContent: "center" }}>
           <View
-            style={{ height: hp("60%"), backgroundColor: theme.background }}
+            style={{ height: hp("62%"), backgroundColor: "white" }}
           >
             <Box height={"100%"} justifyContent="center">
+              <Image source={require('../../assets/logomark.png')} style={{ width: 50, height: 50, justifyContent: "center", alignSelf: "center" }}></Image>
               <Center>
                 <Text
                   maxWidth={"90%"}
-                  color={theme.text}
                   fontFamily="bold"
                   fontSize="3xl"
                 >
@@ -414,124 +422,105 @@ export default function LoginScreen({ navigation }) {
                   maxWidth={"90%"}
                   marginTop={1}
                   color={theme.textSecond}
-                  fontSize="sm"
+                  fontSize="md"
+                  textAlign={"center"}
                 >
-                  Та өөрийн гар утасны дугаарыг оруулна уу
+                  Сайн уу! Дахин тавтай морил, таныг
+                  их санасан байна шүү
                 </Text>
-                <HStack
-                  marginTop={5}
-                  height="16"
-                  width="xs"
-                  justifyContent="center"
-                >
-                  <Box
-                    margin={1}
-                    marginRight={1 / 2}
-                    width="30%"
-                    justifyContent="center"
-                    backgroundColor={theme.main}
-                    borderRadius="sm"
-                  >
-                    <Center>
-                      <VStack>
-                        <Text
-                          fontSize="3xl"
-                          fontFamily="bold"
-                          color={theme.background}
-                        >
-                          +976
-                        </Text>
-                      </VStack>
-                    </Center>
-                  </Box>
-                  <Box
-                    borderRadius="sm"
+                <View style={{ marginTop: 20, width: wp("90%"), alignContent: "center" }}>
+                  <Text color={"dark.300"} fontWeight={"medium"} fontSize="md">Утасны дугаар</Text>
+
+                  <View style={{ marginTop: 5, borderColor: phone.value.length === 8 ? "#F0F0F0" : "#FF9FAF", borderWidth: 2, borderRadius: 6, justifyContent: "center", backgroundColor: "white", height: hp("8%"), width: wp("90%"), alignContent: "center" }}><Box
                     margin={1}
                     marginLeft={1 / 2}
-                    width="70%"
-                    justifyContent="center"
-                    backgroundColor={theme.buttonText}
-                    shadow={"4"}
+                    width="100%"
                   >
-                    <Center>
-                      <VStack>
-                        <Text
-                          fontSize="3xl"
-                          fontFamily="bold"
-                          color={theme.main}
-                        >
-                          {phone.value[0] !== undefined ? phone.value[0] : "-"}
-                          {phone.value[1] !== undefined ? phone.value[1] : "-"}
-                          {phone.value[2] !== undefined ? phone.value[2] : "-"}
-                          {phone.value[3] !== undefined
-                            ? phone.value[3]
-                            : "-"}{" "}
-                          {phone.value[4] !== undefined ? phone.value[4] : "-"}
-                          {phone.value[5] !== undefined ? phone.value[5] : "-"}
-                          {phone.value[6] !== undefined ? phone.value[6] : "-"}
-                          {phone.value[7] !== undefined ? phone.value[7] : "-"}
-                        </Text>
-                      </VStack>
-                    </Center>
-                  </Box>
-                </HStack>
+                    <Text
+                      paddingLeft={4}
+                      fontSize="2xl"
+                      fontFamily="bold"
+                      color={"dark.300"}
+                    >
+                      {phone.value[0] !== undefined ? phone.value[0] : ""}
+                      {phone.value[1] !== undefined ? phone.value[1] : ""}
+                      {phone.value[2] !== undefined ? phone.value[2] : ""}
+                      {phone.value[3] !== undefined
+                        ? phone.value[3]
+                        : ""}{" "}
+                      {phone.value[4] !== undefined ? phone.value[4] : ""}
+                      {phone.value[5] !== undefined ? phone.value[5] : ""}
+                      {phone.value[6] !== undefined ? phone.value[6] : ""}
+                      {phone.value[7] !== undefined ? phone.value[7] : ""}
+                    </Text>
+
+
+                  </Box></View>
+
+                </View>
               </Center>
-              <TouchableOpacity onPress={handlePress} disabled={isPressed}>
-                <Box
-                  paddingTop={2}
-                  borderWidth={0}
-                  borderRadius="2xl"
-                  borderColor={"white"}
-                  width={"xs"}
-                  alignSelf="center"
-                  justifyContent="center"
-                  marginTop={5}
-                  style={{
-                    display: phone.value.length === 8 ? "flex" : "none",
-                  }}
-                >
-                  <Center>
-                    <TouchableHighlight
-                      underlayColor={theme.overlay}
+
+              <Box
+                borderWidth={0}
+                borderColor={"white"}
+                width="100%"
+                alignSelf="center"
+                justifyContent="center"
+                marginTop={5}
+                style={{
+
+                }}
+              >
+                <View style={{
+                  backgroundColor: phone.value.length === 8 ? "#6172F3" : "#F5F5F5",
+                  borderRadius: 6,
+                  height: hp("8%"),
+                  width: wp("90%"),
+                  alignSelf: "center"
+                }}><Center>
+                    <TouchableOpacity
+                      onPress={() => { handlePress() }}
                       style={{
-                        borderRadius: 30,
-                        height: hp("7%"),
-                        width: wp("70%"),
-                        backgroundColor: theme.main,
+                        height: hp("8%"),
+                        width: wp("90%"),
                       }}
+
                     >
                       <Box height={"100%"} justifyContent={"center"}>
                         <Text
                           alignItems={"center"}
                           textAlign={"center"}
-                          color={theme.buttonText}
+                          color={phone.value.length === 8 ? "#FFFFFF" : "#A2A2A2"}
                           fontSize="2xl"
                         >
-                          Үргэлжлүүлэх
+                          Нэвтрэх
                         </Text>
                       </Box>
-                    </TouchableHighlight>
-                  </Center>
-                </Box>
-              </TouchableOpacity>
+                    </TouchableOpacity>
+                  </Center></View>
+
+              </Box>
+
             </Box>
           </View>
-
-          <View style={{ height: hp("40%"), justifyContent: "flex-end" }}>
+          <View style={{position:"relative",  flexDirection:"column",  backgroundColor: "#E5E5E5", justifyContent:"flex-end" }}>
             <Center justifyContent="flex-end" alignSelf="center" width="100%">
-              <VStack>
-                <View style={{ height: hp("10%") }}>
-                  <HStack>
+              <VStack marginTop={2} marginBottom={2}>
+                <View style={{ height: hp("9%") }}>
+                  <HStack borderRadius="lg" paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
                     <Box
-                      borderRadius={0}
+                      borderRadius="lg"
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+                        underlayColor={"#A2A2A2"}
+                        borderRadius="lg"
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "1" });
@@ -542,6 +531,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -553,18 +544,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "2" });
@@ -575,6 +568,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -586,18 +581,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "3" });
@@ -608,6 +605,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -619,23 +618,24 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                   </HStack>
                 </View>
-                <View style={{ height: hp("10%") }}>
-                  <HStack>
+                <View style={{ height: hp("9%") }}>
+                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      minH={"16"}
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "4" });
@@ -646,6 +646,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -657,18 +659,21 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "5" });
@@ -679,6 +684,10 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
+
+
                         >
                           <Center>
                             <Text
@@ -690,18 +699,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "6" });
@@ -709,9 +720,13 @@ export default function LoginScreen({ navigation }) {
                         }}
                       >
                         <VStack
+
+
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -723,22 +738,24 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                   </HStack>
                 </View>
-                <View style={{ height: hp("10%") }}>
-                  <HStack>
+                <View style={{ height: hp("9%") }}>
+                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "7" });
@@ -749,6 +766,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -760,18 +779,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "8" });
@@ -782,6 +803,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -793,18 +816,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "9" });
@@ -816,6 +841,8 @@ export default function LoginScreen({ navigation }) {
                             justifyContent="center"
                             height="100%"
                             width="100%"
+                            borderRadius="lg"
+                            backgroundColor="#FFFFFF"
                           >
                             <Text
                               fontSize="3xl"
@@ -826,28 +853,32 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                   </HStack>
                 </View>
-                <View style={{ height: hp("10%") }}>
-                  <HStack>
+                <View style={{ height: hp("9%"), marginBottom: 2, backgroundColor: "#E5E5E5" }}>
+                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
-                        onPress={() => {}}
+                      <TouchableOpacity
+
+                        onPress={() => { }}
                       >
                         <VStack
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#D4D4D4"
                         >
                           <Center>
                             <Text
@@ -859,18 +890,20 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
+
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "0" });
@@ -881,6 +914,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#FFFFFF"
                         >
                           <Center>
                             <Text
@@ -892,23 +927,25 @@ export default function LoginScreen({ navigation }) {
                             </Text>
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                     <Box
                       borderRadius={0}
                       justifyContent="center"
-                      borderColor={theme.border}
-                      borderWidth={1 / 4}
                       width="1/3"
-                      backgroundColor={theme.background}
+                      paddingLeft={1}
+                      paddingRight={1}
+                      paddingTop={1}
+                      paddingBottom={1}
+                      background="#E5E5E5"
                     >
-                      <TouchableHighlight
-                        underlayColor={theme.overlay}
+                      <TouchableOpacity
                         onPress={() => {
                           if (
                             phone.value.length < 9 &&
                             phone.value.length > 0
                           ) {
+                            setIsPressed(false)
                             setPhone({
                               value: phone.value.substr(
                                 0,
@@ -922,6 +959,8 @@ export default function LoginScreen({ navigation }) {
                           justifyContent="center"
                           height="100%"
                           width="100%"
+                          borderRadius="lg"
+                          backgroundColor="#D4D4D4"
                         >
                           <Center>
                             <Ionicons
@@ -931,7 +970,7 @@ export default function LoginScreen({ navigation }) {
                             />
                           </Center>
                         </VStack>
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                     </Box>
                   </HStack>
                 </View>

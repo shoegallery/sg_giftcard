@@ -79,6 +79,9 @@ import LocationScreen from "./LocationScreen";
 import WalletScreen from "./WalletScreen";
 import LoginScreen from "./LoginScreen";
 import PromotionScreen from "./PromotionScreen";
+import ScanScreen from "./ScanScreen";
+
+
 
 const Tab = createBottomTabNavigator();
 
@@ -101,13 +104,12 @@ const TabbarScreen = ({ navigation }) => {
           style: { height: 50 }, // Adjust the height as per your requirements
         },
         tabBarStyle: {
-          foreground:"red",
+          foreground: "red",
           height: 50,
           paddingBottom: 2,
           paddingTop: 2,
           width: "100%",
-          borderTopLeftRadius: 13, // Specify the top-left border radius
-          borderTopRightRadius: 13, // Specify the top-right border radius
+       
         },
       }}
     >
@@ -143,7 +145,21 @@ const TabbarScreen = ({ navigation }) => {
             ),
         }}
       />
-
+      <Tab.Screen
+        name="ScanScreen"
+        component={ScanScreen}
+        options={{
+          tabBarIconStyle: ({ backgroundColor: "red",display:"flex" }),
+          tabBarLabelStyle:({ display:"none"}),
+       
+          tabBarIcon: ({ focused, tintColor }) =>
+            focused ? (
+              <Feather name="camera" size={36} color="#ff5252" />
+            ) : (
+              <Feather name="shopping-bag" size={36} color="grey" />
+            ),
+        }}
+      />
       <Tab.Screen
         name="PromotionScreen"
         component={PromotionScreen}
