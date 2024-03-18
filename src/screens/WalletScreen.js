@@ -53,7 +53,8 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const WalletScreen = ({ navigation }) => {
+const WalletScreen = ({ navigation,props }) => {
+  console.log(props)
   const [showModal, setShowModal] = useState(false);
   const [copiedText, setCopiedText] = useState("");
   const [loadingStatus, setLoadingStatus] = useState(false);

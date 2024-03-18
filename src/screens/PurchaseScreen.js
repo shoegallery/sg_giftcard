@@ -8,6 +8,7 @@ import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import * as Haptics from "expo-haptics";
 import { NumericFormat } from "react-number-format";
 
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -33,12 +34,12 @@ import { Ionicons } from "@expo/vector-icons";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
-const PurchaseScreen = ({ navigation }) => {
-
+const PurchaseScreen = ({ navigation, route }) => {
 
 
 
   const [userData, setUserData] = useContext(StateContext);
+  const [canGoBack, setCanGoBack] = useState(false)
 
   const [onOpen, setOnOpen] = useState(false);
   const [service, setService] = useState("");
@@ -47,6 +48,7 @@ const PurchaseScreen = ({ navigation }) => {
     value: "",
     error: "",
   });
+
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
   const dataRefresher = () => {
@@ -130,7 +132,7 @@ const PurchaseScreen = ({ navigation }) => {
       setReceiverAmount({ ...receiverAmount, error: receiverAmountError });
       setReceiverPhone({ ...receiverPhone, error: receiverPhoneError });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-      navigation.goBack();
+
       Dialog.show({
         type: ALERT_TYPE.DANGER,
         title: "Амжилтгүй",
@@ -141,7 +143,7 @@ const PurchaseScreen = ({ navigation }) => {
           Dialog.hide();
         },
       });
-
+      console.log(receiverPhone)
       return;
     }
 
@@ -185,8 +187,8 @@ const PurchaseScreen = ({ navigation }) => {
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
         console.log(err);
-        setReceiverPhone({ value: "", error: "" });
-        navigation.goBack();
+     
+
         setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
@@ -229,6 +231,7 @@ const PurchaseScreen = ({ navigation }) => {
       });
   };
   useEffect(() => {
+    setReceiverPhone({ value: route.params.data })
     InternetCheck();
     dataRefresher();
     userTransactionHistory();
@@ -240,6 +243,8 @@ const PurchaseScreen = ({ navigation }) => {
         <BackButton
           style={{ backgroundColor: "white" }}
           goBack={navigation.goBack}
+
+
         />
       ),
     });
@@ -249,6 +254,10 @@ const PurchaseScreen = ({ navigation }) => {
         UIManager.setLayoutAnimationEnabledExperimental(true);
       }
     }
+    const listenerUnsubscribe = navigation.addListener('focus', () => {
+      setCanGoBack(navigation.canGoBack())
+    })
+    return () => listenerUnsubscribe()
   }, [navigation]);
   return (
     <View style={{ justifyContent: "center", alignContent: "center" }}>
@@ -273,63 +282,6 @@ const PurchaseScreen = ({ navigation }) => {
                 )}
               />
             </Box>
-            <Box marginLeft={1 / 2} margin={1} justifyContent="center">
-              <Text
-                fontWeight={"semibold"}
-                alignSelf={"flex-start"}
-                marginTop={1}
-                fontSize={"md"}
-              >
-                Салбар
-              </Text>
-            </Box>
-            <HStack height="16" width="xs" justifyContent="center">
-              <Box
-                borderRadius="sm"
-                height="16"
-                margin={1}
-                marginLeft={1 / 2}
-                width="95%"
-                justifyContent="center"
-                backgroundColor="#ececec"
-                shadow={"4"}
-              >
-                <Select
-                  selectedValue={service}
-                  onValueChange={(itemValue) => {
-                    setService(itemValue),
-                      setReceiverPhone({ value: itemValue });
-                  }}
-                  showSoftInputOnFocus={false}
-                  fontSize="md"
-                  height="16"
-                  accessibilityLabel="Choose Service"
-                  placeholder="Энд дарж салбарыг сонгоно уу"
-                  _selectedItem={{
-                    bg: "#5499c7",
-                    borderRadius: 10,
-                    width: "full",
-                    endIcon: <CheckIcon color="red" size={5} />,
-                  }}
-                >
-                  <Select.Item
-                    label="Гранд Плаза - Shoe Gallery"
-                    value="50001000"
-                  />
-                  <Select.Item
-                    label="Хүннү Моол - Shoe Gallery"
-                    value="50002000"
-                  />
-                  <Select.Item label="УБИД - BASCONI" value="50003000" />
-                  <Select.Item label="УБИД - Sasha Fabiani" value="50004000" />
-                  <Select.Item label="Максмоол - BASCONI" value="50005000" />
-                  <Select.Item
-                    label="Максмоол - Sasha Fabiani"
-                    value="50006000"
-                  />
-                </Select>
-              </Box>
-            </HStack>
             <Box marginLeft={1 / 2} margin={1} justifyContent="center">
               <Text
                 fontWeight={"semibold"}
@@ -382,6 +334,7 @@ const PurchaseScreen = ({ navigation }) => {
               borderWidth={0}
               borderColor={"white"}
               width={"xs"}
+              height={"24"}
               alignSelf="center"
               justifyContent="center"
               marginTop={5}
@@ -725,7 +678,7 @@ const PurchaseScreen = ({ navigation }) => {
                 >
                   <TouchableHighlight
                     underlayColor="#f8f8f8"
-                    onPress={() => {}}
+                    onPress={() => { }}
                   >
                     <VStack justifyContent="center" height="100%" width="100%">
                       <Center>

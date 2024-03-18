@@ -4369,6 +4369,13 @@ expo-blur@~12.4.1:
   resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-12.4.1.tgz#b391de84914ef9ece0702378e51e09461ad565ab"
   integrity sha512-lGN8FS9LuGUlEriULTC62cCWyg5V7zSVQeJ6Duh1wSq8aAETinZ2/7wrT6o+Uhd/XVVxFNON2T25AGCOtMG6ew==
 
+expo-camera@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-14.0.1.tgz#d3567566e5f9c1a906b3ec8f66fde1e4c08fc99d"
+  integrity sha512-72W8T9P+oYloWwFt2/ils15OS5X0R9u1p5vjRRo5fyGhbTA3qkS8UsV1tdSNTCUBcAxXHEXTO+iM4Xzabun8tg==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-clipboard@~4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-4.3.1.tgz#ce6ed35ae31c7fc1aeadb005b8eb9b39a8bb9b40"
@@ -4486,10 +4493,10 @@ expo-notifications@~0.20.1:
     fs-extra "^9.1.0"
     uuid "^3.4.0"
 
-expo-permissions@~14.2.1:
-  version "14.2.1"
-  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-14.2.1.tgz#da4a7ef45e13da99032960528267cc9ca8e964b8"
-  integrity sha512-jXGnOODtDMFvK7cwo7wIRPcnA7m1bie80gJ5BdL6Vs5kgCU7+RCLOCp3sBw7TKRPIlVMmQDhZA62bGzoBV0hkA==
+expo-permissions@^14.4.0:
+  version "14.4.0"
+  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-14.4.0.tgz#d7bb2f0026b87e1294ee551969c35306193f4ad3"
+  integrity sha512-oAcnJ7dlZhpBydK73cwomA2xofizayVUz+FW5REl7dMu7MYyeN/3aqhlpZ3mYddrxvG161bqu97MQr01UixUnw==
 
 expo-sharing@~11.5.0:
   version "11.5.0"
