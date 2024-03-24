@@ -16,13 +16,15 @@ export { default as PromotionScreen } from "./PromotionScreen";
 export { default as ScanScreen } from "./ScanScreen";
 
 
-
 export { default as AdminScreen } from "./AdminScreen";
 
 
 export { default as OperatorScreen } from "./OperatorScreen";
 export { default as SalerScreen } from "./SalerScreen";
-
+export { default as UserScreens } from "./UserScreens";
+export { default as SentNotification } from "./SentNotification";
+export { default as SyncScreen } from "./SyncScreen";
+export { default as SentCoupon } from "./SentCoupon";
 
 
 

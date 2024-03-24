@@ -15,7 +15,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import NumberFormat from "react-number-format";
-
+import { WebView } from 'react-native-webview';
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 
 import {
@@ -37,64 +37,9 @@ const ShoppingScreen = () => {
   return (
     <View>
       <StatusBar barStyle="dark-content"  backgroundColor="red" />
-      <Pressable maxW="96">
-        {({ isHovered, isFocused, isPressed }) => {
-          return (
-            <Box
-              justifyContent={"center"}
-              alignItems={"center"}
-              alignSelf="center"
-              maxWidth={"95%"}
-              width={"95%"}
-              bg={
-                isPressed
-                  ? "coolGray.200"
-                  : isHovered
-                  ? "coolGray.200"
-                  : "coolGray.100"
-              }
-              style={{
-                transform: [
-                  {
-                    scale: isPressed ? 0.96 : 1,
-                  },
-                ],
-              }}
-              p="4"
-              rounded="8"
-              shadow={2}
-              borderWidth="0"
-              borderColor="coolGray.300"
-            >
-              <HStack>
-                <Box width={"50%"}>
-                  <HStack space={3} alignSelf={"flex-start"}>
-                    <Box alignSelf="center">
-                      <MaterialCommunityIcons
-                        name="arrow-right-box"
-                        size={32}
-                        color="red"
-                      />
-                    </Box>
-                    <Text
-                      color="coolGray.800"
-                      fontWeight="medium"
-                      fontSize="md"
-                      alignSelf={"center"}
-                    >
-                      Зарцуулах
-                    </Text>
-                  </HStack>
-                </Box>
-                <Box width={"42%"} justifyContent="center"></Box>
-                <Box width={"8%"} justifyContent="center">
-                  <AntDesign name="right" size={28} color="#616161" />
-                </Box>
-              </HStack>
-            </Box>
-          );
-        }}
-      </Pressable>
+      <Box height={"100%"} >
+        <WebView source={{ style: { justifyContent: "flex-start"}, uri: 'https://shoez.mn/women-home' }} />
+      </Box>
     </View>
   );
 };

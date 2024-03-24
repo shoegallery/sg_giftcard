@@ -77,12 +77,12 @@ import {
   GetCouponScreen,
   BagScreen,
   HistoryScreen,
-  WalletScreen,
+  SentCoupon,
   TabbarScreen,
-  PromotionScreen,
-  CompilationScreen,
+  SyncScreen,
+  SentNotification,
   ScanScreen,
-  AdminScreen, AdminStatementScreen, AdminStatisticScreen, OperatorScreen, SalerScreen
+  AdminScreen, UserScreens, OperatorScreen, SalerScreen
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -118,6 +118,44 @@ const StackScreen = ({ navigation }) => {
         name="GetCouponScreen"
         component={GetCouponScreen}
       /><Stack.Screen
+      options={{
+        headerShown: true,
+        title: "Sync хэсэг",
+        backgroundColor: "#ececec",
+        headerTintColor: "#ececec",
+        headerStyle: { backgroundColor: "white", borderRadius: 0 },
+        headerTitleStyle: {
+          width: "100%",
+          fontSize: 17,
+          color: "black",
+          fontWeight: "500",
+          backgroundColor: "white",
+          fontFamily: "regular",
+          textAlign: Platform.OS === "android" ? "center" : "auto",
+        },
+      }}
+      name="SyncScreen"
+      component={SyncScreen}
+    /><Stack.Screen
+    options={{
+      headerShown: true,
+      title: "Массаар купон илгээх",
+      backgroundColor: "#ececec",
+      headerTintColor: "#ececec",
+      headerStyle: { backgroundColor: "white", borderRadius: 0 },
+      headerTitleStyle: {
+        width: "100%",
+        fontSize: 17,
+        color: "black",
+        fontWeight: "500",
+        backgroundColor: "white",
+        fontFamily: "regular",
+        textAlign: Platform.OS === "android" ? "center" : "auto",
+      },
+    }}
+    name="SentCoupon"
+    component={SentCoupon}
+  /><Stack.Screen
         options={{
           headerShown: true,
           title: "PurchaseScreen",
@@ -195,6 +233,26 @@ const StackScreen = ({ navigation }) => {
         name="HistoryScreen"
         component={HistoryScreen}
       /><Stack.Screen
+      options={{
+        headerShown: true,
+        title: "Мэдэгдэл илгээх",
+        backgroundColor: "#ececec",
+        headerTintColor: "#ececec",
+        headerStyle: { backgroundColor: "white", borderRadius: 0 },
+        headerTitleStyle: {
+          alignContent: "center",
+          width: "100%",
+          fontSize: 17,
+          color: "black",
+          fontWeight: "500",
+          backgroundColor: "white",
+          fontFamily: "regular",
+          textAlign: Platform.OS === "android" ? "center" : "auto",
+        },
+      }}
+      name="SentNotification"
+      component={SentNotification}
+    /><Stack.Screen
         options={{
           headerShown: true,
           title: "AdminScreen",
@@ -235,6 +293,26 @@ const StackScreen = ({ navigation }) => {
         name="SalerScreen"
         component={SalerScreen}
       /><Stack.Screen
+      options={{
+        headerShown: true,
+        title: "Хэрэглэгчид",
+        backgroundColor: "#ececec",
+        headerTintColor: "#ececec",
+        headerStyle: { backgroundColor: "white", borderRadius: 0 },
+        headerTitleStyle: {
+          alignContent: "center",
+          width: "100%",
+          fontSize: 17,
+          color: "black",
+          fontWeight: "500",
+          backgroundColor: "white",
+          fontFamily: "regular",
+          textAlign: Platform.OS === "android" ? "center" : "auto",
+        },
+      }}
+      name="UserScreens"
+      component={UserScreens}
+    /><Stack.Screen
         options={{
           headerShown: true,
           title: "OperatorScreen",
@@ -254,11 +332,7 @@ const StackScreen = ({ navigation }) => {
         }}
         name="OperatorScreen"
         component={OperatorScreen}
-      />
-
-
-
-      <Stack.Screen
+      /><Stack.Screen
         options={{
           headerShown: true,
           title: "Үйлчилгээний нөхцөл",

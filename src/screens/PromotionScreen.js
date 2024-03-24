@@ -6,6 +6,7 @@ import {
   PanResponder,
   Dimensions,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import {
   Button,
@@ -30,6 +31,8 @@ import {
   CheckIcon,
 } from "native-base";
 import InstaStory from 'react-native-insta-story';
+import { WebView } from 'react-native-webview';
+
 
 const data = [
   {
@@ -152,11 +155,15 @@ const { width, height } = Dimensions.get("window");
 const PromotionScreen = () => {
   return (
     <View>
-     <Box><Text height={8} marginLeft={4} bold fontSize={20}>Story</Text></Box>
-      <InstaStory
-        data={data}
-        duration={10} />
-        <Box height={"100%"} bgColor={"amber.400"}></Box>
+      <StatusBar barStyle="dark" backgroundColor={"#484848"} />
+      <Box backgroundColor={"#484848"} height={"20%"} ><Box ><Text color={"#FF5A5F"} height={8} marginLeft={4} bold fontSize={20}>Story</Text></Box>
+        <InstaStory
+          data={data}
+          duration={10} unPressedBorderColor="#F56040" pressedBorderColor="#FCAF45" unPressedAvatarTextColor="#F56040" pressedAvatarTextColor="#FCAF45"/></Box>
+
+      <Box height={"85%"} >
+        <WebView source={{ style: { justifyContent: "flex-start", height: 300 }, uri: 'https://www.apple.com//105/media/us/iphone/family/2024/1efec3e0-8619-4684-a57e-6e2310394f08/anim/welcome/small_2x.mp4#t=1.893576' }} />
+      </Box>
     </View>
   );
 };

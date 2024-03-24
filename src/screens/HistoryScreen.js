@@ -127,7 +127,7 @@ const HistoryScreen = ({ navigation }) => {
                       </Box>
                       <Box width={"50%"}>
                         <NumericFormat
-                          value={item.balanceBefore.$numberDecimal}
+                          value={item.balanceAfter.$numberDecimal}
                           displayType={"text"}
                           thousandSeparator={true}
                           renderText={(formattedValue) => (

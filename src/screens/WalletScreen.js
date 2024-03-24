@@ -1394,7 +1394,7 @@ const WalletScreen = ({ navigation, props }) => {
 
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("AdminStatementScreen");
+              navigation.navigate("HistoryScreen");
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -1518,7 +1518,7 @@ const WalletScreen = ({ navigation, props }) => {
 
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("HistoryScreen");
+              navigation.navigate("UserScreens");
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -1580,7 +1580,7 @@ const WalletScreen = ({ navigation, props }) => {
 
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("HistoryScreen");
+              navigation.navigate("SentNotification");
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -1626,7 +1626,7 @@ const WalletScreen = ({ navigation, props }) => {
                           alignSelf={"center"}
                           fontSize="md"
                         >
-                          Coupon илгээх
+                          Мэдэгдэл илгээх
                         </Text>
                       </HStack>
                     </Box>
@@ -1642,7 +1642,7 @@ const WalletScreen = ({ navigation, props }) => {
 
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("HistoryScreen");
+              navigation.navigate("SyncScreen");
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -1704,7 +1704,7 @@ const WalletScreen = ({ navigation, props }) => {
             paddingBottom={6}
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("HistoryScreen");
+              navigation.navigate("SentCoupon");
             }}
           >
             {({ isHovered, isPressed }) => {

@@ -61,14 +61,14 @@ export default function LoginScreen({ navigation }) {
   const handlePress = () => {
 
     if (phone.value.length === 8) {
-      loginPressed();
-      // if (!isPressed) {
-      //   setIsPressed(true);
-      //   loginPressed();
-      //   setTimeout(() => {
-      //     setIsPressed(false);
-      //   }, 0); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
-      // }
+
+      if (!isPressed) {
+        setIsPressed(true);
+        loginPressed();
+        setTimeout(() => {
+          setIsPressed(false);
+        }, 1000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
+      }
 
     }
 

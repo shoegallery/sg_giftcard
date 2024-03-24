@@ -2,6 +2,9 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Provider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { baseUrl } from "./src/baseUrl";
 
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -14,6 +17,8 @@ import {
   Alert,
   Linking,
 } from "react-native";
+
+import axios from "axios";
 import { AlertNotificationRoot } from "react-native-alert-notification";
 import { ThemeProvider } from "./src/features/theme";
 import { StateProvider } from "./src/Context/StateContext";
@@ -67,6 +72,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
+
   } else {
     alert("Бодит утас ашиглана уу ;)");
   }
@@ -97,7 +103,58 @@ export default function App({ navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+
+
+  AsyncStorage.getItem("user_notification")
+  .then((result) => {
+    if (result === null) {
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: "Мэдэгдэл",
+        textBody: `Та мэдэгдэл хүлээн авахыг тохируулаагүй байна. Мэдэгдэл авахыг хүсвэл ок дарна уу`,
+        button: "Okey",
+        onPressButton: () => {
+          Dialog.hide();
+          getPushNotification();
+        },
+      });
+    }
+  })
+  .catch(() => {
+    console.log("uuid baihgui");
+  });
+  
+
+  const getPushNotification = () => { 
+    
+    let data = JSON.stringify({
+      "token": expoPushToken
+    });
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${baseUrl}/marketing/get`,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      AsyncStorage.setItem("user_notification",  expoPushToken);
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+   }
+
+
   useEffect(() => {
+
     setThemeName("light");
     onLayoutRootView();
     registerForPushNotificationsAsync().then((token) =>
@@ -109,11 +166,12 @@ export default function App({ navigation }) {
         setNotification(notification);
       });
 
+
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
       });
-    console.log(expoPushToken);
+
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
