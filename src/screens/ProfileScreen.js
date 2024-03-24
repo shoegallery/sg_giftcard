@@ -118,54 +118,7 @@ export default function ProfileScreen({ navigation }) {
       </Box> */}
       <Box height={"full"} backgroundColor={"#ececec"}>
         <Box height={"80%"} width={"100%"} paddingTop={"6"}>
-          <Center>
-            <TouchableHighlight
-              underlayColor="#89c4f4"
-              onPress={() => {
-
-              }}
-              style={{
-                width: wp("96%"),
-                borderRadius: hp("1%"),
-                justifyContent: "center",
-                height: 60,
-              }}
-            >
-              <Box
-                backgroundColor="#ececec"
-                h={"100%"}
-                borderRadius={"0"}
-                justifyContent={"center"}
-              >
-                <HStack alignItems="center" justifyContent={"center"}>
-                  <Box>
-                    <Box
-                      backgroundColor={"#acd6f7"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={MaterialCommunityIcons}
-                        width={"xl"}
-                        size="lg"
-                        name="license"
-                        color="#374e62"
-                      />
-                    </Box>
-                  </Box>
-                  <Text width={"80%"} fontSize={"md"} color="#325b77">
-                    {"    "}Хэрэглэгчийн мэдээлэл
-                  </Text>
-                  <Box justifyContent="center">
-                    <AntDesign name="right" size={16} color="#616161" />
-                  </Box>
-                </HStack>
-              </Box>
-            </TouchableHighlight>
-          </Center>
+          {/* + */}
 
           <Center paddingTop={"6"}>
             <TouchableHighlight

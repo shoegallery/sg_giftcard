@@ -16,7 +16,7 @@ import {
   AntDesign,
   MaterialCommunityIcons,
   Ionicons,
-  FontAwesome5,
+  FontAwesome5, FontAwesome
 } from "@expo/vector-icons";
 import {
   ALERT_TYPE,
@@ -31,6 +31,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
 import * as Clipboard from "expo-clipboard";
+import QRCode from 'react-native-qrcode-svg';
 
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 import ScanScreen from "./ScanScreen";
@@ -65,6 +66,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { stringify } from "uuid";
 
 const WalletScreen = ({ navigation, props }) => {
 
@@ -543,7 +545,7 @@ const WalletScreen = ({ navigation, props }) => {
           {userData.wallets.walletType === "member" ? (
             <Box justifyContent={"center"}>
               <Pressable
-                onPress={() => { }}
+            onPress={()=>{setRefreshing(true)}}
                 paddingTop={3}
                 alignItems={"center"}
               >
@@ -566,29 +568,41 @@ const WalletScreen = ({ navigation, props }) => {
                       style={{
                         transform: [
                           {
-                            scale: isPressed ? 1.02 : 1,
+                            scale: isPressed ? 1.03 : 1,
+                         
                           },
                         ],
                       }}
                     >
-                      <Box>
-                        <Text
-                          fontWeight={"semibold"}
-                          pl={"1"}
-                          fontSize={"xl"}
-                        >
-                          <Text fontSize={"xl"} fontWeight={"semibold"}>
-                            Зэрэглэл : Үнэнч үйлчлүүлэгч 😎
+                      <VStack flexDir={"row"}><Box flex={3} backgroundColor={"amber.400"} ><Box>
+                        {
+                          userData.wallets.phone !== undefined ? (<QRCode
+                            value={userData.wallets.phone.toString()}
+                            logoSize={20}
+                          />) : (<Box></Box>)
+
+                        }</Box></Box><Box flex={7} >
+                          <Text
+                            fontWeight={"semibold"}
+                            pt={"2"}
+                            pl={"3"}
+                            fontSize={"xl"}
+                          >
+                            <Text fontSize={"md"} fontWeight={"semibold"}>
+                              Зэрэглэл :
+                            </Text>
                           </Text>
-                        </Text>
-                        <Text
-                          fontWeight={"semibold"}
-                          pl={"1"}
-                          fontSize={"xl"}
-                        >
-                          Оноо ⭐️
-                        </Text>
-                      </Box>
+                          <Text pl={"3"} fontSize={"md"} fontWeight={"semibold"}>
+                            Үнэнч үйлчлүүлэгч 😎
+                          </Text>
+                          <Text
+                            fontWeight={"semibold"}
+                            pl={"3"}
+                            fontSize={"md"}
+                          >
+                            Оноо ⭐️
+                          </Text>
+                        </Box></VStack>
                     </Box>
                   );
                 }}
@@ -737,12 +751,12 @@ const WalletScreen = ({ navigation, props }) => {
           )}
         </Box>) : (<View><Text
           fontWeight={"semibold"}
-          pt={"1"}
+          pt={"5"}
           fontSize={"xl"}
           textAlign={"center"}
         >
-          <Text  fontSize={"xl"} fontWeight={"semibold"}>
-            Оффисс хэсэг 😎
+          <Text fontSize={"xl"} fontWeight={"semibold"}>
+            Оффисс хэсэг 😎 - {userData.wallets.useRole}
           </Text>
         </Text></View>)}
         </View>
@@ -753,7 +767,8 @@ const WalletScreen = ({ navigation, props }) => {
             width: "85%",
           }}
         >
-          <Pressable
+
+          <Box>{userData.wallets.isPanel !== "officeWorker" ? (<Box><Pressable
             paddingTop={"6"}
             alignItems={"center"}
             onPress={() => {
@@ -832,72 +847,75 @@ const WalletScreen = ({ navigation, props }) => {
                 </Box>
               );
             }}
-          </Pressable>
-          <Box>{userData.wallets.isPanel !== "officeWorker" ? (<Box><Pressable
+          </Pressable><Pressable
             paddingTop={3}
             alignItems={"center"}
             onPress={() => {
               setShowModal(true);
             }}
           >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
                         ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialIcons
-                            name="save-alt"
-                            size={32}
-                            color="green"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Цэнэглэх
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable>
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialIcons
+                              name="save-alt"
+                              size={32}
+                              color="green"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Цэнэглэх
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
             <Pressable
               onPress={() => {
-                navigation.navigate("GetCouponScreen");
+                Dialog.show({
+                  type: ALERT_TYPE.WARNING,
+                  title: "Тун удахгүй...",
+                  button: "Ойлголоо",
+                });
               }}
               paddingTop={3}
               alignItems={"center"}
@@ -957,11 +975,7 @@ const WalletScreen = ({ navigation, props }) => {
               paddingTop={3}
               alignItems={"center"}
               onPress={() => {
-                Dialog.show({
-                  type: ALERT_TYPE.WARNING,
-                  title: "Тун удахгүй...",
-                  button: "Ойлголоо",
-                });
+                navigation.navigate("TransferScanScreen")
               }}
             /* onPress={() => {
           navigation.navigate("TransferScreen");
@@ -1093,133 +1107,76 @@ const WalletScreen = ({ navigation, props }) => {
               </Center>
             ) : (
               <View></View>
-            )}</Box>) : (<View></View>)}</Box>
-          <Pressable
-            paddingTop={3}
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("BagScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
+            )}<Pressable
+              paddingTop={3}
+              paddingBottom={6}
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("HistoryScreen");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
                         ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <Feather name="shopping-bag" size={32} color="red" />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          fontSize="md"
-                          alignSelf={"center"}
-                        >
-                          Таны хадгалсан загвар
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable>
-          <Pressable
-            paddingTop={3}
-            paddingBottom={6}
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("HistoryScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Худалдан авалтын түүх
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable>
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="history"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Худалдан авалтын түүх
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable></Box>) : (<View></View>)}</Box>
+
+
 
           {/* Оффисс эрхээр хандагчид */}
-         {userData.wallets.useRole==="admin"?(<Box><Pressable
+          {userData.wallets.useRole === "admin" ? (<Box><Pressable
             paddingTop={3}
-    
+
             alignItems={"center"}
             onPress={() => {
               setShowModalOperator(true);
@@ -1256,8 +1213,8 @@ const WalletScreen = ({ navigation, props }) => {
                     <Box width={"94%"}>
                       <HStack space={2} alignSelf={"flex-start"}>
                         <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
+                          <Feather
+                            name="send"
                             size={32}
                             color="black"
                           />
@@ -1271,115 +1228,115 @@ const WalletScreen = ({ navigation, props }) => {
                           Оператор цэнэглэх
                         </Text>
                         {showModalOperator ? (
-                    <Modal isOpen={showModalOperator} onClose={() => setShowModalOperator(false)}>
-                      <KeyboardAvoidingView
-                        h={{
-                          base: "500px",
-                          lg: "auto",
-                        }}
-                        behavior={Platform.OS === "ios" ? "padding" : "height"}
-                      >
-                        <Modal.Content width={wp("80%")} height={hp("60%")}>
-                          <Modal.CloseButton />
-                          <Modal.Header>
-                            <Text
-                              bold
-                              color="#242B2E"
-                              fontSize={20}
-                              textAlign="center"
+                          <Modal isOpen={showModalOperator} onClose={() => setShowModalOperator(false)}>
+                            <KeyboardAvoidingView
+                              h={{
+                                base: "500px",
+                                lg: "auto",
+                              }}
+                              behavior={Platform.OS === "ios" ? "padding" : "height"}
                             >
-                              Оператор цэнэглэх
-                            </Text>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <FormControl>
-                              <FormControl.Label>
-                                <Text
-                                  fontSize={20}
-                                  fontWeight="semibold"
-                                  color="gray.700"
-                                >
-                                  Хүлээн авагч
-                                </Text>
-                              </FormControl.Label>
-                              <View>
-                                <Box>
-                                  <Input
-                                    value={receiverPhoneOperator.value}
+                              <Modal.Content width={wp("80%")} height={hp("60%")}>
+                                <Modal.CloseButton />
+                                <Modal.Header>
+                                  <Text
+                                    bold
+                                    color="#242B2E"
                                     fontSize={20}
-                                    returnKeyType="next"
-                                    onChangeText={(receiverAmountPhoneo) =>
-                                      setReceiverPhoneOperator({
-                                        value: receiverAmountPhoneo,
-                                        error: "",
-                                      })
-                                    }
-                                    keyboardType="number-pad"
-                                  />
-                                </Box>
-                              </View>
-                            </FormControl>
+                                    textAlign="center"
+                                  >
+                                    Оператор цэнэглэх
+                                  </Text>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  <FormControl>
+                                    <FormControl.Label>
+                                      <Text
+                                        fontSize={20}
+                                        fontWeight="semibold"
+                                        color="gray.700"
+                                      >
+                                        Хүлээн авагч
+                                      </Text>
+                                    </FormControl.Label>
+                                    <View>
+                                      <Box>
+                                        <Input
+                                          value={receiverPhoneOperator.value}
+                                          fontSize={20}
+                                          returnKeyType="next"
+                                          onChangeText={(receiverAmountPhoneo) =>
+                                            setReceiverPhoneOperator({
+                                              value: receiverAmountPhoneo,
+                                              error: "",
+                                            })
+                                          }
+                                          keyboardType="number-pad"
+                                        />
+                                      </Box>
+                                    </View>
+                                  </FormControl>
 
-                            <FormControl.Label>
-                              <Text
-                                fontSize={20}
-                                fontWeight="semibold"
-                                color="gray.700"
-                              >
-                                Үнийн дүн
-                              </Text>
-                            </FormControl.Label>
-                            <Box>
-                              <Input
-                                fontSize={20}
-                                value={String(receiverAmountOperator.value)}
-                                returnKeyType="next"
-                                onChangeText={(receiverAmountNumberso) =>
-                                  setReceiverAmountOperator({
-                                    value: receiverAmountNumberso,
-                                    error: "",
-                                  })
-                                }
-                                keyboardType="number-pad"
-                              />
-                            </Box>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <Button.Group space={5}>
-                              <Button
-                                variant="ghost"
-                                colorScheme="blueGray"
-                                onPress={() => {
-                                  setShowModalOperator(false);
-                                  setReceiverPhoneOperator({ value: "", error: "" });
-                                  setReceiverAmountOperator({
-                                    value: "",
-                                    error: "",
-                                  });
-                                }}
-                              >
-                                <Text bold color="#242B2E">
-                                  Хаах
-                                </Text>
-                              </Button>
-                              <Button
-                                onPress={() => {
-                                  setShowModalOperator(false);
-                                  chargeOperator();
-                                }}
-                              >
-                                <Text bold color="white">
-                                  Цэнэглэх
-                                </Text>
-                              </Button>
-                            </Button.Group>
-                          </Modal.Footer>
-                        </Modal.Content>
-                      </KeyboardAvoidingView>
-                    </Modal>
-                  ) : (
-                    <View></View>
-                  )}
+                                  <FormControl.Label>
+                                    <Text
+                                      fontSize={20}
+                                      fontWeight="semibold"
+                                      color="gray.700"
+                                    >
+                                      Үнийн дүн
+                                    </Text>
+                                  </FormControl.Label>
+                                  <Box>
+                                    <Input
+                                      fontSize={20}
+                                      value={String(receiverAmountOperator.value)}
+                                      returnKeyType="next"
+                                      onChangeText={(receiverAmountNumberso) =>
+                                        setReceiverAmountOperator({
+                                          value: receiverAmountNumberso,
+                                          error: "",
+                                        })
+                                      }
+                                      keyboardType="number-pad"
+                                    />
+                                  </Box>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                  <Button.Group space={5}>
+                                    <Button
+                                      variant="ghost"
+                                      colorScheme="blueGray"
+                                      onPress={() => {
+                                        setShowModalOperator(false);
+                                        setReceiverPhoneOperator({ value: "", error: "" });
+                                        setReceiverAmountOperator({
+                                          value: "",
+                                          error: "",
+                                        });
+                                      }}
+                                    >
+                                      <Text bold color="#242B2E">
+                                        Хаах
+                                      </Text>
+                                    </Button>
+                                    <Button
+                                      onPress={() => {
+                                        setShowModalOperator(false);
+                                        chargeOperator();
+                                      }}
+                                    >
+                                      <Text bold color="white">
+                                        Цэнэглэх
+                                      </Text>
+                                    </Button>
+                                  </Button.Group>
+                                </Modal.Footer>
+                              </Modal.Content>
+                            </KeyboardAvoidingView>
+                          </Modal>
+                        ) : (
+                          <View></View>
+                        )}
                       </HStack>
                     </Box>
                     <Box width={"6%"} justifyContent="center">
@@ -1392,6 +1349,374 @@ const WalletScreen = ({ navigation, props }) => {
           </Pressable><Pressable
             paddingTop={3}
 
+            alignItems={"center"}
+            onPress={() => {
+              navigation.navigate("HistoryScreen");
+            }}
+          >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="history"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Хуулга
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("HistoryScreen");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center"><Ionicons name="stats-chart-outline" size={32} color="black" />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Статистик
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("UserScreens");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialIcons
+                              name="people-outline"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Хэрэглэгчид
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("SentNotification");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialIcons
+                              name="notifications"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Мэдэгдэл илгээх
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("SyncScreen");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <AntDesign
+                              name="sync"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Odoo системээс дата авах
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+              paddingBottom={6}
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("SentCoupon");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialIcons
+                              name="wallet-giftcard"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Coupon илгээх
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable></Box>) : (<Box></Box>)}
+          {userData.wallets.useRole === "operator" ? (<Box><Pressable
+            paddingTop={3}
+            paddingBottom={6}
             alignItems={"center"}
             onPress={() => {
               navigation.navigate("HistoryScreen");
@@ -1428,8 +1753,8 @@ const WalletScreen = ({ navigation, props }) => {
                     <Box width={"94%"}>
                       <HStack space={2} alignSelf={"flex-start"}>
                         <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
+                          <FontAwesome
+                            name="send-o"
                             size={32}
                             color="black"
                           />
@@ -1440,69 +1765,7 @@ const WalletScreen = ({ navigation, props }) => {
                           alignSelf={"center"}
                           fontSize="md"
                         >
-                          Хуулга
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable><Pressable
-            paddingTop={3}
-
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("HistoryScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Статистик
+                          Хэрэглэгч цэнэглэх
                         </Text>
                       </HStack>
                     </Box>
@@ -1521,372 +1784,123 @@ const WalletScreen = ({ navigation, props }) => {
               navigation.navigate("UserScreens");
             }}
           >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
                         ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Хэрэглэгчид
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable><Pressable
-            paddingTop={3}
-
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("SentNotification");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialIcons
+                              name="people-outline"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Хэрэглэгчид
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable><Pressable
+              paddingTop={3}
+              paddingBottom={6}
+              alignItems={"center"}
+              onPress={() => {
+                navigation.navigate("HistoryScreen");
+              }}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"95%"}
+                    bg={
+                      isPressed
                         ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Мэдэгдэл илгээх
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable><Pressable
-            paddingTop={3}
-
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("SyncScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Odoo системээс дата авах
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable><Pressable
-            paddingTop={3}
-            paddingBottom={6}
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("SentCoupon");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Coupon илгээх
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable></Box>):(<Box></Box>)}
-          {userData.wallets.useRole==="operator"?(<Box><Pressable
-            paddingTop={3}
-            paddingBottom={6}
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("HistoryScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Оператор
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable><Pressable
-            paddingTop={3}
-            paddingBottom={6}
-            alignItems={"center"}
-            onPress={() => {
-              navigation.navigate("HistoryScreen");
-            }}
-          >
-            {({ isHovered, isPressed }) => {
-              return (
-                <Box
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  alignSelf="center"
-                  width={"95%"}
-                  bg={
-                    isPressed
-                      ? "coolGray.200"
-                      : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
-                  }
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  p="4"
-                  rounded="8"
-                  shadow={2}
-                  borderWidth="0"
-                  borderColor="coolGray.300"
-                >
-                  <HStack>
-                    <Box width={"94%"}>
-                      <HStack space={2} alignSelf={"flex-start"}>
-                        <Box alignSelf="center">
-                          <MaterialCommunityIcons
-                            name="history"
-                            size={32}
-                            color="black"
-                          />
-                        </Box>
-                        <Text
-                          color="coolGray.800"
-                          fontWeight="medium"
-                          alignSelf={"center"}
-                          fontSize="md"
-                        >
-                          Оператор
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <Box width={"6%"} justifyContent="center">
-                      <AntDesign name="right" size={20} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable></Box>):(<Box></Box>)}
+                        : isHovered
+                          ? "coolGray.200"
+                          : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="history"
+                              size={32}
+                              color="black"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Хуулга
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable></Box>) : (<Box></Box>)}
         </View>
         {loadingStatus === true ? (
           <LoadingDots

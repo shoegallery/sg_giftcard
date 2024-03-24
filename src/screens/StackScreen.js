@@ -73,7 +73,7 @@ import {
   LocationScreen,
   TermScreen,
   PurchaseScreen,
-  TransferScreen,
+
   GetCouponScreen,
   BagScreen,
   HistoryScreen,
@@ -82,7 +82,8 @@ import {
   SyncScreen,
   SentNotification,
   ScanScreen,
-  AdminScreen, UserScreens, OperatorScreen, SalerScreen
+  AdminScreen, UserScreens, OperatorScreen, SalerScreen,
+  TransferScreen,TransferScanScreen
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -233,6 +234,46 @@ const StackScreen = ({ navigation }) => {
         name="HistoryScreen"
         component={HistoryScreen}
       /><Stack.Screen
+      options={{
+        headerShown: true,
+        title: "TransferScreen",
+        backgroundColor: "#ececec",
+        headerTintColor: "#ececec",
+        headerStyle: { backgroundColor: "white", borderRadius: 0 },
+        headerTitleStyle: {
+          alignContent: "center",
+          width: "100%",
+          fontSize: 17,
+          color: "black",
+          fontWeight: "500",
+          backgroundColor: "white",
+          fontFamily: "regular",
+          textAlign: Platform.OS === "android" ? "center" : "auto",
+        },
+      }}
+      name="TransferScreen"
+      component={TransferScreen}
+    /><Stack.Screen
+    options={{
+      headerShown: true,
+      title: "TransferScanScreen",
+      backgroundColor: "#ececec",
+      headerTintColor: "#ececec",
+      headerStyle: { backgroundColor: "white", borderRadius: 0 },
+      headerTitleStyle: {
+        alignContent: "center",
+        width: "100%",
+        fontSize: 17,
+        color: "black",
+        fontWeight: "500",
+        backgroundColor: "white",
+        fontFamily: "regular",
+        textAlign: Platform.OS === "android" ? "center" : "auto",
+      },
+    }}
+    name="TransferScanScreen"
+    component={TransferScanScreen}
+  /><Stack.Screen
       options={{
         headerShown: true,
         title: "Мэдэгдэл илгээх",

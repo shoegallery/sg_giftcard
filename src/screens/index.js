@@ -7,7 +7,7 @@ export { default as TermScreen } from "./TermScreen";
 export { default as LoginAuthScreen } from "./LoginAuthScreen";
 
 export { default as PurchaseScreen } from "./PurchaseScreen";
-export { default as TransferScreen } from "./TransferScreen";
+
 export { default as GetCouponScreen } from "./GetCouponScreen";
 export { default as BagScreen } from "./BagScreen";
 export { default as HistoryScreen } from "./HistoryScreen";
@@ -25,6 +25,9 @@ export { default as UserScreens } from "./UserScreens";
 export { default as SentNotification } from "./SentNotification";
 export { default as SyncScreen } from "./SyncScreen";
 export { default as SentCoupon } from "./SentCoupon";
+
+export { default as TransferScanScreen } from "./TransferScanScreen";
+export { default as TransferScreen } from "./TransferScreen";
 
 
 
