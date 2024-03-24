@@ -250,7 +250,6 @@ export default function LoginAuthScreen({ navigation }) {
                   Dialog.hide();
                 },
               });
-
               navigation.navigate("LoginScreen");
             }
           });
@@ -1022,7 +1021,7 @@ export default function LoginAuthScreen({ navigation }) {
             >
               <Modal.Content width="90%">
                 <Modal.Body width="100%" maxWidth="100%">
-                  Shoe Gallery Wallet апп-д шинэ хувилбар гарсан байна. Илүү
+                  Point Plus апп-д шинэ хувилбар гарсан байна. Илүү
                   олон, Илүү шинэ боломжууд бий болсон байна. Хэрэглэгч та
                   заавал аппаа шинэчилж ашиглана уу.
                 </Modal.Body>

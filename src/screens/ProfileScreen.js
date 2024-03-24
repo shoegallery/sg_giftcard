@@ -7,13 +7,14 @@ import {
   UIManager,
 
   TouchableHighlight,
-
+  BackHandler,
   StatusBar,
   Linking,
   Share,
-  
+
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   MaterialIcons,
@@ -50,6 +51,9 @@ import MyActionButtonComponent from "../components/MyActionButtonComponent";
 import appJson from "../../app.json";
 const Tab = createBottomTabNavigator();
 export default function ProfileScreen({ navigation }) {
+  const handlePressCloseApp = () => {
+    BackHandler.remove(); // Close the app (for Android)
+  };
   const onShare = async () => {
     try {
       let messageOs;
@@ -118,7 +122,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#89c4f4"
               onPress={() => {
-             
+
               }}
               style={{
                 width: wp("96%"),
@@ -162,58 +166,12 @@ export default function ProfileScreen({ navigation }) {
               </Box>
             </TouchableHighlight>
           </Center>
-          <Center paddingTop={"2"}>
-            <TouchableHighlight
-              underlayColor="#89c4f4"
-              onPress={() => {
-                navigation.navigate("TermScreen");
-              }}
-              style={{
-                width: wp("96%"),
-                borderRadius: hp("1%"),
-                justifyContent: "center",
-                height: 60,
-              }}
-            >
-              <Box
-                backgroundColor="#ececec"
-                h={"100%"}
-                w="100%"
-                borderRadius={"md"}
-                justifyContent={"center"}
-              >
-                <HStack alignItems="center" justifyContent={"center"}>
-                  <Box
-                    backgroundColor={"#acd6f7"}
-                    width={12}
-                    borderRadius={"sm"}
-                    height={12}
-                    alignItems="center"
-                    justifyContent={"center"}
-                  >
-                    <Icon
-                      width={"30%"}
-                      as={AntDesign}
-                      size="lg"
-                      name="book"
-                      color="#374e62"
-                    />
-                  </Box>
-                  <Text width={"80%"} fontSize={"md"} color="#325b77">
-                    {"    "}Үйлчилгээний нөхцөл
-                  </Text>
-                  <Box justifyContent="center">
-                    <AntDesign name="right" size={16} color="#616161" />
-                  </Box>
-                </HStack>
-              </Box>
-            </TouchableHighlight>
-          </Center>
+
           <Center paddingTop={"6"}>
             <TouchableHighlight
               underlayColor="#b2dfdb"
               onPress={() => {
-     
+
               }}
               style={{
                 width: wp("96%"),
@@ -300,7 +258,7 @@ export default function ProfileScreen({ navigation }) {
             <TouchableHighlight
               underlayColor="#b2dfdb"
               onPress={() => {
-        
+
               }}
               style={{
                 width: wp("96%"),
@@ -347,9 +305,9 @@ export default function ProfileScreen({ navigation }) {
               underlayColor="#b2dfdb"
               onPress={() => {
                 if (Platform.OS === "android") {
-                  Linking.openURL(`tel:${80409000}`);
+                  Linking.openURL(`tel:${86218721}`);
                 } else {
-                  Linking.openURL(`telprompt:${80409000}`);
+                  Linking.openURL(`telprompt:${86218721}`);
                 }
               }}
               style={{
@@ -436,12 +394,32 @@ export default function ProfileScreen({ navigation }) {
           <Center paddingTop={"6"}>
             <TouchableHighlight
               underlayColor="#ffcdd2"
-              onPress={() => {
-                if (Platform.OS === "android") {
-                  Linking.openURL(`tel:${80409000}`);
-                } else {
-                  Linking.openURL(`telprompt:${80409000}`);
-                }
+              onPress={async () => {
+                AsyncStorage.getItem("user_uuid")
+                  .then(async (result) => {
+                    await AsyncStorage.setItem("user_uuid", "")
+
+                  })
+                  .catch((err) => {
+                    console.log("user_phone baihgui");
+                  });
+
+
+                await AsyncStorage.getItem("user_phone")
+                  .then(async (result) => {
+                    console.log(result);
+                    await AsyncStorage.setItem("user_phone", "")
+                    await navigation.reset({
+                      index: 0,
+                      routes: [{ name: "LoginScreen" }],
+                    });
+                  })
+                  .catch((err) => {
+                    console.log("user_phone baihgui");
+                  });
+
+
+
               }}
               style={{
                 width: wp("96%"),
@@ -483,12 +461,13 @@ export default function ProfileScreen({ navigation }) {
               </Box>
             </TouchableHighlight>
           </Center>
+     
         </Box>
         <Box height={"20%"} justifyContent={"flex-end"}>
           <Box justifyContent={"flex-end"} backgroundColor={"#ececec"}>
             <View>
               <Text textAlign={"center"} color="#192d3b">
-                Shoe Gallery LLC © {new Date().getFullYear()}
+                Point Plus LLC © {new Date().getFullYear()}
               </Text>
             </View>
             <Text textAlign={"center"} color="#192d3b" fontSize="xs">

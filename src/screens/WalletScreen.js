@@ -33,6 +33,7 @@ import { amountValidator } from "../helpers/amountValidator";
 import * as Clipboard from "expo-clipboard";
 
 import { StateContext, StateContextHistory } from "../Context/StateContext";
+import ScanScreen from "./ScanScreen";
 
 import {
   Text,
@@ -620,7 +621,7 @@ const WalletScreen = ({ navigation,props }) => {
             paddingTop={"6"}
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("PurchaseScreen");
+              navigation.navigate("ScanScreen");
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -897,7 +898,7 @@ const WalletScreen = ({ navigation,props }) => {
                 <Modal.Content width={"80%"} maxH="412">
                   <Modal.Header>Цэнэглэх заавар</Modal.Header>
                   <Modal.Body>
-                    Та доорх дансаар төлбөрөө төлж, SG Wallet аппын дансаа
+                    Та доорх дансаар төлбөрөө төлж, Point Plus аппын дансаа
                     цэнэглээрэй.
                     <Box width={"100%"}>
                       <HStack>
@@ -917,7 +918,7 @@ const WalletScreen = ({ navigation,props }) => {
                         <Text pt={1} fontSize={"md"} space={2}>
                           Хүлээн авагч:{" "}
                           <Text fontWeight={"semibold"}>
-                            Шүү Галлерэй Монголиа ХХК
+                            Пойнт Плас ХХК
                           </Text>
                         </Text>
                       </HStack>

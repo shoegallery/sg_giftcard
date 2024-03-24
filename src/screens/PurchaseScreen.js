@@ -82,7 +82,6 @@ const PurchaseScreen = ({ navigation, route }) => {
             title: "Уучлаарай",
             textBody: "Дараа дахин оролдоно уу",
             button: "Okey",
-
             onPressButton: () => {
               Dialog.hide();
             },
@@ -101,7 +100,6 @@ const PurchaseScreen = ({ navigation, route }) => {
           title: "Уучлаарай",
           textBody: "Интэрнет холболт алга байна. Шалгана уу.",
           button: "Okey",
-
           onPressButton: () => {
             Dialog.hide();
           },
@@ -171,7 +169,6 @@ const PurchaseScreen = ({ navigation, route }) => {
           userTransactionHistory();
           dataRefresher();
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
             title: "Success",
@@ -179,7 +176,10 @@ const PurchaseScreen = ({ navigation, route }) => {
             button: "Okey",
             onPressButton: () => {
               Dialog.hide();
-              navigation.goBack();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
             },
           });
         }
@@ -187,20 +187,36 @@ const PurchaseScreen = ({ navigation, route }) => {
       .catch(function (error) {
         const err = JSON.parse(JSON.stringify(error));
         console.log(err);
-     
-
         setReceiverAmount({ value: "", error: "" });
         if (err.status == 405) {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-
           Dialog.show({
             type: ALERT_TYPE.DANGER,
             title: "Амжилтгүй",
             textBody: "Дахин оролдоно уу. Ямар нэгэн зүйл буруу байна.",
             button: "Okey",
-
             onPressButton: () => {
               Dialog.hide();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
+            },
+          });
+        }
+        if (err.status == 403) {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          Dialog.show({
+            type: ALERT_TYPE.DANGER,
+            title: "Амжилтгүй",
+            textBody: "Админ худалдан авалт хийх боломжгүй.",
+            button: "Okey",
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
             },
           });
         }
@@ -238,7 +254,7 @@ const PurchaseScreen = ({ navigation, route }) => {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
-      title: "Худалдан авалтад зарцуулах",
+      title: "Үнийн дүнгээ оруулна уу",
       headerLeft: () => (
         <BackButton
           style={{ backgroundColor: "white" }}
@@ -328,7 +344,6 @@ const PurchaseScreen = ({ navigation, route }) => {
                 </Center>
               </Box>
             </HStack>
-
             <Box
               paddingTop={2}
               borderWidth={0}

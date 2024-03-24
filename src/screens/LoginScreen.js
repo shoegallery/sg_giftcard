@@ -59,21 +59,22 @@ export default function LoginScreen({ navigation }) {
   const [isPressed, setIsPressed] = useState(false);
 
   const handlePress = () => {
-    console.log("Hi")
+
     if (phone.value.length === 8) {
-      if (!isPressed) {
-        setIsPressed(true);
-        loginPressed();
-        setTimeout(() => {
-          setIsPressed(false);
-        }, 10000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
-      }
+      loginPressed();
+      // if (!isPressed) {
+      //   setIsPressed(true);
+      //   loginPressed();
+      //   setTimeout(() => {
+      //     setIsPressed(false);
+      //   }, 0); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
+      // }
 
     }
 
   };
 
-  const loginPressed = () => {
+  const loginPressed = async () => {
 
     reactToUpdates();
     InternetCheck();
@@ -93,25 +94,24 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: requestToken,
         };
-        AsyncStorage.setItem("user_phone", phone.value);
-        axios(config)
-          .then(function (response) {
+        await AsyncStorage.setItem("user_phone", phone.value);
+        await axios(config)
+          .then(async function (response) {
             if (showModal === false) {
-              setUserData(response.data);
-
+              await setUserData(response.data);
               Toast.show({
                 type: ALERT_TYPE.SUCCESS,
                 title: "Success",
                 textBody: "Амжилттай нэвтэрлээ",
               });
-              navigation.reset({
+              await navigation.reset({
                 index: 0,
                 routes: [{ name: "TabbarScreen" }],
               });
             }
           })
-          .catch(function (error) {
-            AsyncStorage.setItem("user_phone", phone.value)
+          .catch(async function (error) {
+            await AsyncStorage.setItem("user_phone", phone.value)
               .then(() => { })
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
@@ -132,7 +132,6 @@ export default function LoginScreen({ navigation }) {
                 title: "Уучлаарай",
                 textBody: "Таны хаяг түр блоклогдлоо.",
                 button: "Okey",
-
                 onPressButton: () => {
                   Dialog.hide();
                 },
@@ -169,150 +168,7 @@ export default function LoginScreen({ navigation }) {
       }
     }
   };
-  const autoLogin = () => {
-    reactToUpdates();
-    InternetCheck();
-    if (versionUpdate !== true) {
-      if (phone.value !== "" && userUUID !== undefined) {
-        let requestToken = JSON.stringify({
-          phone: parseInt(phone.value),
-          uuid: userUUID,
-        });
-
-        let config = {
-          method: "POST",
-          url: `${baseUrl}/wallets/create`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          maxRedirects: 0,
-          data: requestToken,
-        };
-
-        axios(config)
-          .then(function (response) {
-            if (showModal === false) {
-              setUserData(response.data);
-              warnToast.show({
-                backgroundColor: "emerald.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "300",
-                fontSize: 20,
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Амжилттай нэвтэрлээ",
-                placement: "top",
-              });
-
-              AsyncStorage.setItem("user_phone", phone.value);
-
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "TabbarScreen" }],
-              });
-            }
-          })
-          .catch(function (error) {
-            AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => { })
-              .catch(() => console.log("password"));
-            const err = JSON.parse(JSON.stringify(error));
-            if (err.status === 492) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Таны хаяг түр блоклогдсон байна.",
-                placement: "top",
-              });
-            } else if (err.status === 491) {
-              warnToast.show({
-                backgroundColor: "red.400",
-                px: "2",
-                py: "1",
-                rounded: "sm",
-                height: "50",
-                width: "250",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                title: "Таны хаяг түр блоклогдлоо",
-                placement: "top",
-              });
-            } else {
-              if (err.status === 482) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
-              } else if (err.status === 481) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
-              } else if (err.status === 480) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
-              } else if (err.status === 499) {
-                warnToast.show({
-                  backgroundColor: "emerald.400",
-                  px: "2",
-                  py: "1",
-                  rounded: "sm",
-                  height: "50",
-                  width: "250",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  title: "Мессеж илгээсэн.",
-                  placement: "top",
-                });
-              }
-              navigation.navigate("LoginAuthScreen");
-            }
-          });
-      }
-    }
-  };
+  
   const reactToUpdates = () => {
     let dataVersion = JSON.stringify({});
     let configVersion = {
@@ -380,7 +236,7 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          if (result !== null) {
+          if (result !== null ) {
             setPhone({ value: result, error: "" });
           }
         })
@@ -503,7 +359,7 @@ export default function LoginScreen({ navigation }) {
 
             </Box>
           </View>
-          <View style={{position:"relative",  flexDirection:"column",  backgroundColor: "#E5E5E5", justifyContent:"flex-end" }}>
+          <View style={{ position: "relative", flexDirection: "column", backgroundColor: "#E5E5E5", justifyContent: "flex-end" }}>
             <Center justifyContent="flex-end" alignSelf="center" width="100%">
               <VStack marginTop={2} marginBottom={2}>
                 <View style={{ height: hp("9%") }}>

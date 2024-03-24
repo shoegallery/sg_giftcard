@@ -81,7 +81,7 @@ import {
   TabbarScreen,
   PromotionScreen,
   CompilationScreen,
-  
+  ScanScreen
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -137,7 +137,26 @@ const StackScreen = ({ navigation }) => {
         name="PurchaseScreen"
         component={PurchaseScreen}
       />
-
+     <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "ScanScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="ScanScreen"
+        component={ScanScreen}
+      />
       <Stack.Screen
         options={{
           headerShown: true,

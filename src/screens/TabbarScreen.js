@@ -88,7 +88,7 @@ const Tab = createBottomTabNavigator();
 const TabbarScreen = ({ navigation }) => {
   return (
     <Tab.Navigator
-      initialRouteName="Shopping"
+      initialRouteName="Хэтэвч"
       barStyle={{ backgroundColor: "tomato" }}
       screenOptions={{
         tabBarActiveTintColor: "#ff5252",
@@ -146,22 +146,7 @@ const TabbarScreen = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name="ScanScreen"
-        component={ScanScreen}
-        options={{
-          tabBarIconStyle: ({ backgroundColor: "red",display:"flex" }),
-          tabBarLabelStyle:({ display:"none"}),
-       
-          tabBarIcon: ({ focused, tintColor }) =>
-            focused ? (
-              <Feather name="camera" size={36} color="#ff5252" />
-            ) : (
-              <Feather name="shopping-bag" size={36} color="grey" />
-            ),
-        }}
-      />
-      <Tab.Screen
-        name="PromotionScreen"
+        name="Promotion"
         component={PromotionScreen}
         options={{
           headerShown: false,
