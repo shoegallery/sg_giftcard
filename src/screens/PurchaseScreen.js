@@ -209,7 +209,7 @@ const PurchaseScreen = ({ navigation, route }) => {
           Dialog.show({
             type: ALERT_TYPE.DANGER,
             title: "Амжилтгүй",
-            textBody: "Админ худалдан авалт хийх боломжгүй.",
+            textBody: "Ажилтан худалдан авалт хийх боломжгүй.",
             button: "Okey",
             onPressButton: () => {
               Dialog.hide();

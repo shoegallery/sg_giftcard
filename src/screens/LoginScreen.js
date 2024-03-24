@@ -99,6 +99,7 @@ export default function LoginScreen({ navigation }) {
           .then(async function (response) {
             if (showModal === false) {
               await setUserData(response.data);
+              console.log(response.data)
               Toast.show({
                 type: ALERT_TYPE.SUCCESS,
                 title: "Success",
@@ -354,9 +355,7 @@ export default function LoginScreen({ navigation }) {
                       </Box>
                     </TouchableOpacity>
                   </Center></View>
-
               </Box>
-
             </Box>
           </View>
           <View style={{ position: "relative", flexDirection: "column", backgroundColor: "#E5E5E5", justifyContent: "flex-end" }}>

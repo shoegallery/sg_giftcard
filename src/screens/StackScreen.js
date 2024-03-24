@@ -81,7 +81,8 @@ import {
   TabbarScreen,
   PromotionScreen,
   CompilationScreen,
-  ScanScreen
+  ScanScreen,
+  AdminScreen, AdminStatementScreen, AdminStatisticScreen, OperatorScreen, SalerScreen
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -116,8 +117,7 @@ const StackScreen = ({ navigation }) => {
         }}
         name="GetCouponScreen"
         component={GetCouponScreen}
-      />
-      <Stack.Screen
+      /><Stack.Screen
         options={{
           headerShown: true,
           title: "PurchaseScreen",
@@ -136,8 +136,7 @@ const StackScreen = ({ navigation }) => {
         }}
         name="PurchaseScreen"
         component={PurchaseScreen}
-      />
-     <Stack.Screen
+      /><Stack.Screen
         options={{
           headerShown: true,
           title: "ScanScreen",
@@ -156,8 +155,7 @@ const StackScreen = ({ navigation }) => {
         }}
         name="ScanScreen"
         component={ScanScreen}
-      />
-      <Stack.Screen
+      /><Stack.Screen
         options={{
           headerShown: true,
           title: "BagScreen",
@@ -176,8 +174,7 @@ const StackScreen = ({ navigation }) => {
         }}
         name="BagScreen"
         component={BagScreen}
-      />
-      <Stack.Screen
+      /><Stack.Screen
         options={{
           headerShown: true,
           title: "Худалдан авалтын түүх",
@@ -197,7 +194,70 @@ const StackScreen = ({ navigation }) => {
         }}
         name="HistoryScreen"
         component={HistoryScreen}
+      /><Stack.Screen
+        options={{
+          headerShown: true,
+          title: "AdminScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            alignContent: "center",
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="AdminScreen"
+        component={AdminScreen}
+      /><Stack.Screen
+        options={{
+          headerShown: true,
+          title: "SalerScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            alignContent: "center",
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="SalerScreen"
+        component={SalerScreen}
+      /><Stack.Screen
+        options={{
+          headerShown: true,
+          title: "OperatorScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            alignContent: "center",
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="OperatorScreen"
+        component={OperatorScreen}
       />
+
+
+
       <Stack.Screen
         options={{
           headerShown: true,

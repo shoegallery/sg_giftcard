@@ -11,6 +11,10 @@ import {
 
 const { width, height } = Dimensions.get("window");
 
+
+
+
+
 const TransferScreen = () => {
   return (
     <View style={styles.container}>
