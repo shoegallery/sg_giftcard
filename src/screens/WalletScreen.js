@@ -545,7 +545,7 @@ const WalletScreen = ({ navigation, props }) => {
           {userData.wallets.walletType === "member" ? (
             <Box justifyContent={"center"}>
               <Pressable
-            onPress={()=>{setRefreshing(true)}}
+                onPress={() => { setRefreshing(true) }}
                 paddingTop={3}
                 alignItems={"center"}
               >
@@ -569,7 +569,7 @@ const WalletScreen = ({ navigation, props }) => {
                         transform: [
                           {
                             scale: isPressed ? 1.03 : 1,
-                         
+
                           },
                         ],
                       }}
@@ -1640,7 +1640,7 @@ const WalletScreen = ({ navigation, props }) => {
                             alignSelf={"center"}
                             fontSize="md"
                           >
-                            Odoo системээс дата авах
+                            Дата sync хийх
                           </Text>
                         </HStack>
                       </Box>
@@ -1901,6 +1901,69 @@ const WalletScreen = ({ navigation, props }) => {
                 );
               }}
             </Pressable></Box>) : (<Box></Box>)}
+          <Box>{userData.wallets.useRole === "saler" ? (<Pressable
+            paddingTop={3}
+            paddingBottom={6}
+            alignItems={"center"}
+            onPress={() => {
+              navigation.navigate("HistoryScreen");
+            }}
+          >
+            {({ isHovered, isPressed }) => {
+              return (
+                <Box
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  alignSelf="center"
+                  width={"95%"}
+                  bg={
+                    isPressed
+                      ? "coolGray.200"
+                      : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                  }
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 0.96 : 1,
+                      },
+                    ],
+                  }}
+                  p="4"
+                  rounded="8"
+                  shadow={2}
+                  borderWidth="0"
+                  borderColor="coolGray.300"
+                >
+                  <HStack>
+                    <Box width={"94%"}>
+                      <HStack space={2} alignSelf={"flex-start"}>
+                        <Box alignSelf="center">
+                          <MaterialCommunityIcons
+                            name="history"
+                            size={32}
+                            color="black"
+                          />
+                        </Box>
+                        <Text
+                          color="coolGray.800"
+                          fontWeight="medium"
+                          alignSelf={"center"}
+                          fontSize="md"
+                        >
+                          Хуулга
+                        </Text>
+                      </HStack>
+                    </Box>
+                    <Box width={"6%"} justifyContent="center">
+                      <AntDesign name="right" size={20} color="#616161" />
+                    </Box>
+                  </HStack>
+                </Box>
+              );
+            }}
+          </Pressable>) : (<View></View>)}</Box>
         </View>
         {loadingStatus === true ? (
           <LoadingDots
@@ -1917,6 +1980,7 @@ const WalletScreen = ({ navigation, props }) => {
         ) : (
           <View></View>
         )}
+
       </ScrollView>
     </SafeAreaView>
   );
