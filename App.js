@@ -28,14 +28,11 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import StackScreen from "./src/screens/StackScreen";
 
-LogBox.ignoreLogs([
-  "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
-]);
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
 });
 
@@ -125,7 +122,7 @@ export default function App({ navigation }) {
   });
   
 
-  const getPushNotification = () => { 
+  const getPushNotification = async () => { 
     
     let data = JSON.stringify({
       "token": expoPushToken
@@ -141,7 +138,7 @@ export default function App({ navigation }) {
       data : data
     };
     
-    axios.request(config)
+    await axios.request(config)
     .then((response) => {
       AsyncStorage.setItem("user_notification",  expoPushToken);
       console.log(JSON.stringify(response.data));

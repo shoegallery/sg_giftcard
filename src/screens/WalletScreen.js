@@ -75,7 +75,14 @@ const WalletScreen = ({ navigation, props }) => {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [showModalOperator, setShowModalOperator] = useState(false);
   const [receiverOrder, setReceiverOrder] = useState({ value: "", error: "" });
+  const [showModalSecond, setShowModalSecond] = useState(false);
 
+  const [receiverOrderSecond, setReceiverOrderSecond] = useState({ value: "", error: "" });
+  const [receiverPhoneSecond, setReceiverPhoneSecond] = useState({ value: "", error: "" });
+  const [receiverAmountSecond, setReceiverAmountSecond] = useState({
+    value: "",
+    error: "",
+  });
   const [receiverSONumber, setReceiverSONumber] = useState({
     value: "",
     error: "",
@@ -374,6 +381,131 @@ const WalletScreen = ({ navigation, props }) => {
         });
     } catch (err) { }
   };
+
+  const chargeBonus = () => {
+    const receiverPhoneError = phoneValidator(receiverPhoneSecond.value);
+    const receiverAmountError = amountValidator(receiverAmountSecond.value);
+
+    if (receiverAmountError || receiverPhoneError) {
+      setReceiverAmountSecond({ ...receiverAmountSecond, error: receiverAmountError });
+      setReceiverPhoneSecond({ ...receiverPhoneSecond, error: receiverPhoneError });
+      Alert.alert(
+        "Та шилжүүлгийн мэдээллээ зөв оруулна уу",
+        `Утасны дугаар зөвхөн 8 орноос бүрдэх ёстой. Үнийн дүн зөвхөн тоо агуулна.`,
+        [
+          {
+            text: "OK",
+          },
+        ]
+      );
+      return;
+    }
+
+    if (receiverOrderSecond.value.length > 0) {
+      var request = JSON.stringify({
+
+        fromPhone: userData.wallets.phone,
+        toPhone: parseInt(receiverPhoneSecond.value),
+        amount: parseInt(receiverAmountSecond.value),
+        summary: receiverOrderSecond.value,
+        id: userData.wallets._id,
+        walletSuperId: userData.wallets.walletSuperId,
+
+      });
+
+      var config = {
+        method: "POST",
+        url: `${baseUrl}/transactions/bonus`,
+        headers: {
+          "Content-Type": "application/json",
+
+        },
+        data: request,
+      };
+      axios(config)
+        .then(function (response) {
+          if (response.data.success === true) {
+            setReceiverPhoneSecond({ value: "", error: "" });
+            setReceiverAmountSecond({ value: "", error: "" });
+            setReceiverOrderSecond({ value: "", error: "" });
+            userTransactionHistory();
+
+            dataRefresher();
+            successToast.show({
+              backgroundColor: "emerald.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Гүйлгээ амжилттай",
+              placement: "top",
+            });
+          } else {
+            warnToast.show({
+              backgroundColor: "red.400",
+              px: "2",
+              py: "1",
+              rounded: "sm",
+              height: "50",
+              width: "250",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              title: "Гүйлгээ aмжилтгүй",
+              placement: "top",
+            });
+          }
+        })
+        .catch(function (error) {
+          const err = JSON.parse(JSON.stringify(error));
+          setReceiverAmountSecond({ value: "", error: "" });
+          setReceiverOrderSecond({ value: "", error: "" });
+          setReceiverPhoneSecond({ value: "", error: "" });
+          if (err.status == 405) {
+            Alert.alert("Дахин оролдоно уу", "Ямар нэгэн зүйл буруу байна.", [
+              {
+                text: "OK",
+              },
+            ]);
+          }
+          warnToast.show({
+            backgroundColor: "red.400",
+            px: "2",
+            py: "1",
+            rounded: "sm",
+            height: "50",
+            width: "250",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            title: "Гүйлгээ aмжилтгүй",
+            placement: "top",
+          });
+        });
+    } else {
+      setReceiverAmountSecond({ value: "", error: "" });
+      setReceiverOrderSecond({ value: "", error: "" });
+      setReceiverPhoneSecond({ value: "", error: "" });
+      warnToast.show({
+        backgroundColor: "red.400",
+        px: "2",
+        py: "1",
+        rounded: "sm",
+        height: "50",
+        width: "250",
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        title: "Тайлбар оруулна уу",
+        placement: "top",
+      });
+    }
+
+  };
   const getCoupon = () => {
     InternetCheck();
     if (receiverCoupon.length !== 5) {
@@ -498,9 +630,16 @@ const WalletScreen = ({ navigation, props }) => {
   };
 
   useEffect(() => {
+    setShowModalSecond(false);
     setShowModalOperator(false);
     setLoadingStatus(false);
     InternetCheck();
+    setReceiverOrderSecond({ value: "", error: "" });
+    setReceiverPhoneSecond({ value: "", error: "" });
+    setReceiverAmountSecond({
+      value: "",
+      error: "",
+    });
     userTransactionHistory();
     setUserTransactionData("");
     setReceiverCoupon("");
@@ -1719,7 +1858,7 @@ const WalletScreen = ({ navigation, props }) => {
             paddingBottom={6}
             alignItems={"center"}
             onPress={() => {
-              navigation.navigate("HistoryScreen");
+              setShowModalSecond(true);
             }}
           >
             {({ isHovered, isPressed }) => {
@@ -1758,8 +1897,138 @@ const WalletScreen = ({ navigation, props }) => {
                             size={32}
                             color="black"
                           />
-                        </Box>
-                        <Text
+                        </Box>{showModalSecond ? (
+                          <Modal isOpen={showModalSecond} onClose={() => setShowModalSecond(false)}>
+                            <KeyboardAvoidingView
+                              h={
+                               hp("95%")
+                              }
+                   
+                              behavior={Platform.OS === "ios" ? "padding" : 0}
+                            >
+                              <Modal.Content width={wp("90%")} height={hp("60%")} >
+                                <Modal.CloseButton />
+                                <Modal.Header>
+                                  <Text
+                                    bold
+                                    color="#242B2E"
+                                    fontSize={16}
+                                    textAlign="center"
+                                  >
+                                    Хэрэглэгч цэнэглэх
+                                  </Text>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  <FormControl>
+                                    <FormControl.Label>
+                                      <Text
+                                        fontSize={16}
+                                        fontWeight="semibold"
+                                        color="gray.700"
+                                      >
+                                        Хүлээн авагч
+                                      </Text>
+                                    </FormControl.Label>
+                                    <View>
+                                      <Box>
+                                        <Input
+                                          value={receiverPhoneSecond.value}
+                                          fontSize={16}
+                                          returnKeyType="next"
+                                          onChangeText={(receiverAmountPhones) =>
+                                            setReceiverPhoneSecond({
+                                              value: receiverAmountPhones,
+                                              error: "",
+                                            })
+                                          }
+                                          keyboardType="number-pad"
+                                        />
+                                      </Box>
+                                    </View>
+                                  </FormControl>
+                                  <FormControl.Label>
+                                    <Text
+                                      fontSize={16}
+                                      fontWeight="semibold"
+                                      color="gray.700"
+                                    >
+                                      Үнийн дүн
+                                    </Text>
+                                  </FormControl.Label>
+                                  <Box>
+                                    <Input
+                                      fontSize={16}
+                                      value={String(receiverAmountSecond.value)}
+                                      returnKeyType="next"
+                                      onChangeText={(receiverAmountNumbers) =>
+                                        setReceiverAmountSecond({
+                                          value: receiverAmountNumbers,
+                                          error: "",
+                                        })
+                                      }
+                                      keyboardType="number-pad"
+                                    />
+                                  </Box>
+                                  <FormControl.Label>
+                                    <Text
+                                      fontSize={16}
+                                      fontWeight="semibold"
+                                      color="gray.700"
+                                    >
+                                      Тайлбар заавал
+                                    </Text>
+                                  </FormControl.Label>
+                                  <Box>
+                                    <Input
+                                      fontSize={16}
+                                      value={String(receiverOrderSecond.value)}
+                                      returnKeyType="done"
+                                      onChangeText={(receiverSummeryNumbers) =>
+                                        setReceiverOrderSecond({
+                                          value: receiverSummeryNumbers,
+                                          error: "",
+                                        })
+                                      }
+                                      keyboardType="default"
+                                    />
+                                  </Box>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                  <Button.Group space={5}>
+                                    <Button
+                                      variant="ghost"
+                                      colorScheme="blueGray"
+                                      onPress={() => {
+                                        setShowModalSecond(false);
+                                        setReceiverPhoneSecond({ value: "", error: "" });
+                                        setReceiverAmountSecond({
+                                          value: "",
+                                          error: "",
+                                        });
+                                      }}
+                                    >
+                                      <Text bold color="#242B2E">
+                                        Хаах
+                                      </Text>
+                                    </Button>
+                                    <Button
+                                      onPress={() => {
+                                        setShowModalSecond(false);
+                                        chargeBonus();
+                                      }}
+                                    >
+                                      <Text bold color="white">
+                                        Цэнэглэх
+                                      </Text>
+                                    </Button>
+                                  </Button.Group>
+                                </Modal.Footer>
+                              </Modal.Content>
+                            </KeyboardAvoidingView>
+                          </Modal>
+                        ) : (
+                          <View></View>
+                        )}<Text
                           color="coolGray.800"
                           fontWeight="medium"
                           alignSelf={"center"}
