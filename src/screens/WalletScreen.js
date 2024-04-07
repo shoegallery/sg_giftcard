@@ -1903,7 +1903,6 @@ const WalletScreen = ({ navigation, props }) => {
                               h={
                                hp("95%")
                               }
-                   
                               behavior={Platform.OS === "ios" ? "padding" : 0}
                             >
                               <Modal.Content width={wp("90%")} height={hp("60%")} >
