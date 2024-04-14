@@ -1,27 +1,131 @@
-import React, { useEffect } from "react";
+import { baseUrl } from "../baseUrl";
+import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import {
-  View,
   StyleSheet,
-  Dimensions,
+  View,
   Platform,
   UIManager,
+  Image,
+  StatusBar,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
-import { Text } from "native-base";
+import NetInfo from "@react-native-community/netinfo";
+import { phoneValidator } from "../helpers/phoneValidator";
+import { amountValidator } from "../helpers/amountValidator";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StateContext, StateContextHistory } from "../Context/StateContext";
+import Product from "../components/Product";
 import BackButton from "../components/BackButton";
+import { NumericFormat } from "react-number-format";
+import moment from "moment";
+
+import {
+  MaterialIcons,
+  Feather,
+  Entypo,
+  AntDesign,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  FontAwesome,
+  Octicons,
+} from "@expo/vector-icons";
+import {
+  Button,
+  Modal,
+  Text,
+  NativeBaseProvider,
+  HStack,
+  Spacer,
+  Stack,
+  TextArea,
+  FormControl,
+  Input,
+  Box,
+  VStack,
+  Heading,
+  useToast,
+  Center,
+  Select,
+  IconButton,
+} from "native-base";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { AccordionList } from "react-native-accordion-list-view";
+import CartStyle from "../components/CartStyle";
+import MyActionButtonComponent from "../components/MyActionButtonComponent";
+import { ScrollView } from "react-native-virtualized-view";
+import * as Animatable from "react-native-animatable";
+
 const { width, height } = Dimensions.get("window");
 
 const GetCouponScreen = ({ navigation }) => {
+  const [userData, setUserData] = useContext(StateContext);
+
+  const [couponCode, setCouponCode] = useState("");
+
+  const SentToCoupon = () => {
+    if (couponCode !== "") {
+      let data = JSON.stringify({
+        coupon_code: couponCode,
+        walletSuperId: userData.wallets.walletSuperId,
+      });
+      console.log(data);
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${baseUrl}/transactions/use_coupon`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          console.log(response);
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Мэдэгдэл",
+            textBody: `Амжилттай купон орлоо`,
+            button: "Okey",
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
+            },
+          });
+        })
+        .catch((error) => {
+          Dialog.show({
+            type: ALERT_TYPE.DANGER,
+            title: "Уучлаарай",
+            textBody: "Таны оруулсан код буруу байна",
+            button: "Okey",
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
+            },
+          });
+        });
+    }
+  };
+
   useEffect(() => {
-    // Use `setOptions` to update the button that we previously specified
-    // Now the button includes an `onPress` handler to update the count
+    SentToCoupon();
     navigation.setOptions({
-      headerLeft: () => (
-        <BackButton
-          style={{ backgroundColor: "white" }}
-          goBack={navigation.goBack}
-        />
-      ),
+      headerLeft: () => <BackButton goBack={navigation.goBack} />,
     });
 
     if (Platform.OS === "android") {
@@ -31,9 +135,35 @@ const GetCouponScreen = ({ navigation }) => {
     }
   }, [navigation]);
   return (
-    <View style={styles.container}>
-      <Text>GetCouponScreen</Text>
-    </View>
+    <SafeAreaView
+      style={{
+        height: "100%",
+        width: "100%",
+        flex: 1,
+      }}
+    >
+      <Box alignItems="center" w="100%">
+        <Text paddingTop={6}>Купон дугаараа оруулна уу</Text>
+        <Input
+          fontSize={"md"}
+          onChangeText={(text) => setCouponCode(text)}
+          mx="3"
+          placeholder="Энд дарж оруулаарай"
+          w="75%"
+        />
+
+        <Box width={"75%"} paddingTop={6}>
+          <Button
+            onPress={() => {
+              SentToCoupon();
+            }}
+            colorScheme="success"
+          >
+            Илгээх
+          </Button>
+        </Box>
+      </Box>
+    </SafeAreaView>
   );
 };
 

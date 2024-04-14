@@ -73,7 +73,6 @@ import {
   LocationScreen,
   TermScreen,
   PurchaseScreen,
-
   GetCouponScreen,
   BagScreen,
   HistoryScreen,
@@ -82,8 +81,9 @@ import {
   SyncScreen,
   SentNotification,
   ScanScreen,
-  AdminScreen, UserScreens, OperatorScreen, SalerScreen,
-  TransferScreen,TransferScanScreen
+  UserScreens,
+  TransferScreen,
+  TransferScanScreen,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -102,7 +102,7 @@ const StackScreen = ({ navigation }) => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: "GetCouponScreen",
+          title: "Купон идэвхжүүлэх",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
@@ -118,45 +118,48 @@ const StackScreen = ({ navigation }) => {
         }}
         name="GetCouponScreen"
         component={GetCouponScreen}
-      /><Stack.Screen
-      options={{
-        headerShown: true,
-        title: "Sync хэсэг",
-        backgroundColor: "#ececec",
-        headerTintColor: "#ececec",
-        headerStyle: { backgroundColor: "white", borderRadius: 0 },
-        headerTitleStyle: {
-          width: "100%",
-          fontSize: 17,
-          color: "black",
-          fontWeight: "500",
-          backgroundColor: "white",
-          fontFamily: "regular",
-          textAlign: Platform.OS === "android" ? "center" : "auto",
-        },
-      }}
-      name="SyncScreen"
-      component={SyncScreen}
-    /><Stack.Screen
-    options={{
-      headerShown: true,
-      title: "Массаар купон илгээх",
-      backgroundColor: "#ececec",
-      headerTintColor: "#ececec",
-      headerStyle: { backgroundColor: "white", borderRadius: 0 },
-      headerTitleStyle: {
-        width: "100%",
-        fontSize: 17,
-        color: "black",
-        fontWeight: "500",
-        backgroundColor: "white",
-        fontFamily: "regular",
-        textAlign: Platform.OS === "android" ? "center" : "auto",
-      },
-    }}
-    name="SentCoupon"
-    component={SentCoupon}
-  /><Stack.Screen
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Sync хэсэг",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="SyncScreen"
+        component={SyncScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Купон илгээх",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="SentCoupon"
+        component={SentCoupon}
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
           title: "PurchaseScreen",
@@ -175,7 +178,8 @@ const StackScreen = ({ navigation }) => {
         }}
         name="PurchaseScreen"
         component={PurchaseScreen}
-      /><Stack.Screen
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
           title: "ScanScreen",
@@ -194,7 +198,8 @@ const StackScreen = ({ navigation }) => {
         }}
         name="ScanScreen"
         component={ScanScreen}
-      /><Stack.Screen
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
           title: "BagScreen",
@@ -213,7 +218,8 @@ const StackScreen = ({ navigation }) => {
         }}
         name="BagScreen"
         component={BagScreen}
-      /><Stack.Screen
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
           title: "Худалдан авалтын түүх",
@@ -233,70 +239,11 @@ const StackScreen = ({ navigation }) => {
         }}
         name="HistoryScreen"
         component={HistoryScreen}
-      /><Stack.Screen
-      options={{
-        headerShown: true,
-        title: "TransferScreen",
-        backgroundColor: "#ececec",
-        headerTintColor: "#ececec",
-        headerStyle: { backgroundColor: "white", borderRadius: 0 },
-        headerTitleStyle: {
-          alignContent: "center",
-          width: "100%",
-          fontSize: 17,
-          color: "black",
-          fontWeight: "500",
-          backgroundColor: "white",
-          fontFamily: "regular",
-          textAlign: Platform.OS === "android" ? "center" : "auto",
-        },
-      }}
-      name="TransferScreen"
-      component={TransferScreen}
-    /><Stack.Screen
-    options={{
-      headerShown: true,
-      title: "TransferScanScreen",
-      backgroundColor: "#ececec",
-      headerTintColor: "#ececec",
-      headerStyle: { backgroundColor: "white", borderRadius: 0 },
-      headerTitleStyle: {
-        alignContent: "center",
-        width: "100%",
-        fontSize: 17,
-        color: "black",
-        fontWeight: "500",
-        backgroundColor: "white",
-        fontFamily: "regular",
-        textAlign: Platform.OS === "android" ? "center" : "auto",
-      },
-    }}
-    name="TransferScanScreen"
-    component={TransferScanScreen}
-  /><Stack.Screen
-      options={{
-        headerShown: true,
-        title: "Мэдэгдэл илгээх",
-        backgroundColor: "#ececec",
-        headerTintColor: "#ececec",
-        headerStyle: { backgroundColor: "white", borderRadius: 0 },
-        headerTitleStyle: {
-          alignContent: "center",
-          width: "100%",
-          fontSize: 17,
-          color: "black",
-          fontWeight: "500",
-          backgroundColor: "white",
-          fontFamily: "regular",
-          textAlign: Platform.OS === "android" ? "center" : "auto",
-        },
-      }}
-      name="SentNotification"
-      component={SentNotification}
-    /><Stack.Screen
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
-          title: "AdminScreen",
+          title: "TransferScreen",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
@@ -311,12 +258,13 @@ const StackScreen = ({ navigation }) => {
             textAlign: Platform.OS === "android" ? "center" : "auto",
           },
         }}
-        name="AdminScreen"
-        component={AdminScreen}
-      /><Stack.Screen
+        name="TransferScreen"
+        component={TransferScreen}
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
-          title: "SalerScreen",
+          title: "TransferScanScreen",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
@@ -331,32 +279,13 @@ const StackScreen = ({ navigation }) => {
             textAlign: Platform.OS === "android" ? "center" : "auto",
           },
         }}
-        name="SalerScreen"
-        component={SalerScreen}
-      /><Stack.Screen
-      options={{
-        headerShown: true,
-        title: "Хэрэглэгчид",
-        backgroundColor: "#ececec",
-        headerTintColor: "#ececec",
-        headerStyle: { backgroundColor: "white", borderRadius: 0 },
-        headerTitleStyle: {
-          alignContent: "center",
-          width: "100%",
-          fontSize: 17,
-          color: "black",
-          fontWeight: "500",
-          backgroundColor: "white",
-          fontFamily: "regular",
-          textAlign: Platform.OS === "android" ? "center" : "auto",
-        },
-      }}
-      name="UserScreens"
-      component={UserScreens}
-    /><Stack.Screen
+        name="TransferScanScreen"
+        component={TransferScanScreen}
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
-          title: "OperatorScreen",
+          title: "Мэдэгдэл илгээх",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
@@ -371,9 +300,31 @@ const StackScreen = ({ navigation }) => {
             textAlign: Platform.OS === "android" ? "center" : "auto",
           },
         }}
-        name="OperatorScreen"
-        component={OperatorScreen}
-      /><Stack.Screen
+        name="SentNotification"
+        component={SentNotification}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Хэрэглэгчид",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            alignContent: "center",
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="UserScreens"
+        component={UserScreens}
+      />
+      <Stack.Screen
         options={{
           headerShown: true,
           title: "Үйлчилгээний нөхцөл",

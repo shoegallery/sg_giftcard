@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { View, StyleSheet, Alert } from "react-native";
+import { BarCodeScanner } from "expo-barcode-scanner";
 import BackButton from "../components/BackButton";
 const ScanScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -9,7 +9,7 @@ const ScanScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     })();
     navigation.setOptions({
       title: "QR кодыг уншуулна уу",
@@ -17,8 +17,6 @@ const ScanScreen = ({ navigation }) => {
         <BackButton
           style={{ backgroundColor: "white" }}
           goBack={navigation.goBack}
-
-
         />
       ),
     });
@@ -28,8 +26,6 @@ const ScanScreen = ({ navigation }) => {
     if (!scanned) {
       setScanned(true);
 
-
-
       if (data.length === 8) {
         setScanned(true);
         console.log(data);
@@ -37,8 +33,6 @@ const ScanScreen = ({ navigation }) => {
         navigation.navigate("PurchaseScreen", { data: data });
         setScanned(false);
       }
-
-
     }
   };
 
@@ -65,11 +59,11 @@ const ScanScreen = ({ navigation }) => {
   );
 };
 
-const opacity = 'rgba(0, 0, 0, .6)';
+const opacity = "rgba(0, 0, 0, .6)";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   layerTop: {
     flex: 1,
@@ -77,7 +71,7 @@ const styles = StyleSheet.create({
   },
   layerCenter: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   layerLeft: {
     flex: 1,

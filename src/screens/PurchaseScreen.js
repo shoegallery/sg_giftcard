@@ -8,7 +8,6 @@ import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import * as Haptics from "expo-haptics";
 import { NumericFormat } from "react-number-format";
 
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -35,11 +34,8 @@ import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
 const PurchaseScreen = ({ navigation, route }) => {
-
-
-
   const [userData, setUserData] = useContext(StateContext);
-  const [canGoBack, setCanGoBack] = useState(false)
+  const [canGoBack, setCanGoBack] = useState(false);
 
   const [onOpen, setOnOpen] = useState(false);
   const [service, setService] = useState("");
@@ -141,7 +137,7 @@ const PurchaseScreen = ({ navigation, route }) => {
           Dialog.hide();
         },
       });
-      console.log(receiverPhone)
+      console.log(receiverPhone);
       return;
     }
 
@@ -247,7 +243,7 @@ const PurchaseScreen = ({ navigation, route }) => {
       });
   };
   useEffect(() => {
-    setReceiverPhone({ value: route.params.data })
+    setReceiverPhone({ value: route.params.data });
     InternetCheck();
     dataRefresher();
     userTransactionHistory();
@@ -259,8 +255,6 @@ const PurchaseScreen = ({ navigation, route }) => {
         <BackButton
           style={{ backgroundColor: "white" }}
           goBack={navigation.goBack}
-
-
         />
       ),
     });
@@ -270,10 +264,10 @@ const PurchaseScreen = ({ navigation, route }) => {
         UIManager.setLayoutAnimationEnabledExperimental(true);
       }
     }
-    const listenerUnsubscribe = navigation.addListener('focus', () => {
-      setCanGoBack(navigation.canGoBack())
-    })
-    return () => listenerUnsubscribe()
+    const listenerUnsubscribe = navigation.addListener("focus", () => {
+      setCanGoBack(navigation.canGoBack());
+    });
+    return () => listenerUnsubscribe();
   }, [navigation]);
   return (
     <View style={{ justifyContent: "center", alignContent: "center" }}>
@@ -693,7 +687,7 @@ const PurchaseScreen = ({ navigation, route }) => {
                 >
                   <TouchableHighlight
                     underlayColor="#f8f8f8"
-                    onPress={() => { }}
+                    onPress={() => {}}
                   >
                     <VStack justifyContent="center" height="100%" width="100%">
                       <Center>

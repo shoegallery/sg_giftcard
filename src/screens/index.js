@@ -1,4 +1,3 @@
-
 export { default as LoginScreen } from "./LoginScreen";
 export { default as ProfileScreen } from "./ProfileScreen";
 export { default as LocationScreen } from "./LocationScreen";
@@ -15,12 +14,6 @@ export { default as WalletScreen } from "./WalletScreen";
 export { default as PromotionScreen } from "./PromotionScreen";
 export { default as ScanScreen } from "./ScanScreen";
 
-
-export { default as AdminScreen } from "./AdminScreen";
-
-
-export { default as OperatorScreen } from "./OperatorScreen";
-export { default as SalerScreen } from "./SalerScreen";
 export { default as UserScreens } from "./UserScreens";
 export { default as SentNotification } from "./SentNotification";
 export { default as SyncScreen } from "./SyncScreen";
@@ -28,18 +21,3 @@ export { default as SentCoupon } from "./SentCoupon";
 
 export { default as TransferScanScreen } from "./TransferScanScreen";
 export { default as TransferScreen } from "./TransferScreen";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
