@@ -7,7 +7,8 @@ import {
   View,
   Platform,
   StatusBar,
-  Pressable, Image
+  Pressable,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
@@ -40,7 +41,6 @@ import {
   Button,
 } from "native-base";
 
-
 import { useTheme } from "../features/theme";
 export default function LoginScreen({ navigation }) {
   const theme = useTheme();
@@ -58,24 +58,18 @@ export default function LoginScreen({ navigation }) {
   const [seeLockPassword, setSeeLockPassword] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
+  console.log(isPressed);
   const handlePress = () => {
-
     if (phone.value.length === 8) {
-
-      if (!isPressed) {
-        setIsPressed(true);
-        loginPressed();
-        setTimeout(() => {
-          setIsPressed(false);
-        }, 1000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
-      }
-
+      setIsPressed(true);
+      loginPressed();
+      setTimeout(() => {
+        setIsPressed(false);
+      }, 1000); // Set a timeout to enable button presses after a specific duration (e.g., 1 second)
     }
-
   };
 
   const loginPressed = async () => {
-
     reactToUpdates();
     InternetCheck();
 
@@ -94,13 +88,14 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: requestToken,
         };
-        console.log(config.url)
+        console.log(config.url);
         await AsyncStorage.setItem("user_phone", phone.value);
         await axios(config)
           .then(async function (response) {
             if (showModal === false) {
+              setIsPressed(false);
               await setUserData(response.data);
-              console.log(response.data)
+              console.log(response.data);
               Toast.show({
                 type: ALERT_TYPE.SUCCESS,
                 title: "Success",
@@ -113,8 +108,9 @@ export default function LoginScreen({ navigation }) {
             }
           })
           .catch(async function (error) {
+            setIsPressed(false);
             await AsyncStorage.setItem("user_phone", phone.value)
-              .then(() => { })
+              .then(() => {})
               .catch(() => console.log("password"));
             const err = JSON.parse(JSON.stringify(error));
             if (err.status === 492) {
@@ -170,7 +166,7 @@ export default function LoginScreen({ navigation }) {
       }
     }
   };
-  
+
   const reactToUpdates = () => {
     let dataVersion = JSON.stringify({});
     let configVersion = {
@@ -201,9 +197,10 @@ export default function LoginScreen({ navigation }) {
           }
         }
       })
-      .catch(function (error) { });
+      .catch(function (error) {});
   };
   const InternetCheck = () => {
+    setIsPressed(false);
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
         Dialog.show({
@@ -238,7 +235,7 @@ export default function LoginScreen({ navigation }) {
 
       AsyncStorage.getItem("user_phone")
         .then((result) => {
-          if (result !== null ) {
+          if (result !== null) {
             setPhone({ value: result, error: "" });
           }
         })
@@ -249,7 +246,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   useEffect(() => {
-
+    setIsPressed(false);
     setUserUUID(undefined);
     setShowModal(false);
     reactToUpdates();
@@ -263,17 +260,19 @@ export default function LoginScreen({ navigation }) {
       <StatusBar barStyle={theme.status} backgroundColor={theme.background} />
       <ToastProvider>
         <View style={{ justifyContent: "center", alignContent: "center" }}>
-          <View
-            style={{ height: hp("62%"), backgroundColor: "white" }}
-          >
+          <View style={{ height: hp("62%"), backgroundColor: "white" }}>
             <Box height={"100%"} justifyContent="center">
-              <Image source={require('../../assets/logomark.png')} style={{ width: 50, height: 50, justifyContent: "center", alignSelf: "center" }}></Image>
+              <Image
+                source={require("../../assets/logomark.png")}
+                style={{
+                  width: 50,
+                  height: 50,
+                  justifyContent: "center",
+                  alignSelf: "center",
+                }}
+              ></Image>
               <Center>
-                <Text
-                  maxWidth={"90%"}
-                  fontFamily="bold"
-                  fontSize="3xl"
-                >
+                <Text maxWidth={"90%"} fontFamily="bold" fontSize="3xl">
                   Нэвтрэх
                 </Text>
                 <Text
@@ -283,38 +282,53 @@ export default function LoginScreen({ navigation }) {
                   fontSize="md"
                   textAlign={"center"}
                 >
-                  Сайн уу! Дахин тавтай морил, таныг
-                  их санасан байна шүү
+                  Сайн уу! Дахин тавтай морил, таныг их санасан байна шүү
                 </Text>
-                <View style={{ marginTop: 20, width: wp("90%"), alignContent: "center" }}>
-                  <Text color={"dark.300"} fontWeight={"medium"} fontSize="md">Утасны дугаар</Text>
+                <View
+                  style={{
+                    marginTop: 20,
+                    width: wp("90%"),
+                    alignContent: "center",
+                  }}
+                >
+                  <Text color={"dark.300"} fontWeight={"medium"} fontSize="md">
+                    Утасны дугаар
+                  </Text>
 
-                  <View style={{ marginTop: 5, borderColor: phone.value.length === 8 ? "#F0F0F0" : "#FF9FAF", borderWidth: 2, borderRadius: 6, justifyContent: "center", backgroundColor: "white", height: hp("8%"), width: wp("90%"), alignContent: "center" }}><Box
-                    margin={1}
-                    marginLeft={1 / 2}
-                    width="100%"
+                  <View
+                    style={{
+                      marginTop: 5,
+                      borderColor:
+                        phone.value.length === 8 ? "#F0F0F0" : "#FF9FAF",
+                      borderWidth: 2,
+                      borderRadius: 6,
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      height: hp("8%"),
+                      width: wp("90%"),
+                      alignContent: "center",
+                    }}
                   >
-                    <Text
-                      paddingLeft={4}
-                      fontSize="2xl"
-                      fontFamily="bold"
-                      color={"dark.300"}
-                    >
-                      {phone.value[0] !== undefined ? phone.value[0] : ""}
-                      {phone.value[1] !== undefined ? phone.value[1] : ""}
-                      {phone.value[2] !== undefined ? phone.value[2] : ""}
-                      {phone.value[3] !== undefined
-                        ? phone.value[3]
-                        : ""}{" "}
-                      {phone.value[4] !== undefined ? phone.value[4] : ""}
-                      {phone.value[5] !== undefined ? phone.value[5] : ""}
-                      {phone.value[6] !== undefined ? phone.value[6] : ""}
-                      {phone.value[7] !== undefined ? phone.value[7] : ""}
-                    </Text>
-
-
-                  </Box></View>
-
+                    <Box margin={1} marginLeft={1 / 2} width="100%">
+                      <Text
+                        paddingLeft={4}
+                        fontSize="2xl"
+                        fontFamily="bold"
+                        color={"dark.300"}
+                      >
+                        {phone.value[0] !== undefined ? phone.value[0] : ""}
+                        {phone.value[1] !== undefined ? phone.value[1] : ""}
+                        {phone.value[2] !== undefined ? phone.value[2] : ""}
+                        {phone.value[3] !== undefined
+                          ? phone.value[3]
+                          : ""}{" "}
+                        {phone.value[4] !== undefined ? phone.value[4] : ""}
+                        {phone.value[5] !== undefined ? phone.value[5] : ""}
+                        {phone.value[6] !== undefined ? phone.value[6] : ""}
+                        {phone.value[7] !== undefined ? phone.value[7] : ""}
+                      </Text>
+                    </Box>
+                  </View>
                 </View>
               </Center>
 
@@ -325,45 +339,63 @@ export default function LoginScreen({ navigation }) {
                 alignSelf="center"
                 justifyContent="center"
                 marginTop={5}
-                style={{
-
-                }}
+                style={{}}
               >
-                <View style={{
-                  backgroundColor: phone.value.length === 8 ? "#6172F3" : "#F5F5F5",
-                  borderRadius: 6,
-                  height: hp("8%"),
-                  width: wp("90%"),
-                  alignSelf: "center"
-                }}><Center>
+                <View
+                  style={{
+                    backgroundColor:
+                      phone.value.length === 8 ? "#6172F3" : "#F5F5F5",
+                    borderRadius: 6,
+                    height: hp("8%"),
+                    width: wp("90%"),
+                    alignSelf: "center",
+                  }}
+                >
+                  <Center>
                     <TouchableOpacity
-                      onPress={() => { handlePress() }}
+                      onPress={() => {
+                        handlePress();
+                      }}
                       style={{
                         height: hp("8%"),
                         width: wp("90%"),
                       }}
-
                     >
                       <Box height={"100%"} justifyContent={"center"}>
                         <Text
                           alignItems={"center"}
                           textAlign={"center"}
-                          color={phone.value.length === 8 ? "#FFFFFF" : "#A2A2A2"}
+                          color={
+                            phone.value.length === 8 ? "#FFFFFF" : "#A2A2A2"
+                          }
                           fontSize="2xl"
                         >
                           Нэвтрэх
                         </Text>
                       </Box>
                     </TouchableOpacity>
-                  </Center></View>
+                  </Center>
+                </View>
               </Box>
             </Box>
           </View>
-          <View style={{ position: "relative", flexDirection: "column", backgroundColor: "#E5E5E5", justifyContent: "flex-end" }}>
+          <View
+            style={{
+              position: "relative",
+              flexDirection: "column",
+              backgroundColor: "#E5E5E5",
+              justifyContent: "flex-end",
+            }}
+          >
             <Center justifyContent="flex-end" alignSelf="center" width="100%">
               <VStack marginTop={2} marginBottom={2}>
                 <View style={{ height: hp("9%") }}>
-                  <HStack borderRadius="lg" paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
+                  <HStack
+                    borderRadius="lg"
+                    paddingLeft={3}
+                    paddingRight={3}
+                    backgroundColor={"#E5E5E5"}
+                  >
                     <Box
                       borderRadius="lg"
                       justifyContent="center"
@@ -413,7 +445,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "2" });
@@ -450,7 +481,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "3" });
@@ -479,7 +509,11 @@ export default function LoginScreen({ navigation }) {
                   </HStack>
                 </View>
                 <View style={{ height: hp("9%") }}>
-                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
+                  <HStack
+                    paddingLeft={3}
+                    paddingRight={3}
+                    backgroundColor={"#E5E5E5"}
+                  >
                     <Box
                       borderRadius={0}
                       justifyContent="center"
@@ -491,7 +525,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "4" });
@@ -528,8 +561,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "5" });
@@ -542,8 +573,6 @@ export default function LoginScreen({ navigation }) {
                           width="100%"
                           borderRadius="lg"
                           backgroundColor="#FFFFFF"
-
-
                         >
                           <Center>
                             <Text
@@ -568,7 +597,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "6" });
@@ -576,8 +604,6 @@ export default function LoginScreen({ navigation }) {
                         }}
                       >
                         <VStack
-
-
                           justifyContent="center"
                           height="100%"
                           width="100%"
@@ -599,7 +625,11 @@ export default function LoginScreen({ navigation }) {
                   </HStack>
                 </View>
                 <View style={{ height: hp("9%") }}>
-                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
+                  <HStack
+                    paddingLeft={3}
+                    paddingRight={3}
+                    backgroundColor={"#E5E5E5"}
+                  >
                     <Box
                       borderRadius={0}
                       justifyContent="center"
@@ -611,7 +641,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "7" });
@@ -648,7 +677,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "8" });
@@ -685,7 +713,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "9" });
@@ -713,8 +740,18 @@ export default function LoginScreen({ navigation }) {
                     </Box>
                   </HStack>
                 </View>
-                <View style={{ height: hp("9%"), marginBottom: 2, backgroundColor: "#E5E5E5" }}>
-                  <HStack paddingLeft={3} paddingRight={3} backgroundColor={"#E5E5E5"}>
+                <View
+                  style={{
+                    height: hp("9%"),
+                    marginBottom: 2,
+                    backgroundColor: "#E5E5E5",
+                  }}
+                >
+                  <HStack
+                    paddingLeft={3}
+                    paddingRight={3}
+                    backgroundColor={"#E5E5E5"}
+                  >
                     <Box
                       borderRadius={0}
                       justifyContent="center"
@@ -725,10 +762,7 @@ export default function LoginScreen({ navigation }) {
                       paddingBottom={1}
                       background="#E5E5E5"
                     >
-                      <TouchableOpacity
-
-                        onPress={() => { }}
-                      >
+                      <TouchableOpacity onPress={() => {}}>
                         <VStack
                           justifyContent="center"
                           height="100%"
@@ -759,7 +793,6 @@ export default function LoginScreen({ navigation }) {
                       background="#E5E5E5"
                     >
                       <TouchableOpacity
-
                         onPress={() => {
                           if (phone.value.length < 8) {
                             setPhone({ value: phone.value + "0" });
@@ -801,7 +834,7 @@ export default function LoginScreen({ navigation }) {
                             phone.value.length < 9 &&
                             phone.value.length > 0
                           ) {
-                            setIsPressed(false)
+                            setIsPressed(false);
                             setPhone({
                               value: phone.value.substr(
                                 0,
