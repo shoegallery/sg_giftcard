@@ -94,6 +94,7 @@ export default function LoginScreen({ navigation }) {
           maxRedirects: 0,
           data: requestToken,
         };
+        console.log(config.url)
         await AsyncStorage.setItem("user_phone", phone.value);
         await axios(config)
           .then(async function (response) {
