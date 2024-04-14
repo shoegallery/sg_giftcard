@@ -1616,7 +1616,7 @@ const WalletScreen = ({ navigation, props }) => {
                 paddingTop={3}
                 alignItems={"center"}
                 onPress={() => {
-                  navigation.navigate("HistoryScreen");
+                  navigation.navigate("HistoryScreenAll");
                 }}
               >
                 {({ isHovered, isPressed }) => {

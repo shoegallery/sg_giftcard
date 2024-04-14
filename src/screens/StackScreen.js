@@ -84,6 +84,7 @@ import {
   UserScreens,
   TransferScreen,
   TransferScanScreen,
+  HistoryScreenAll,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -158,6 +159,26 @@ const StackScreen = ({ navigation }) => {
         }}
         name="SentCoupon"
         component={SentCoupon}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "HistoryScreenAll",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="HistoryScreenAll"
+        component={HistoryScreenAll}
       />
       <Stack.Screen
         options={{
@@ -344,7 +365,6 @@ const StackScreen = ({ navigation }) => {
         name="TermScreen"
         component={TermScreen}
       />
-
       <Stack.Screen
         options={{
           headerShown: true,

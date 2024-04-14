@@ -10,6 +10,8 @@ export { default as PurchaseScreen } from "./PurchaseScreen";
 export { default as GetCouponScreen } from "./GetCouponScreen";
 export { default as BagScreen } from "./BagScreen";
 export { default as HistoryScreen } from "./HistoryScreen";
+export { default as HistoryScreenAll } from "./HistoryScreenAll";
+
 export { default as WalletScreen } from "./WalletScreen";
 export { default as PromotionScreen } from "./PromotionScreen";
 export { default as ScanScreen } from "./ScanScreen";
