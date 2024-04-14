@@ -10,7 +10,11 @@ import {
   StatusBar,
   SafeAreaView,
   Dimensions,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
+import { ALERT_TYPE, Dialog, Toast } from "react-native-alert-notification";
+
 import NetInfo from "@react-native-community/netinfo";
 import { phoneValidator } from "../helpers/phoneValidator";
 import { amountValidator } from "../helpers/amountValidator";
@@ -47,6 +51,7 @@ import {
   Center,
   Select,
   IconButton,
+  Pressable,
 } from "native-base";
 import {
   widthPercentageToDP as wp,
@@ -57,6 +62,7 @@ import CartStyle from "../components/CartStyle";
 import MyActionButtonComponent from "../components/MyActionButtonComponent";
 import { ScrollView } from "react-native-virtualized-view";
 import * as Animatable from "react-native-animatable";
+import { stringify } from "uuid";
 
 const { width, height } = Dimensions.get("window");
 
@@ -81,6 +87,43 @@ const UserScreens = ({ navigation }) => {
       });
   };
 
+  const onNavPress = (item) => {
+    Dialog.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: "Block гаргах",
+      textBody: `${item.phone} дугаартай хэрэглэгчийн блокыг гаргах`,
+      button: "Unblock",
+
+      onPressButton: () => {
+        Dialog.hide();
+        unblock(item.phone);
+      },
+    });
+  };
+
+  const unblock = async (phone) => {
+    try {
+      var requests = JSON.stringify({
+        phone: phone,
+      });
+
+      var configs = {
+        method: "POST",
+        url: `${baseUrl}/wallets/unblock`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        maxRedirects: 0,
+        data: requests,
+      };
+
+      await axios(configs)
+        .then(function (response) {
+          getData();
+        })
+        .catch(function (error) {});
+    } catch (err) {}
+  };
   useEffect(() => {
     getData();
     navigation.setOptions({
@@ -116,68 +159,93 @@ const UserScreens = ({ navigation }) => {
                 }}
                 borderColor="gray.300"
               >
-                <View>
-                  <HStack justifyContent="space-between">
-                    <VStack justifyContent="center" width="50%">
-                      <Text
-                        fontSize={16}
-                        color={item.role === "user" ? "green.400" : "amber.400"}
-                        fontWeight={"semibold"}
-                      >
-                        {item.phone}
-                      </Text>
-                      <Text
-                        fontSize={11}
-                        color="#242B2E"
-                        _dark={{
-                          color: "warmGray.200",
-                        }}
-                      >
-                        Хэрэглэгчийн эрх: {item.role}
-                      </Text>
-                    </VStack>
-                    <Spacer />
-                    <NumericFormat
-                      value={item.balance.$numberDecimal}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      renderText={(formattedValue) => (
+                <TouchableOpacity
+                  onPress={
+                    item.authLock === true || item.Blocked === true
+                      ? () => onNavPress(item)
+                      : () => console.log("Heello")
+                  }
+                >
+                  <View>
+                    <HStack justifyContent="space-between">
+                      <VStack justifyContent="center" width="50%">
                         <Text
-                          fontWeight={"semibold"}
-                          width="50%"
-                          textAlign="right"
-                          justifyContent="flex-end"
-                          alignSelf="center"
                           fontSize={16}
                           color={
-                            item.role !== "user" ? "amber.400" : "green.400"
+                            item.role === "user" ? "green.400" : "amber.400"
                           }
+                          fontWeight={"semibold"}
                         >
-                          {formattedValue}₮
+                          {item.phone}
                         </Text>
-                      )}
-                    />
-                  </HStack>
-                  <Box paddingBottom={"2"} width={"100%"}>
-                    <HStack>
-                      <Box width={"50%"}>
-                        <Text fontSize={10} color="#242B2E">
-                          {moment(item.createdAt).format("YYYY-MM-DD LT")}
-                        </Text>
-                      </Box>
-                      <Box width={"50%"}>
                         <Text
-                          bold
-                          textAlign="right"
-                          justifyContent={"flex-start"}
-                          fontSize={10}
+                          fontSize={11}
+                          color={
+                            item.authLock === true || item.Blocked === true
+                              ? "#ff0000"
+                              : "#242B2E"
+                          }
+                          _dark={{
+                            color: "warmGray.200",
+                          }}
                         >
-                          Үлдэгдэл
+                          Хэрэглэгчийн эрх: {item.role}
+                          {item.authLock === true || item.Blocked === true
+                            ? " Blocked"
+                            : ""}
                         </Text>
-                      </Box>
+                      </VStack>
+                      <Spacer />
+                      <NumericFormat
+                        value={item.balance.$numberDecimal}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        renderText={(formattedValue) => (
+                          <Text
+                            fontWeight={"semibold"}
+                            width="50%"
+                            textAlign="right"
+                            justifyContent="flex-end"
+                            alignSelf="center"
+                            fontSize={16}
+                            color={
+                              item.role !== "user" ? "amber.400" : "green.400"
+                            }
+                          >
+                            {formattedValue}₮
+                          </Text>
+                        )}
+                      />
                     </HStack>
-                  </Box>
-                </View>
+                    <Box paddingBottom={"2"} width={"100%"}>
+                      <HStack>
+                        <Box width={"50%"}>
+                          <Text
+                            fontSize={10}
+                            color={
+                              item.authLock.toString() === "true"
+                                ? "#ff0000"
+                                : "#242B2E"
+                            }
+                          >
+                            Үүсгэсэн:{" "}
+                            {moment(item.createdAt).format("YYYY-MM-DD")}
+                          </Text>
+                        </Box>
+                        <Box width={"50%"}>
+                          <Text
+                            bold
+                            textAlign="right"
+                            justifyContent={"flex-start"}
+                            fontSize={10}
+                          >
+                            Үлдэгдэл
+                          </Text>
+                        </Box>
+                      </HStack>
+                    </Box>
+                  </View>
+                </TouchableOpacity>
               </Box>
             </View>
           ))}
