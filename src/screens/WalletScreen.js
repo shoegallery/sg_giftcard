@@ -796,141 +796,148 @@ const WalletScreen = ({ navigation, props }) => {
                   >
                     Танд санал болгох үйлчилгээ
                   </Text>
-                  <HStack paddingTop={"1"} height={180} width={"100%"}>
-                    <Pressable disabled width={"1/3"}>
-                      <Box
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        bg={"white"}
-                        p="2"
-                        rounded="8"
-                        shadow={2}
-                        borderWidth="0"
-                        borderColor="coolGray.300"
+                  <ScrollView>
+                    <HStack paddingTop={"1"} height={180} width={"100%"}>
+                      <Pressable width={"1/3"}>
+                        <Box
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          bg={"white"}
+                          p="2"
+                          rounded="8"
+                          shadow={2}
+                          borderWidth="0"
+                          borderColor="coolGray.300"
+                        >
+                          <VStack>
+                            <Box alignSelf="center">
+                              <MaterialCommunityIcons
+                                name="check-decagram-outline"
+                                size={36}
+                                color={"#2851A3"}
+                              />
+                            </Box>
+                            <Box justifyContent="center">
+                              <Text
+                                color={"#2851A3"}
+                                fontWeight="medium"
+                                fontSize="sm"
+                                textAlign={"center"}
+                              >
+                                Цуглуулах
+                              </Text>
+                            </Box>
+                            <Box paddingTop={"2"}>
+                              <Text
+                                textAlign={"center"}
+                                color="#325b77"
+                                fontSize={"xs"}
+                              >
+                                Худалдан авалт бүрийнхээ үнийн дүнгийн{" "}
+                                <Text fontSize={"xs"} bold>
+                                  5%
+                                </Text>{" "}
+                                оноо цуглуулах
+                              </Text>
+                            </Box>
+                          </VStack>
+                        </Box>
+                      </Pressable>
+                      <Pressable
+                        paddingLeft={2}
+                        height={"100%"}
+                        disabled
+                        width={"1/3"}
                       >
-                        <VStack>
-                          <Box alignSelf="center">
-                            <MaterialCommunityIcons
-                              name="check-decagram-outline"
-                              size={36}
-                              color="blue"
-                            />
-                          </Box>
-                          <Box justifyContent="center">
-                            <Text
-                              color="coolGray.800"
-                              fontWeight="medium"
-                              fontSize="sm"
-                              textAlign={"center"}
-                            >
-                              Цуглуулах
-                            </Text>
-                          </Box>
-                          <Box paddingTop={"2"}>
-                            <Text
-                              textAlign={"center"}
-                              color="#325b77"
-                              fontSize={"xs"}
-                            >
-                              Худалдан авалт бүрийнхээ үнийн дүнгийн{" "}
-                              <Text fontSize={"xs"} bold>
-                                5%
-                              </Text>{" "}
-                              оноо цуглуулах
-                            </Text>
-                          </Box>
-                        </VStack>
-                      </Box>
-                    </Pressable>
-                    <Pressable
-                      paddingLeft={2}
-                      height={"100%"}
-                      disabled
-                      width={"1/3"}
-                    >
-                      <Box
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        bg={"white"}
-                        p="2"
-                        rounded="8"
-                        shadow={2}
-                        borderWidth="0"
-                        borderColor="coolGray.300"
-                      >
-                        <VStack>
-                          <Box alignSelf="center">
-                            <MaterialCommunityIcons
-                              name="check-decagram-outline"
-                              size={36}
-                              color="blue"
-                            />
-                          </Box>
-                          <Box justifyContent="center">
-                            <Text
-                              color="coolGray.800"
-                              fontWeight="medium"
-                              fontSize="sm"
-                              textAlign={"center"}
-                            >
-                              Шуурхай
-                            </Text>
-                          </Box>
-                          <Box paddingTop={"2"}>
-                            <Text
-                              textAlign={"center"}
-                              color="#325b77"
-                              fontSize={"xs"}
-                            >
-                              Хямдралын мэдээг цаг алдалгүй зөвхөн танд хүргэнэ.
-                            </Text>
-                          </Box>
-                        </VStack>
-                      </Box>
-                    </Pressable>
-                    <Pressable paddingLeft={2} disabled width={"1/3"}>
-                      <Box
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        bg={"white"}
-                        pt={"2"}
-                        pb={"2"}
-                        rounded="8"
-                        shadow={2}
-                        borderWidth="0"
-                        borderColor="coolGray.300"
-                      >
-                        <VStack>
-                          <Box alignSelf="center">
-                            <MaterialCommunityIcons
-                              name="check-decagram-outline"
-                              size={36}
-                              color="blue"
-                            />
-                          </Box>
-                          <Box justifyContent="center">
-                            <Text
-                              color="coolGray.800"
-                              fontWeight="medium"
-                              fontSize="sm"
-                              textAlign={"center"}
-                            >
-                              Хадгалах
-                            </Text>
-                          </Box>
-                          <Box paddingTop={"2"}>
-                            <Text
-                              textAlign={"center"}
-                              color="#325b77"
-                              fontSize={"xs"}
-                            >
-                              Таны таалагдсан загвар, хэмжээг 5 хоног хадгална.
-                            </Text>
-                          </Box>
-                        </VStack>
-                      </Box>
-                    </Pressable>
-                  </HStack>
+                        <Box
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          bg={"white"}
+                          p="2"
+                          rounded="8"
+                          shadow={2}
+                          borderWidth="0"
+                          borderColor="coolGray.300"
+                        >
+                          <VStack>
+                            <Box alignSelf="center">
+                              <MaterialCommunityIcons
+                                name="check-decagram-outline"
+                                size={36}
+                                color={"#2851A3"}
+                              />
+                            </Box>
+                            <Box justifyContent="center">
+                              <Text
+                                color={"#2851A3"}
+                                fontWeight="medium"
+                                fontSize="sm"
+                                textAlign={"center"}
+                              >
+                                Шуурхай
+                              </Text>
+                            </Box>
+                            <Box paddingTop={"2"}>
+                              <Text
+                                textAlign={"center"}
+                                color="#325b77"
+                                fontSize={"xs"}
+                              >
+                                Хямдралын мэдээг цаг алдалгүй зөвхөн танд
+                                хүргэнэ.
+                              </Text>
+                            </Box>
+                          </VStack>
+                        </Box>
+                      </Pressable>
+                      <Pressable paddingLeft={2} width={"1/3"}>
+                        <Box
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          bg={"white"}
+                          pt={"2"}
+                          pb={"2"}
+                          rounded="8"
+                          shadow={2}
+                          borderWidth="0"
+                          borderColor="coolGray.300"
+                        >
+                          <VStack>
+                            <Box alignSelf="center">
+                              <MaterialCommunityIcons
+                                name="check-decagram-outline"
+                                size={36}
+                                color={"#2851A3"}
+                              />
+                            </Box>
+                            <Box justifyContent="center">
+                              <Text
+                                color={"#2851A3"}
+                                fontWeight="medium"
+                                fontSize="sm"
+                                textAlign={"center"}
+                              >
+                                Урамшуулал
+                              </Text>
+                            </Box>
+                            <Box paddingTop={"2"}>
+                              <Text
+                                textAlign={"center"}
+                                color="#325b77"
+                                fontSize={"xs"}
+                              >
+                                Та цэнэглэлт бүрээсээ{" "}
+                                <Text fontSize={"xs"} bold>
+                                  10%
+                                </Text>{" "}
+                                нэмэгдэл бонус аваарай.
+                              </Text>
+                            </Box>
+                          </VStack>
+                        </Box>
+                      </Pressable>
+                    </HStack>
+                  </ScrollView>
                 </Box>
               ) : (
                 <Text></Text>
@@ -1426,7 +1433,7 @@ const WalletScreen = ({ navigation, props }) => {
                                 alignSelf={"center"}
                                 fontSize="md"
                               >
-                                Худалдан авалтын түүх
+                                Дансны хуулга
                               </Text>
                             </HStack>
                           </Box>

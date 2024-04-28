@@ -86,7 +86,7 @@ import {
   TransferScanScreen,
   HistoryScreenAll,
   LoanScreen,
-  ScanScreenLoan,
+  SaveScreen,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -141,6 +141,26 @@ const StackScreen = ({ navigation }) => {
         }}
         name="SyncScreen"
         component={SyncScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "ProfileScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}
       />
       <Stack.Screen
         options={{
@@ -245,7 +265,7 @@ const StackScreen = ({ navigation }) => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: "ScanScreenLoan",
+          title: "SaveScreen",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
@@ -259,8 +279,8 @@ const StackScreen = ({ navigation }) => {
             textAlign: Platform.OS === "android" ? "center" : "auto",
           },
         }}
-        name="ScanScreenLoan"
-        component={ScanScreenLoan}
+        name="SaveScreen"
+        component={SaveScreen}
       />
       <Stack.Screen
         options={{
@@ -285,7 +305,7 @@ const StackScreen = ({ navigation }) => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: "Худалдан авалтын түүх",
+          title: "Дансны хуулга",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },

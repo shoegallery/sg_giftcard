@@ -24,4 +24,4 @@ export { default as SentCoupon } from "./SentCoupon";
 export { default as TransferScanScreen } from "./TransferScanScreen";
 export { default as TransferScreen } from "./TransferScreen";
 export { default as LoanScreen } from "./LoanScreen";
-export { default as ScanScreenLoan } from "./ScanScreenLoan";
+export { default as SaveScreen } from "./SaveScreen";

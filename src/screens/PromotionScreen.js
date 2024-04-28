@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Animated,
   View,
@@ -7,6 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import {
   Button,
@@ -148,35 +150,61 @@ const data = [
 ];
 const { width, height } = Dimensions.get("window");
 
+const injectJavaScript = `
+    const video = document.getElementsByTagName('video')[0];
+    video.controls = false;
+    video.loop = true;
+  `;
+
 const PromotionScreen = () => {
   return (
-    <View>
-      <StatusBar barStyle="dark" backgroundColor={"#484848"} />
-      <Box backgroundColor={"#484848"} height={"20%"}>
-        <Box>
-          <Text color={"#FF5A5F"} height={8} marginLeft={4} bold fontSize={20}>
-            Story
-          </Text>
-        </Box>
-        <InstaStory
-          data={data}
-          duration={10}
-          unPressedBorderColor="#F56040"
-          pressedBorderColor="#FCAF45"
-          unPressedAvatarTextColor="#F56040"
-          pressedAvatarTextColor="#FCAF45"
-        />
-      </Box>
+    <SafeAreaView
+      style={{
+        height: "100%",
+        width: "100%",
+        flex: 1,
+      }}
+    >
+      <StatusBar barStyle="dark-content" backgroundColor={"#EBEDF0"} />
 
-      <Box height={"85%"}>
-        <WebView
-          source={{
-            style: { justifyContent: "flex-start", height: 300 },
-            uri: "https://www.apple.com//105/media/us/iphone/family/2024/1efec3e0-8619-4684-a57e-6e2310394f08/anim/welcome/small_2x.mp4#t=1.893576",
-          }}
-        />
-      </Box>
-    </View>
+      <ScrollView>
+        <Box backgroundColor={"#EBEDF0"}>
+          <Box>
+            <Text
+              color={"#2851A3"}
+              marginTop={3}
+              paddingLeft={4}
+              bold
+              fontSize={20}
+            >
+              Story
+            </Text>
+          </Box>
+          <InstaStory
+            data={data}
+            duration={10}
+            pressedBorderColor="#606770"
+            pressedAvatarTextColor="#606770"
+            unPressedBorderColor="#77A7FF"
+            unPressedAvatarTextColor="#2851A3"
+          />
+        </Box>
+        <Box backgroundColor={"#EBEDF0"} width={"100%"} h={"650"}>
+          <WebView
+            injectedJavaScript={injectJavaScript}
+            javaScriptEnabled={true}
+            source={{
+              style: {
+                justifyContent: "flex-start",
+                width: "100%",
+                backgroundColor: "#EBEDF0",
+              },
+              uri: "https://www.apple.com//105/media/us/iphone/family/2024/1efec3e0-8619-4684-a57e-6e2310394f08/anim/welcome/small_2x.mp4#t=1.893576",
+            }}
+          />
+        </Box>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

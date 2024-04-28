@@ -1,17 +1,13 @@
-
 import React, { useState, useEffect, useContext } from "react";
 import {
-
   View,
   Platform,
   UIManager,
-
   TouchableHighlight,
   BackHandler,
   StatusBar,
   Linking,
   Share,
-
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -30,17 +26,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StateContext, StateContextHistory } from "../Context/StateContext";
 
-import {
-
-  Text,
-
-  Box,
-
-  Center,
-
-  Icon,
-  HStack,
-} from "native-base";
+import { Text, Box, Center, Icon, HStack } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -89,7 +75,7 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       {/* <Box height={"100%"} width={"100%"} backgroundColor={"#ececec"}>
         <Box height={"100%"} width={"100%"} paddingRight={-100}>
           <Select
@@ -123,9 +109,7 @@ export default function ProfileScreen({ navigation }) {
           <Center paddingTop={"6"}>
             <TouchableHighlight
               underlayColor="#b2dfdb"
-              onPress={() => {
-
-              }}
+              onPress={() => {}}
               style={{
                 width: wp("96%"),
                 borderRadius: hp("1%"),
@@ -210,9 +194,7 @@ export default function ProfileScreen({ navigation }) {
           <Center paddingTop={"2"}>
             <TouchableHighlight
               underlayColor="#b2dfdb"
-              onPress={() => {
-
-              }}
+              onPress={() => {}}
               style={{
                 width: wp("96%"),
                 borderRadius: hp("1%"),
@@ -350,18 +332,16 @@ export default function ProfileScreen({ navigation }) {
               onPress={async () => {
                 AsyncStorage.getItem("user_uuid")
                   .then(async (result) => {
-                    await AsyncStorage.setItem("user_uuid", "")
-
+                    await AsyncStorage.setItem("user_uuid", "");
                   })
                   .catch((err) => {
                     console.log("user_phone baihgui");
                   });
 
-
                 await AsyncStorage.getItem("user_phone")
                   .then(async (result) => {
                     console.log(result);
-                    await AsyncStorage.setItem("user_phone", "")
+                    await AsyncStorage.setItem("user_phone", "");
                     await navigation.reset({
                       index: 0,
                       routes: [{ name: "LoginScreen" }],
@@ -370,9 +350,6 @@ export default function ProfileScreen({ navigation }) {
                   .catch((err) => {
                     console.log("user_phone baihgui");
                   });
-
-
-
               }}
               style={{
                 width: wp("96%"),
@@ -414,7 +391,6 @@ export default function ProfileScreen({ navigation }) {
               </Box>
             </TouchableHighlight>
           </Center>
-     
         </Box>
         <Box height={"20%"} justifyContent={"flex-end"}>
           <Box justifyContent={"flex-end"} backgroundColor={"#ececec"}>

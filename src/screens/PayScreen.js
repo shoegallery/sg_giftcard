@@ -40,7 +40,7 @@ import { Ionicons } from "@expo/vector-icons";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
-const LoanScreen = ({ navigation, route }) => {
+const PayScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useContext(StateContext);
   const [canGoBack, setCanGoBack] = useState(false);
   const [onChangeValue, setOnChangeValue] = React.useState(1);
@@ -287,13 +287,13 @@ const LoanScreen = ({ navigation, route }) => {
                 fontSize={"md"}
                 color="#325b77"
               >
-                Хугацаа сонгох - {onChangeValue} сар
+                Хугацаа сонгох - {onChangeValue}
               </Text>
             </Box>
             <Box space={4} alignItems="center" w="75%" maxW="300">
               <Slider
                 defaultValue={1}
-                maxValue={12}
+                maxValue={4}
                 minValue={1}
                 colorScheme="cyan"
                 onChange={(v) => {
@@ -314,8 +314,8 @@ const LoanScreen = ({ navigation, route }) => {
                     <View key={number} style={{ height: hp("4%") }}>
                       <Box width={wp("85%")}>
                         <HStack>
-                          <Box width="70%">
-                            {number !== onChangeValue ? (
+                          <Box width="60%">
+                            {number === 1 ? (
                               <NumericFormat
                                 value={Math.floor(
                                   parseInt(receiverAmount.value) / onChangeValue
@@ -329,32 +329,15 @@ const LoanScreen = ({ navigation, route }) => {
                                     textAlign="left"
                                     fontSize={16}
                                   >
-                                    {number === 1
-                                      ? "Эхний"
-                                      : number === 2 ||
-                                        number === 3 ||
-                                        number === 5 ||
-                                        number === 6 ||
-                                        number === 7 ||
-                                        number === 8 ||
-                                        number === 10 ||
-                                        number === 12
-                                      ? `${number} дахь`
-                                      : `${number} дэх`}{" "}
-                                    төлөлт: {formattedValue}₮
+                                    Эхний төлөлт: {formattedValue}₮
                                   </Text>
                                 )}
                               />
-                            ) : (
+                            ) : number === 2 || number === 3 ? (
                               <NumericFormat
-                                value={
-                                  parseInt(receiverAmount.value) -
-                                  Math.floor(
-                                    parseInt(receiverAmount.value) /
-                                      onChangeValue
-                                  ) *
-                                    (onChangeValue - 1)
-                                }
+                                value={Math.floor(
+                                  parseInt(receiverAmount.value) / onChangeValue
+                                )}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 renderText={(formattedValue) => (
@@ -364,7 +347,25 @@ const LoanScreen = ({ navigation, route }) => {
                                     textAlign="left"
                                     fontSize={16}
                                   >
-                                    Сүүлийн төлөлт: {formattedValue}₮
+                                    {number} дахь төлөлт: {formattedValue}₮
+                                  </Text>
+                                )}
+                              />
+                            ) : (
+                              <NumericFormat
+                                value={Math.floor(
+                                  parseInt(receiverAmount.value) / onChangeValue
+                                )}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                renderText={(formattedValue) => (
+                                  <Text
+                                    color={"#1D3C78"}
+                                    bold
+                                    textAlign="left"
+                                    fontSize={16}
+                                  >
+                                    4 дэх төлөлт: {formattedValue}₮
                                   </Text>
                                 )}
                               />
@@ -373,12 +374,12 @@ const LoanScreen = ({ navigation, route }) => {
                           <Box
                             alignItems={"center"}
                             justifyItems={"center"}
-                            width="30%"
+                            width="40%"
                           >
                             <Text fontSize={16} fontWeight={"normal"}>
                               {new Date(
                                 new Date().getTime() +
-                                  number * 30 * 24 * 60 * 60 * 1000
+                                  number * 15 * 24 * 60 * 60 * 1000
                               )
                                 .toISOString()
                                 .slice(0, 10)}{" "}
@@ -828,4 +829,4 @@ const LoanScreen = ({ navigation, route }) => {
   );
 };
 
-export default LoanScreen;
+export default PayScreen;

@@ -2,13 +2,7 @@ import { baseUrl } from "../baseUrl";
 import axios from "axios";
 
 import React, { useEffect, useState, useContext } from "react";
-import {
-  View,
-  Dimensions,
-  Platform,
-  UIManager,
-  ScrollView,
-} from "react-native";
+import { View, Dimensions, Platform, UIManager } from "react-native";
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
 import * as Haptics from "expo-haptics";
@@ -40,15 +34,11 @@ import { Ionicons } from "@expo/vector-icons";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
-const LoanScreen = ({ navigation, route }) => {
+const SaveScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useContext(StateContext);
   const [canGoBack, setCanGoBack] = useState(false);
   const [onChangeValue, setOnChangeValue] = React.useState(1);
-  const numbers = [];
-  for (let i = 1; i <= onChangeValue; i++) {
-    numbers.push(i);
-  }
-  console.log(numbers);
+
   const [onOpen, setOnOpen] = useState(false);
   const [service, setService] = useState("");
 
@@ -59,8 +49,7 @@ const LoanScreen = ({ navigation, route }) => {
 
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
-  const currentDate = new Date();
-  const futureDate = new Date(currentDate);
+
   const InternetCheck = () => {
     NetInfo.fetch().then((networkState) => {
       if (networkState.isConnected !== true) {
@@ -222,13 +211,9 @@ const LoanScreen = ({ navigation, route }) => {
         <Box height={"100%"}>
           <Center>
             <Box justifyItems={"right"}></Box>
-            <Box
-              height={"10%"}
-              marginLeft={1 / 2}
-              margin={1}
-              justifyContent="center"
-            >
+            <Box marginLeft={1 / 2} margin={1} justifyContent="center">
               <Text
+                pt={3}
                 fontWeight={"semibold"}
                 alignSelf={"flex-start"}
                 marginTop={1}
@@ -274,12 +259,7 @@ const LoanScreen = ({ navigation, route }) => {
                 </Center>
               </Box>
             </HStack>
-            <Box
-              height={"10%"}
-              marginLeft={1 / 2}
-              margin={1}
-              justifyContent="center"
-            >
+            <Box marginLeft={1 / 2} margin={1} justifyContent="center">
               <Text
                 fontWeight={"semibold"}
                 alignSelf={"flex-start"}
@@ -287,13 +267,13 @@ const LoanScreen = ({ navigation, route }) => {
                 fontSize={"md"}
                 color="#325b77"
               >
-                Хугацаа сонгох - {onChangeValue} сар
+                Хугацаа сонгох - {onChangeValue}
               </Text>
             </Box>
             <Box space={4} alignItems="center" w="75%" maxW="300">
               <Slider
                 defaultValue={1}
-                maxValue={12}
+                maxValue={4}
                 minValue={1}
                 colorScheme="cyan"
                 onChange={(v) => {
@@ -307,100 +287,24 @@ const LoanScreen = ({ navigation, route }) => {
               </Slider>
             </Box>
 
-            <View style={{ height: hp("16%") }}>
-              {receiverAmount.value > 0 ? (
-                <ScrollView>
-                  {numbers.map((number) => (
-                    <View key={number} style={{ height: hp("4%") }}>
-                      <Box width={wp("85%")}>
-                        <HStack>
-                          <Box width="70%">
-                            {number !== onChangeValue ? (
-                              <NumericFormat
-                                value={Math.floor(
-                                  parseInt(receiverAmount.value) / onChangeValue
-                                )}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                renderText={(formattedValue) => (
-                                  <Text
-                                    color={"#1D3C78"}
-                                    bold
-                                    textAlign="left"
-                                    fontSize={16}
-                                  >
-                                    {number === 1
-                                      ? "Эхний"
-                                      : number === 2 ||
-                                        number === 3 ||
-                                        number === 5 ||
-                                        number === 6 ||
-                                        number === 7 ||
-                                        number === 8 ||
-                                        number === 10 ||
-                                        number === 12
-                                      ? `${number} дахь`
-                                      : `${number} дэх`}{" "}
-                                    төлөлт: {formattedValue}₮
-                                  </Text>
-                                )}
-                              />
-                            ) : (
-                              <NumericFormat
-                                value={
-                                  parseInt(receiverAmount.value) -
-                                  Math.floor(
-                                    parseInt(receiverAmount.value) /
-                                      onChangeValue
-                                  ) *
-                                    (onChangeValue - 1)
-                                }
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                renderText={(formattedValue) => (
-                                  <Text
-                                    color={"#1D3C78"}
-                                    bold
-                                    textAlign="left"
-                                    fontSize={16}
-                                  >
-                                    Сүүлийн төлөлт: {formattedValue}₮
-                                  </Text>
-                                )}
-                              />
-                            )}
-                          </Box>
-                          <Box
-                            alignItems={"center"}
-                            justifyItems={"center"}
-                            width="30%"
-                          >
-                            <Text fontSize={16} fontWeight={"normal"}>
-                              {new Date(
-                                new Date().getTime() +
-                                  number * 30 * 24 * 60 * 60 * 1000
-                              )
-                                .toISOString()
-                                .slice(0, 10)}{" "}
-                            </Text>
-                          </Box>
-                        </HStack>
-                      </Box>
-                      <Text></Text>
-                    </View>
-                  ))}
-                </ScrollView>
-              ) : (
-                <View></View>
-              )}
-            </View>
+            {receiverAmount.value > 0 ? (
+              <Text textAlign="center">
+                {Math.floor(
+                  parseInt(receiverAmount.value) / parseInt(onChangeValue)
+                )}
+              </Text>
+            ) : (
+              <View></View>
+            )}
             <Box
+              paddingTop={2}
               borderWidth={0}
               borderColor={"white"}
               width={"xs"}
               height={"24"}
               alignSelf="center"
               justifyContent="center"
+              marginTop={5}
             >
               <Center>
                 <TouchableHighlight
@@ -419,10 +323,9 @@ const LoanScreen = ({ navigation, route }) => {
                       alignItems={"center"}
                       textAlign={"center"}
                       color="white"
-                      fontSize="xl"
-                      fontWeight={"semibold"}
+                      fontSize="2xl"
                     >
-                      Ok
+                      Болсон
                     </Text>
                   </Box>
                 </TouchableHighlight>
@@ -828,4 +731,4 @@ const LoanScreen = ({ navigation, route }) => {
   );
 };
 
-export default LoanScreen;
+export default SaveScreen;

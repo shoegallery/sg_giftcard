@@ -95,16 +95,6 @@ if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.allowFontScaling = false;
 export default function App({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
-  console.log(isLoading);
-  AsyncStorage.getItem("firstscreen")
-    .then((result) => {
-      if (result === null) {
-        setIsLoading(false);
-      }
-    })
-    .catch(() => {
-      console.log("uuid baihgui");
-    });
 
   const handleFinish = () => {
     setIsLoading(true);
@@ -223,7 +213,8 @@ export default function App({ navigation }) {
     {
       id: 4,
       title: "Хязгааргүй",
-      description: "Өшөө илүү олон боломжуудыг аваарай",
+      description:
+        "Өшөө илүү олон боломжуудыг аваарай. Хадгаламж, Хувааж төлөх, Зээл",
       icon: require("./src/assets/onboard4.jpg"),
     },
   ];
