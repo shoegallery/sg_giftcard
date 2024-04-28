@@ -93,8 +93,8 @@ const SentCoupon = ({ navigation }) => {
         .then((response) => {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
-            title: "Мэдэгдэл",
-            textBody: `Амжилттай мэдэгдэл илгээлээ`,
+            title: "Амжилттай",
+            textBody: `Амжилттай купон илгээлээ`,
             button: "Okey",
             onPressButton: () => {
               Dialog.hide();

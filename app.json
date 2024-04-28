@@ -32,7 +32,6 @@
         "backgroundColor": "#FFF"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.shoegallery.sg_wallet_app",
       "versionCode": 24,
       "icon": "./assets/icon.png"
     },

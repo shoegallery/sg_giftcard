@@ -85,6 +85,8 @@ import {
   TransferScreen,
   TransferScanScreen,
   HistoryScreenAll,
+  LoanScreen,
+  ScanScreenLoan,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -219,6 +221,46 @@ const StackScreen = ({ navigation }) => {
         }}
         name="ScanScreen"
         component={ScanScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "LoanScreen",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="LoanScreen"
+        component={LoanScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "ScanScreenLoan",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="ScanScreenLoan"
+        component={ScanScreenLoan}
       />
       <Stack.Screen
         options={{

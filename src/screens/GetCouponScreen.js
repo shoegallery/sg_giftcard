@@ -143,7 +143,9 @@ const GetCouponScreen = ({ navigation }) => {
       }}
     >
       <Box alignItems="center" w="100%">
-        <Text paddingTop={6}>Купон дугаараа оруулна уу</Text>
+        <Text paddingTop={6} pb={3} fontSize={"md"}>
+          Купон дугаараа оруулна уу
+        </Text>
         <Input
           fontSize={"md"}
           onChangeText={(text) => setCouponCode(text)}
@@ -159,7 +161,9 @@ const GetCouponScreen = ({ navigation }) => {
             }}
             colorScheme="success"
           >
-            Илгээх
+            <Text fontSize={"md"} fontWeight={"semibold"} color={"#ececec"}>
+              Илгээх
+            </Text>
           </Button>
         </Box>
       </Box>

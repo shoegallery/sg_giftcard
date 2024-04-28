@@ -35,12 +35,12 @@ const ShoppingScreen = () => {
   const [userData, setUserData] = useContext(StateContext);
   return (
     <View>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" backgroundColor={"#6c2699"} />
       <Box height={"100%"}>
         <WebView
           source={{
             style: { justifyContent: "flex-start" },
-            uri: "https://shoez.mn/",
+            uri: "https://shoppy.mn/",
           }}
         />
       </Box>

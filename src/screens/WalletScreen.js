@@ -669,8 +669,11 @@ const WalletScreen = ({ navigation, props }) => {
         flex: 1,
       }}
     >
-      <StatusBar translucent={false} backgroundColor="#f4d0e0" />
-
+      <StatusBar
+        barStyle="dark-content"
+        translucent={false}
+        backgroundColor={"#f4d0e0"}
+      />
       <LinearGradient
         start={{ x: 0.0, y: 0.1 }}
         end={{ x: 0.7, y: 0.8 }}
@@ -763,7 +766,22 @@ const WalletScreen = ({ navigation, props }) => {
                                 pl={"3"}
                                 fontSize={"md"}
                               >
-                                Оноо ⭐️
+                                Оноо:
+                                <Text
+                                  fontWeight={"black"}
+                                  fontSize={"lg"}
+                                  color={"#6172f3"}
+                                >
+                                  {" "}
+                                  0{" "}
+                                </Text>
+                                <Text
+                                  fontWeight={"black"}
+                                  fontSize={"md"}
+                                  color={"#6172f3"}
+                                >
+                                  PPC
+                                </Text>
                               </Text>
                             </Box>
                           </VStack>
@@ -1136,6 +1154,72 @@ const WalletScreen = ({ navigation, props }) => {
                                 fontSize="md"
                               >
                                 Купон идэвхжүүлэх
+                              </Text>
+                            </HStack>
+                          </Box>
+                          <Box width={"6%"} justifyContent="center">
+                            <AntDesign name="right" size={20} color="#616161" />
+                          </Box>
+                        </HStack>
+                      </Box>
+                    );
+                  }}
+                </Pressable>
+                <Pressable
+                  paddingTop={3}
+                  alignItems={"center"}
+                  onPress={() => {
+                    navigation.navigate("LoanScreen");
+                  }}
+                  /* onPress={() => {
+        navigation.navigate("TransferScreen");
+        }}
+        */
+                >
+                  {({ isHovered, isPressed }) => {
+                    return (
+                      <Box
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        alignSelf="center"
+                        width={"95%"}
+                        bg={
+                          isPressed
+                            ? "coolGray.200"
+                            : isHovered
+                            ? "coolGray.200"
+                            : "coolGray.100"
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        p="4"
+                        rounded="8"
+                        shadow={2}
+                        borderWidth="0"
+                        borderColor="coolGray.300"
+                      >
+                        <HStack>
+                          <Box width={"94%"}>
+                            <HStack space={2} alignSelf={"flex-start"}>
+                              <Box alignSelf="center">
+                                <AntDesign
+                                  name="plussquareo"
+                                  size={32}
+                                  color="green"
+                                />
+                              </Box>
+                              <Text
+                                color="coolGray.800"
+                                fontWeight="medium"
+                                alignSelf={"center"}
+                                fontSize="md"
+                              >
+                                Зээл авах
                               </Text>
                             </HStack>
                           </Box>

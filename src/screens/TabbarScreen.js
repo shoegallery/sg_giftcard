@@ -81,8 +81,6 @@ import LoginScreen from "./LoginScreen";
 import PromotionScreen from "./PromotionScreen";
 import ScanScreen from "./ScanScreen";
 
-
-
 const Tab = createBottomTabNavigator();
 
 const TabbarScreen = ({ navigation }) => {
@@ -91,7 +89,7 @@ const TabbarScreen = ({ navigation }) => {
       initialRouteName="Хэтэвч"
       barStyle={{ backgroundColor: "tomato" }}
       screenOptions={{
-        tabBarActiveTintColor: "#ff5252",
+        tabBarActiveTintColor: "#6172f3",
         headerShown: false,
         tabBarShowLabel: true,
         tabBarLabelStyle: {
@@ -109,7 +107,6 @@ const TabbarScreen = ({ navigation }) => {
           paddingBottom: 2,
           paddingTop: 2,
           width: "100%",
-       
         },
       }}
     >
@@ -122,7 +119,7 @@ const TabbarScreen = ({ navigation }) => {
               <MaterialCommunityIcons
                 name="wallet-giftcard"
                 size={32}
-                color="#ff5252"
+                color="#6172f3"
               />
             ) : (
               <MaterialCommunityIcons
@@ -134,25 +131,25 @@ const TabbarScreen = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Shopping"
+        name="Шоппинг"
         component={ShoppingScreen}
         options={{
           tabBarIcon: ({ focused, tintColor }) =>
             focused ? (
-              <Feather name="shopping-bag" size={28} color="#ff5252" />
+              <Feather name="shopping-bag" size={28} color="#6172f3" />
             ) : (
               <Feather name="shopping-bag" size={28} color="grey" />
             ),
         }}
       />
       <Tab.Screen
-        name="Promotion"
+        name="Сурталчилгаа"
         component={PromotionScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, tintColor }) =>
             focused ? (
-              <Octicons name="video" size={28} color="#ff5252" />
+              <Octicons name="video" size={28} color="#6172f3" />
             ) : (
               <Octicons name="video" size={28} color="grey" />
             ),
@@ -164,7 +161,7 @@ const TabbarScreen = ({ navigation }) => {
         options={{
           tabBarIcon: ({ focused, tintColor }) =>
             focused ? (
-              <FontAwesome5 name="star" size={28} color="#ff5252" />
+              <FontAwesome5 name="star" size={28} color="#6172f3" />
             ) : (
               <FontAwesome5 name="star" size={28} color="grey" />
             ),
