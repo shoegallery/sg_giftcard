@@ -87,6 +87,7 @@ import {
   HistoryScreenAll,
   LoanScreen,
   SaveScreen,
+  LoanScreenFinal,
 } from "../screens";
 
 const Stack = createStackNavigator();
@@ -121,6 +122,27 @@ const StackScreen = ({ navigation }) => {
         }}
         name="GetCouponScreen"
         component={GetCouponScreen}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "LoanScreenFinal",
+          backgroundColor: "#ececec",
+          headerTintColor: "#ececec",
+          headerStyle: { backgroundColor: "white", borderRadius: 0 },
+          headerTitleStyle: {
+            width: "100%",
+            fontSize: 17,
+            color: "black",
+            fontWeight: "500",
+            backgroundColor: "white",
+            fontFamily: "regular",
+            textAlign: Platform.OS === "android" ? "center" : "auto",
+          },
+        }}
+        name="LoanScreenFinal"
+        component={LoanScreenFinal}
       />
       <Stack.Screen
         options={{

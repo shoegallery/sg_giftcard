@@ -25,3 +25,4 @@ export { default as TransferScanScreen } from "./TransferScanScreen";
 export { default as TransferScreen } from "./TransferScreen";
 export { default as LoanScreen } from "./LoanScreen";
 export { default as SaveScreen } from "./SaveScreen";
+export { default as LoanScreenFinal } from "./LoanScreenFinal";

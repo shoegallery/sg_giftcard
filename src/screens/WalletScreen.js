@@ -34,7 +34,11 @@ import { amountValidator } from "../helpers/amountValidator";
 import * as Clipboard from "expo-clipboard";
 import QRCode from "react-native-qrcode-svg";
 
-import { StateContext, StateContextHistory } from "../Context/StateContext";
+import {
+  StateContext,
+  StateContextHistory,
+  StateContextLoan,
+} from "../Context/StateContext";
 import ScanScreen from "./ScanScreen";
 
 import {
@@ -105,6 +109,7 @@ const WalletScreen = ({ navigation, props }) => {
   console.log(userData.wallets);
   const [userTransactionData, setUserTransactionData] =
     useContext(StateContextHistory);
+  const [userLoanData, setUserLoanData] = useContext(StateContextLoan);
 
   const [showCouponModal, setShowCouponModal] = useState(false);
 
@@ -637,6 +642,21 @@ const WalletScreen = ({ navigation, props }) => {
         setUserTransactionData(response.data.data);
       })
       .catch((error) => {});
+
+    var configSecond = {
+      method: "POST",
+      url: `${baseUrl}/wallets/myloan`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      data: datas,
+    };
+    axios(configSecond)
+      .then((response) => {
+        setUserLoanData(response.data.data);
+      })
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -972,7 +992,12 @@ const WalletScreen = ({ navigation, props }) => {
                   paddingTop={"6"}
                   alignItems={"center"}
                   onPress={() => {
-                    navigation.navigate("ScanScreen");
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      navigation.navigate("ScanScreen");
+                    }
                   }}
                 >
                   {({ isHovered, isPressed }) => {
@@ -1052,7 +1077,156 @@ const WalletScreen = ({ navigation, props }) => {
                   paddingTop={3}
                   alignItems={"center"}
                   onPress={() => {
-                    setShowModal(true);
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      navigation.navigate("LoanScreen");
+                    }
+                  }}
+
+                  /* onPress={() => {
+        navigation.navigate("TransferScreen");
+        }}
+        */
+                >
+                  {({ isHovered, isPressed }) => {
+                    return (
+                      <Box
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        alignSelf="center"
+                        width={"95%"}
+                        bg={
+                          isPressed
+                            ? "coolGray.200"
+                            : isHovered
+                            ? "coolGray.200"
+                            : "coolGray.100"
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        p="4"
+                        rounded="8"
+                        shadow={2}
+                        borderWidth="0"
+                        borderColor="coolGray.300"
+                      >
+                        <HStack>
+                          <Box width={"94%"}>
+                            <HStack space={2} alignSelf={"flex-start"}>
+                              <Box alignSelf="center">
+                                <AntDesign
+                                  name="plussquareo"
+                                  size={32}
+                                  color="green"
+                                />
+                              </Box>
+                              <Text
+                                color="coolGray.800"
+                                fontWeight="medium"
+                                alignSelf={"center"}
+                                fontSize="md"
+                              >
+                                Хувааж төлөх
+                              </Text>
+                            </HStack>
+                          </Box>
+                          <Box width={"6%"} justifyContent="center">
+                            <AntDesign name="right" size={20} color="#616161" />
+                          </Box>
+                        </HStack>
+                      </Box>
+                    );
+                  }}
+                </Pressable>
+                <Pressable
+                  paddingTop={3}
+                  alignItems={"center"}
+                  onPress={() => {
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      navigation.navigate("LoanScreenFinal");
+                    }
+                  }}
+
+                  /* onPress={() => {
+        navigation.navigate("TransferScreen");
+        }}
+        */
+                >
+                  {({ isHovered, isPressed }) => {
+                    return (
+                      <Box
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        alignSelf="center"
+                        width={"95%"}
+                        bg={
+                          isPressed
+                            ? "coolGray.200"
+                            : isHovered
+                            ? "coolGray.200"
+                            : "coolGray.100"
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        p="4"
+                        rounded="8"
+                        shadow={2}
+                        borderWidth="0"
+                        borderColor="coolGray.300"
+                      >
+                        <HStack>
+                          <Box width={"94%"}>
+                            <HStack space={2} alignSelf={"flex-start"}>
+                              <Box alignSelf="center">
+                                <AntDesign
+                                  name="plussquareo"
+                                  size={32}
+                                  color="green"
+                                />
+                              </Box>
+                              <Text
+                                color="coolGray.800"
+                                fontWeight="medium"
+                                alignSelf={"center"}
+                                fontSize="md"
+                              >
+                                LoanScreenFinal
+                              </Text>
+                            </HStack>
+                          </Box>
+                          <Box width={"6%"} justifyContent="center">
+                            <AntDesign name="right" size={20} color="#616161" />
+                          </Box>
+                        </HStack>
+                      </Box>
+                    );
+                  }}
+                </Pressable>
+                <Pressable
+                  paddingTop={3}
+                  alignItems={"center"}
+                  onPress={() => {
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      setShowModal(true);
+                    }
                   }}
                 >
                   {({ isHovered, isPressed }) => {
@@ -1112,7 +1286,12 @@ const WalletScreen = ({ navigation, props }) => {
                 </Pressable>
                 <Pressable
                   onPress={() => {
-                    navigation.navigate("GetCouponScreen");
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      navigation.navigate("GetCouponScreen");
+                    }
                   }}
                   paddingTop={3}
                   alignItems={"center"}
@@ -1176,74 +1355,14 @@ const WalletScreen = ({ navigation, props }) => {
                   paddingTop={3}
                   alignItems={"center"}
                   onPress={() => {
-                    navigation.navigate("LoanScreen");
+                    if (
+                      userData.wallets.phone !== 70000003 &&
+                      userData.wallets.phone !== 70000004
+                    ) {
+                      navigation.navigate("TransferScanScreen");
+                    }
                   }}
-                  /* onPress={() => {
-        navigation.navigate("TransferScreen");
-        }}
-        */
-                >
-                  {({ isHovered, isPressed }) => {
-                    return (
-                      <Box
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        alignSelf="center"
-                        width={"95%"}
-                        bg={
-                          isPressed
-                            ? "coolGray.200"
-                            : isHovered
-                            ? "coolGray.200"
-                            : "coolGray.100"
-                        }
-                        style={{
-                          transform: [
-                            {
-                              scale: isPressed ? 0.96 : 1,
-                            },
-                          ],
-                        }}
-                        p="4"
-                        rounded="8"
-                        shadow={2}
-                        borderWidth="0"
-                        borderColor="coolGray.300"
-                      >
-                        <HStack>
-                          <Box width={"94%"}>
-                            <HStack space={2} alignSelf={"flex-start"}>
-                              <Box alignSelf="center">
-                                <AntDesign
-                                  name="plussquareo"
-                                  size={32}
-                                  color="green"
-                                />
-                              </Box>
-                              <Text
-                                color="coolGray.800"
-                                fontWeight="medium"
-                                alignSelf={"center"}
-                                fontSize="md"
-                              >
-                                Зээл авах
-                              </Text>
-                            </HStack>
-                          </Box>
-                          <Box width={"6%"} justifyContent="center">
-                            <AntDesign name="right" size={20} color="#616161" />
-                          </Box>
-                        </HStack>
-                      </Box>
-                    );
-                  }}
-                </Pressable>
-                <Pressable
-                  paddingTop={3}
-                  alignItems={"center"}
-                  onPress={() => {
-                    navigation.navigate("TransferScanScreen");
-                  }}
+
                   /* onPress={() => {
           navigation.navigate("TransferScreen");
         }}
