@@ -721,7 +721,7 @@ const WalletScreen = ({ navigation, props }) => {
                 <Box justifyContent={"center"}>
                   <Pressable
                     onPress={() => {
-                      setRefreshing(true);
+                      dataRefresher();
                     }}
                     paddingTop={3}
                     alignItems={"center"}
@@ -1193,8 +1193,8 @@ const WalletScreen = ({ navigation, props }) => {
                           <Box width={"94%"}>
                             <HStack space={2} alignSelf={"flex-start"}>
                               <Box alignSelf="center">
-                                <AntDesign
-                                  name="plussquareo"
+                                <MaterialIcons
+                                  name="assignment-returned"
                                   size={32}
                                   color="green"
                                 />
@@ -1205,7 +1205,7 @@ const WalletScreen = ({ navigation, props }) => {
                                 alignSelf={"center"}
                                 fontSize="md"
                               >
-                                LoanScreenFinal
+                                Зээлүүд
                               </Text>
                             </HStack>
                           </Box>

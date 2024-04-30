@@ -157,21 +157,29 @@ const HistoryScreenAll = ({ navigation }) => {
       ) : (
         <View
           style={{
+            backgroundColor: "#f6f6e8",
             justifyContent: "center",
             height: "100%",
           }}
         >
           <Box>
             <Center>
-              <Image
-                source={require("../assets/empty.png")}
-                style={{
-                  height: 100,
-                  alignSelf: "center",
-                  resizeMode: "contain",
-                }}
-              />
-              <Text fontWeight={"semibold"} paddingTop={5} textAlign={"center"}>
+              <View>
+                <Image
+                  style={{
+                    height: 200,
+                    alignSelf: "center",
+                    resizeMode: "contain",
+                  }}
+                  source={require("../assets/gif/empty.gif")}
+                />
+              </View>
+              <Text
+                fontWeight={"semibold"}
+                paddingTop={3}
+                fontSize={"md"}
+                textAlign={"center"}
+              >
                 Уучлаарай гүйлгээ алга байна
               </Text>
             </Center>

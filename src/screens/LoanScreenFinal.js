@@ -311,9 +311,6 @@ const LoanScreenFinal = ({ navigation, route }) => {
                           </Text>
                           {loan.loan.map((loanItem) => (
                             <View key={loanItem.index} style={styles.loanItem}>
-                              <Text style={styles.index}>
-                                Index: {loanItem.index}
-                              </Text>
                               <Text style={styles.amountsmall}>
                                 Төлөх дүн: {loanItem.amount}
                               </Text>

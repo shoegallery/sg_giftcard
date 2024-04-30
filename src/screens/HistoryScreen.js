@@ -1,4 +1,4 @@
-import React, {  useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   View,
   Image,
@@ -9,21 +9,12 @@ import {
   ScrollView,
 } from "react-native";
 import moment from "moment";
+import LottieView from "lottie-react-native";
 
 import { NumericFormat } from "react-number-format";
 import { StateContextHistory } from "../Context/StateContext";
 
-
-import {
-  Box,
-
-  HStack,
-  VStack,
-  Text,
-  Spacer,
-  Center,
- 
-} from "native-base";
+import { Box, HStack, VStack, Text, Spacer, Center } from "native-base";
 import BackButton from "../components/BackButton";
 const { width, height } = Dimensions.get("window");
 
@@ -80,7 +71,8 @@ const HistoryScreen = ({ navigation }) => {
                           item.trnxType === "Зарлага" ? "red.400" : "green.500"
                         }
                         fontWeight={"semibold"}
-                      >{item.trnxType}
+                      >
+                        {item.trnxType}
                       </Text>
                       <Text
                         fontSize={11}
@@ -110,7 +102,9 @@ const HistoryScreen = ({ navigation }) => {
                               ? "red.400"
                               : "green.400"
                           }
-                        >{item.trnxType === "Зарлага"?("-"):("+")}{formattedValue}₮
+                        >
+                          {item.trnxType === "Зарлага" ? "-" : "+"}
+                          {formattedValue}₮
                         </Text>
                       )}
                     />
@@ -129,7 +123,7 @@ const HistoryScreen = ({ navigation }) => {
                           thousandSeparator={true}
                           renderText={(formattedValue) => (
                             <Text bold textAlign="right" fontSize={10}>
-                             Үлдэгдэл: {formattedValue}₮
+                              Үлдэгдэл: {formattedValue}₮
                             </Text>
                           )}
                         />
@@ -144,21 +138,29 @@ const HistoryScreen = ({ navigation }) => {
       ) : (
         <View
           style={{
+            backgroundColor: "#f6f6e8",
             justifyContent: "center",
             height: "100%",
           }}
         >
           <Box>
             <Center>
-              <Image
-                source={require("../assets/empty.png")}
-                style={{
-                  height: 100,
-                  alignSelf: "center",
-                  resizeMode: "contain",
-                }}
-              />
-              <Text fontWeight={"semibold"} paddingTop={5} textAlign={"center"}>
+              <View>
+                <Image
+                  style={{
+                    height: 200,
+                    alignSelf: "center",
+                    resizeMode: "contain",
+                  }}
+                  source={require("../assets/gif/empty.gif")}
+                />
+              </View>
+              <Text
+                fontWeight={"semibold"}
+                paddingTop={3}
+                fontSize={"md"}
+                textAlign={"center"}
+              >
                 Уучлаарай гүйлгээ алга байна
               </Text>
             </Center>

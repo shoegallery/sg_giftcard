@@ -127,7 +127,7 @@ const StackScreen = ({ navigation }) => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: "LoanScreenFinal",
+          title: "Зээлийн жагсаалт",
           backgroundColor: "#ececec",
           headerTintColor: "#ececec",
           headerStyle: { backgroundColor: "white", borderRadius: 0 },
