@@ -138,23 +138,20 @@ const LoanScreenFinal = ({ navigation, route }) => {
       };
       axios(config)
         .then(function (response) {
-          console.log("--------" + response.data.success);
-          if (response.data.success === true) {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            Dialog.show({
-              type: ALERT_TYPE.SUCCESS,
-              title: "Success",
-              textBody: "Гүйлгээ амжилттай хийгдлээ",
-              button: "Okey",
-              onPressButton: () => {
-                Dialog.hide();
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "TabbarScreen" }],
-                });
-              },
-            });
-          }
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Success",
+            textBody: "Гүйлгээ амжилттай хийгдлээ",
+            button: "Okey",
+            onPressButton: () => {
+              Dialog.hide();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "TabbarScreen" }],
+              });
+            },
+          });
         })
         .catch(function (error) {
           const err = JSON.stringify(error);

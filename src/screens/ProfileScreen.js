@@ -92,7 +92,7 @@ export default function ProfileScreen({ navigation }) {
     }
   }, []);
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
 
       <Center backgroundColor={"#ffffff"}>
@@ -105,11 +105,13 @@ export default function ProfileScreen({ navigation }) {
       </Center>
       <ScrollView>
         <Box
-          height={"full"}
+          height={"100%"}
+          width={"100%"}
+          alignItems={"center"}
           justifyItems={"center"}
           backgroundColor={"#ffffff"}
         >
-          <Box height={"80%"} width={"100%"} paddingTop={"3"}>
+          <Box width={"100%"} paddingTop={"3"}>
             {/* + */}
             <HStack
               paddingTop={"1"}
@@ -140,298 +142,325 @@ export default function ProfileScreen({ navigation }) {
               </Pressable>
             </HStack>
 
-            <Center paddingTop={"6"}>
-              <TouchableHighlight
-                underlayColor="#b2dfdb"
-                onPress={() => {}}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#b2dfdb"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={Octicons}
-                        size="lg"
-                        name="star"
-                        color="#004d40"
-                      />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Брэндийн танилцуулга
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
-            <Center paddingTop={"2"}>
-              <TouchableHighlight
-                underlayColor="#b2dfdb"
-                onPress={() => {
-                  navigation.navigate("LocationScreen");
-                }}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#b2dfdb"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={Entypo}
-                        size="lg"
-                        name="location"
-                        color="#004d40"
-                      />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Дэлгүүрийн хаяг, байршил
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
-            <Center paddingTop={"2"}>
-              <TouchableHighlight
-                underlayColor="#b2dfdb"
-                onPress={() => {}}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#b2dfdb"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={MaterialCommunityIcons}
-                        size="lg"
-                        name="help-circle-outline"
-                        color="#004d40"
-                      />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Тусламж, зөвлөгөө
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
-            <Center paddingTop={"2"}>
-              <TouchableHighlight
-                underlayColor="#b2dfdb"
-                onPress={() => {
-                  if (Platform.OS === "android") {
-                    Linking.openURL(`tel:${86218721}`);
-                  } else {
-                    Linking.openURL(`telprompt:${86218721}`);
-                  }
-                }}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#b2dfdb"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={AntDesign}
-                        size="lg"
-                        name="phone"
-                        color="#004d40"
-                      />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Холбоо барих
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
-            <Center paddingTop={"2"}>
-              <TouchableHighlight
-                underlayColor="#d1c4e9"
-                onPress={() => {
-                  onShare();
-                }}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#d1c4e9"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Entypo name="slideshare" size={24} color="#673ab7" />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Найздаа хуваалцах
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
-            <Center paddingTop={"6"}>
-              <TouchableHighlight
-                underlayColor="#ffcdd2"
-                onPress={async () => {
-                  AsyncStorage.getItem("user_uuid")
-                    .then(async (result) => {
-                      await AsyncStorage.setItem("user_uuid", "");
-                    })
-                    .catch((err) => {
-                      console.log("user_phone baihgui");
-                    });
+            <Pressable onPress={() => {}} paddingTop={6} alignItems={"center"}>
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="chat"
+                              size={32}
+                              color="#6172F3"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            StorePlus чат апп
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+            <Pressable onPress={() => {}} paddingTop={3} alignItems={"center"}>
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="help-circle-outline"
+                              size={32}
+                              color="green"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Тусламж зөвлөгөө
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                if (Platform.OS === "android") {
+                  Linking.openURL(`tel:${86218721}`);
+                } else {
+                  Linking.openURL(`telprompt:${86218721}`);
+                }
+              }}
+              paddingTop={3}
+              alignItems={"center"}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <MaterialCommunityIcons
+                              name="phone"
+                              size={32}
+                              color="green"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Холбоо барих
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                onShare();
+              }}
+              paddingTop={3}
+              alignItems={"center"}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <Entypo
+                              name="slideshare"
+                              size={32}
+                              color="#673ab7"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Найздаа хуваалцах
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+            <Pressable
+              onPress={async () => {
+                AsyncStorage.getItem("user_uuid")
+                  .then(async (result) => {
+                    await AsyncStorage.setItem("user_uuid", "");
+                  })
+                  .catch((err) => {
+                    console.log("user_phone baihgui");
+                  });
 
-                  await AsyncStorage.getItem("user_phone")
-                    .then(async (result) => {
-                      console.log(result);
-                      await AsyncStorage.setItem("user_phone", "");
-                      await navigation.reset({
-                        index: 0,
-                        routes: [{ name: "LoginScreen" }],
-                      });
-                    })
-                    .catch((err) => {
-                      console.log("user_phone baihgui");
+                await AsyncStorage.getItem("user_phone")
+                  .then(async (result) => {
+                    console.log(result);
+                    await AsyncStorage.setItem("user_phone", "");
+                    await navigation.reset({
+                      index: 0,
+                      routes: [{ name: "LoginScreen" }],
                     });
-                }}
-                style={{
-                  width: wp("96%"),
-                  borderRadius: hp("1%"),
-                  justifyContent: "center",
-                  height: 60,
-                }}
-              >
-                <Box
-                  backgroundColor="#ffffff"
-                  h={"100%"}
-                  w="100%"
-                  borderRadius={"md"}
-                  justifyContent={"center"}
-                >
-                  <HStack alignItems="center" justifyContent={"center"}>
-                    <Box
-                      backgroundColor={"#ffcdd2"}
-                      width={12}
-                      borderRadius={"sm"}
-                      height={12}
-                      alignItems="center"
-                      justifyContent={"center"}
-                    >
-                      <Icon
-                        as={Feather}
-                        size="lg"
-                        name="log-out"
-                        color="#ef5350"
-                      />
-                    </Box>
-                    <Text width={"80%"} fontSize={"md"} color="#325b77">
-                      {"    "}Гарах
-                    </Text>
-                    <Box justifyContent="center">
-                      <AntDesign name="right" size={16} color="#616161" />
-                    </Box>
-                  </HStack>
-                </Box>
-              </TouchableHighlight>
-            </Center>
+                  })
+                  .catch((err) => {
+                    console.log("user_phone baihgui");
+                  });
+              }}
+              paddingTop={3}
+              alignItems={"center"}
+            >
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
+                            <Feather name="log-out" size={32} color="#ef5350" />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            Гарах
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
           </Box>
-          <Box height={"20%"} justifyContent={"flex-end"}>
+          <Box height={"20%"} pt={3} justifyContent={"flex-end"}>
             <Box justifyContent={"flex-end"} backgroundColor={"#ffffff"}>
               <View>
                 <Text textAlign={"center"} color="#192d3b">

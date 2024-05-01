@@ -9,6 +9,7 @@ import {
   StatusBar,
   SafeAreaView,
   ScrollView,
+  Linking,
 } from "react-native";
 import {
   Button,
@@ -204,7 +205,16 @@ const PromotionScreen = () => {
           />
         </Box>
         <Center py={3} px="3">
-          <Pressable>
+          <Pressable
+            width={"90%"}
+            onPress={() => {
+              if (Platform.OS === "android") {
+                Linking.openURL(`https://next.mn/promotion`);
+              } else {
+                Linking.openURL(`https://next.mn/promotion`);
+              }
+            }}
+          >
             {({ isHovered, isFocused, isPressed }) => {
               return (
                 <Box
@@ -238,24 +248,27 @@ const PromotionScreen = () => {
                       variant="solid"
                       rounded="4"
                     >
-                      Business
+                      Сурталчилгаа
                     </Badge>
                     <Spacer />
                     <Text fontSize={10} color="coolGray.800">
-                      1 month ago
+                      1 Hour ago
                     </Text>
                   </HStack>
                   <Text
                     color="coolGray.800"
                     mt="3"
                     fontWeight="medium"
-                    fontSize="xl"
+                    fontSize="md"
+                    bold
                   >
-                    Marketing License
+                    Next Expo - Ялалтын талбайд
                   </Text>
                   <Text mt="2" fontSize="sm" color="coolGray.700">
-                    Unlock powerfull time-saving tools for creating email
-                    delivery and collecting marketing data
+                    <Text bold color={"red.600"}>
+                      Next electronics
+                    </Text>{" "}
+                    дэлгүүр бүх цахилгаан бараанууд 10-20% хямдарлаа
                   </Text>
                   <Flex>
                     {isFocused ? (
@@ -276,7 +289,7 @@ const PromotionScreen = () => {
                         fontWeight="medium"
                         color="darkBlue.600"
                       >
-                        Read More
+                        Цааш унших
                       </Text>
                     )}
                   </Flex>
