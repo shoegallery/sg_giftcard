@@ -230,6 +230,62 @@ export default function ProfileScreen({ navigation }) {
                       <Box width={"94%"}>
                         <HStack space={2} alignSelf={"flex-start"}>
                           <Box alignSelf="center">
+                            <MaterialIcons
+                              name="lock-outline"
+                              size={32}
+                              color="green"
+                            />
+                          </Box>
+                          <Text
+                            color="coolGray.800"
+                            fontWeight="medium"
+                            alignSelf={"center"}
+                            fontSize="md"
+                          >
+                            BlockChain шилжилт🚀
+                          </Text>
+                        </HStack>
+                      </Box>
+                      <Box width={"6%"} justifyContent="center">
+                        <AntDesign name="right" size={20} color="#616161" />
+                      </Box>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+            <Pressable onPress={() => {}} paddingTop={7} alignItems={"center"}>
+              {({ isHovered, isPressed }) => {
+                return (
+                  <Box
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    alignSelf="center"
+                    width={"85%"}
+                    bg={
+                      isPressed
+                        ? "coolGray.200"
+                        : isHovered
+                        ? "coolGray.200"
+                        : "coolGray.100"
+                    }
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    p="4"
+                    rounded="8"
+                    shadow={2}
+                    borderWidth="0"
+                    borderColor="coolGray.300"
+                  >
+                    <HStack>
+                      <Box width={"94%"}>
+                        <HStack space={2} alignSelf={"flex-start"}>
+                          <Box alignSelf="center">
                             <MaterialCommunityIcons
                               name="help-circle-outline"
                               size={32}
@@ -460,7 +516,7 @@ export default function ProfileScreen({ navigation }) {
               }}
             </Pressable>
           </Box>
-          <Box height={"20%"} pt={3} justifyContent={"flex-end"}>
+          <Box height={"20%"} pt={3}>
             <Box justifyContent={"flex-end"} backgroundColor={"#ffffff"}>
               <View>
                 <Text textAlign={"center"} color="#192d3b">

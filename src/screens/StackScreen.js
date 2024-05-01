@@ -141,7 +141,7 @@ const StackScreen = ({ navigation }) => {
             textAlign: Platform.OS === "android" ? "center" : "auto",
           },
         }}
-        name="LoanScreenFinal"
+        name="Зээлийн жагсаалт"
         component={LoanScreenFinal}
       />
       <Stack.Screen
